@@ -134,6 +134,28 @@ body {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
 }
 
+/* 国旗图标样式 */
+.flag {
+  width: 18px;
+  height: 12px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.flag-us { background: linear-gradient(180deg, #B22234 33.3%, #fff 33.3%, #fff 66.6%, #3C3B6E 66.6%); }
+.flag-hk { background: linear-gradient(180deg, #EA2839 50%, #fff 50%); }
+.flag-cn { background: #DE2910; position: relative; }
+.flag-cn::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 3px;
+  width: 4px;
+  height: 4px;
+  background: #FFDE00;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px #FFDE00, 0 0 0 2px #FFDE00;
+}
+
 .container {
   max-width: 720px;
   margin: 0 auto;
@@ -345,9 +367,15 @@ td:nth-child(2) {
   <div class="tabbar">
     <div class="tabs">
       <button class="tab active" data-target="all">全部</button>
-      <button class="tab" data-target="us">🇺🇸 美股</button>
-      <button class="tab" data-target="hk">🇭🇰 港股</button>
-      <button class="tab" data-target="cn">🇨🇳 A股</button>
+      <button class="tab" data-target="us">
+        <span class="flag flag-us"></span> 美股
+      </button>
+      <button class="tab" data-target="hk">
+        <span class="flag flag-hk"></span> 港股
+      </button>
+      <button class="tab" data-target="cn">
+        <span class="flag flag-cn"></span> A股
+      </button>
     </div>
   </div>
 </div>
@@ -357,7 +385,9 @@ td:nth-child(2) {
   <div class="card section" data-section="us">
     <div class="card-header">
       <div class="card-left">
-        <div class="badge badge-us">🇺🇸 US</div>
+        <div class="badge badge-us">
+          <span class="flag flag-us"></span> US
+        </div>
         <div class="card-title">美股躺平组合</div>
       </div>
       <div class="card-stats">
@@ -383,7 +413,9 @@ td:nth-child(2) {
   <div class="card section" data-section="hk">
     <div class="card-header">
       <div class="card-left">
-        <div class="badge badge-hk">🇭🇰 HK</div>
+        <div class="badge badge-hk">
+          <span class="flag flag-hk"></span> HK
+        </div>
         <div class="card-title">港股躺平组合</div>
       </div>
       <div class="card-stats">
@@ -409,7 +441,9 @@ td:nth-child(2) {
   <div class="card section" data-section="cn">
     <div class="card-header">
       <div class="card-left">
-        <div class="badge badge-cn">🇨🇳 CN</div>
+        <div class="badge badge-cn">
+          <span class="flag flag-cn"></span> CN
+        </div>
         <div class="card-title">A股躺平组合</div>
       </div>
       <div class="card-stats">
