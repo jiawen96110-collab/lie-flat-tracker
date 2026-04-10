@@ -399,35 +399,7 @@
     cursor: pointer;
   }
 
-  /* Summary bar */
-  .summary-bar {
-    display: flex;
-    gap: 8px;
-    overflow-x: auto;
-    scrollbar-width: none;
-    padding-bottom: 2px;
-  }
-  .summary-bar::-webkit-scrollbar { display: none; }
-  .summary-chip {
-    flex-shrink: 0;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 10px 14px;
-    text-align: center;
-    min-width: 90px;
-  }
-  .chip-label {
-    font-size: 10px;
-    color: var(--muted);
-    margin-bottom: 4px;
-    font-family: 'DM Mono', monospace;
-  }
-  .chip-value {
-    font-family: 'DM Mono', monospace;
-    font-size: 15px;
-    font-weight: 500;
-  }
+
 
   /* Sections hidden by tab */
   .section-wrapper { display: block; }
@@ -567,7 +539,7 @@
           <span class="market-tag tag-my">MY</span>
           <span class="section-name">我的自选</span>
         </div>
-        <button class="add-btn" onclick="openModal()">＋ 添加标的</button>
+        <button class="add-btn" onclick="openModal()" id="add-btn-main" style="display:none">＋ 添加标的</button>
       </div>
       <table>
         <thead>
@@ -688,7 +660,11 @@ const STATIC_DATA = {
 const liveData = {};
 let useStatic = false;
 
-// ─── Custom holdings (localStorage) ───────────────────────
+// ─── Admin mode ────────────────────────────────────────────
+const IS_ADMIN = new URLSearchParams(window.location.search).get('admin') === '20260410';
+
+// ─── Custom holdings (hardcoded, editable by admin) ────────
+// 自选持仓数据 - 只有管理员可以通过界面修改
 const STORAGE_KEY = 'lieflat_custom_v2';
 let customHoldings = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
 
@@ -709,12 +685,7 @@ function pctInline(val) {
   const sign = val > 0 ? '+' : '';
   return `<span style="${cls};font-family:DM Mono,monospace;font-size:12px;font-weight:600">${sign}${val.toFixed(2)}%</span>`;
 }
-function chipVal(val) {
-  if (val === null || isNaN(val)) return '<span style="color:var(--muted)">--</span>';
-  const cls = val > 0 ? 'var(--green)' : val < 0 ? 'var(--red)' : 'var(--muted)';
-  const sign = val > 0 ? '+' : '';
-  return `<span style="color:${cls}">${sign}${val.toFixed(2)}%</span>`;
-}
+
 
 // ─── Render fixed portfolios ───────────────────────────────
 function renderPortfolio(key) {
@@ -740,8 +711,7 @@ function renderPortfolio(key) {
   tbody.innerHTML = rows;
   document.getElementById(`${key}-today`).innerHTML = pctInline(todayWt);
   document.getElementById(`${key}-ytd`).innerHTML = pctInline(ytdWt);
-  document.getElementById(`chip-${key}-today`).innerHTML = chipVal(todayWt);
-  document.getElementById(`chip-${key}-ytd`).innerHTML = chipVal(ytdWt);
+
 }
 
 // ─── Render custom holdings ────────────────────────────────
@@ -777,7 +747,7 @@ function renderCustom() {
       </td>
       <td>${pctTag(d.today)}</td>
       <td>${sinceHtml}</td>
-      <td><button class="del-btn" onclick="removeCustom(${i})" title="删除">✕</button></td>
+      <td>${IS_ADMIN ? `<button class="del-btn" onclick="removeCustom(${i})" title="删除">✕</button>` : ''}</td>
     </tr>`;
   }
   tbody.innerHTML = rows;
@@ -936,6 +906,11 @@ function renderAll() {
 }
 
 // ─── Init ──────────────────────────────────────────────────
+// Show admin controls if admin mode
+if (IS_ADMIN) {
+  document.getElementById('add-btn-main').style.display = 'flex';
+  document.title = '🔑 ' + document.title;
+}
 // Render with static data immediately
 for (const [key, d] of Object.entries(STATIC_DATA)) {
   liveData[key] = { today: d.today, ytd: d.ytd };
