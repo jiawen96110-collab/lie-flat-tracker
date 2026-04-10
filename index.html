@@ -302,20 +302,22 @@ async function fetchAll(){
       for(const [code, s] of Object.entries(SINA_MAP)){
         if(s === sym){
           let now, pre;
-          // 区分不同市场的字段（新浪接口不同市场字段顺序不同）
-          if(s.startsWith('sh') || s.startsWith('sz')){ // A股
-            now = parseFloat(data[3]); // 现价
-            pre = parseFloat(data[2]); // 昨日收盘价
+          // 严格区分不同市场的字段（新浪接口不同市场字段顺序完全不同）
+          if(s.startsWith('sh') || s.startsWith('sz')){ // A股（沪/深）
+            now = parseFloat(data[3]);  // 现价（第4个字段，索引3）
+            pre = parseFloat(data[2]);  // 昨日收盘价（第3个字段，索引2）
           } else if(s.startsWith('hk')){ // 港股
-            now = parseFloat(data[6]); // 现价
-            pre = parseFloat(data[5]); // 昨日收盘价
+            now = parseFloat(data[6]);  // 现价（第7个字段，索引6）
+            pre = parseFloat(data[5]);  // 昨日收盘价（第6个字段，索引5）
           } else if(s.startsWith('gb_')){ // 美股
-            now = parseFloat(data[1]); // 现价
-            pre = parseFloat(data[3]); // 昨日收盘价
+            now = parseFloat(data[1]);  // 现价（第2个字段，索引1）
+            pre = parseFloat(data[3]);  // 昨日收盘价（第4个字段，索引3）
           }
-          if(!isNaN(now)&&!isNaN(pre)&&pre>0){
+          // 严格校验数据有效性：必须有数值、且昨日收盘价>0（避免0值导致计算错误）
+          if(!isNaN(now) && !isNaN(pre) && pre > 0){
+            // 强制覆盖liveData，确保实时数据优先，不再用静态数据兜底
             liveData[code] = { 
-              today: (now - pre) / pre * 100, 
+              today: Number(((now - pre) / pre * 100).toFixed(2)), 
               ytd: STATIC_DATA[code]?.ytd 
             };
           }
@@ -324,6 +326,7 @@ async function fetchAll(){
     }
   }catch(e){console.error('行情拉取失败:',e);}
   renderAll();
+  // 每次行情刷新同步更新时间
   document.getElementById('last-update').textContent = new Date().toTimeString().slice(0,8);
 }
 
@@ -334,10 +337,16 @@ function renderAll(){
   renderPortfolio('us');renderPortfolio('hk');renderPortfolio('cn');
 }
 
+// 初始化静态数据
 for(const [k,d] of Object.entries(STATIC_DATA)) liveData[k] = {today:d.today,ytd:d.ytd};
 renderAll();
 fetchAll();
+// 30秒自动刷新行情
 setInterval(fetchAll,30000);
+// 每秒自动刷新时间（独立定时器，不依赖行情）
+setInterval(() => { 
+  document.getElementById('last-update').textContent = new Date().toTimeString().slice(0,8); 
+}, 1000);
 </script>
 </body>
 </html>
