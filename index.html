@@ -190,7 +190,7 @@ td:first-child, td:nth-child(2) { text-align: left; }
   <div class="nav-inner">
     <div class="nav-title">
       <h1>躺平组合</h1>
-      <span class="nav-sub">京城Z学生·跟踪版</span>
+      <span class="nav-sub">京城Z先生 · ETF 跟踪</span>
     </div>
     <div class="nav-live">
       <div class="live-dot"></div>
@@ -268,22 +268,22 @@ td:first-child, td:nth-child(2) { text-align: left; }
     <div class="card-header">
       <div class="card-hl">
         <span class="mkt-badge b-my">MY</span>
-        <span class="card-title">Z先生重点标的</span>
+        <span class="card-title">我的自选</span>
       </div>
       <button class="add-btn" id="add-btn-main" style="display:none" onclick="openModal()">＋ 添加</button>
     </div>
-    <table id="my-table">
-      <thead><tr><th>标的</th><th>名称</th><th>今日</th><th>推荐以来</th><th></th></tr></thead>
+    <table id="my-table" style="display:none">
+      <thead><tr><th>标的</th><th>名称</th><th>今日</th><th>自选以来</th><th></th></tr></thead>
       <tbody id="my-tbody"></tbody>
     </table>
-    <div class="empty-state" id="my-empty" style="display:none;">
+    <div class="empty-state" id="my-empty">
       <div class="ei">📊</div>
       <div class="et">还没有自选标的</div>
       <div class="es">管理员可添加自定义标的<br>从买入日起追踪涨跌幅</div>
     </div>
   </div>
 
-  <div class="footer-note">数据来源：新浪财经 · 每30秒自动刷新 · 仅供参考，不构成投资建议</div>
+  <div class="footer-note">数据来源：腾讯财经 · 每30秒自动刷新 · 仅供参考，不构成投资建议</div>
 </div>
 
 <!-- MODAL -->
@@ -353,37 +353,11 @@ const STATIC_DATA = {
   cn_588200:{today:+2.42,ytd:+10.16},cn_515880:{today:+2.50,ytd:+19.77},
   cn_518880:{today:+0.90,ytd:+7.48},
 };
-const SINA_MAP = {
-  us_QQQ:"gb_QQQ",us_SPY:"gb_SPY",us_RING:"gb_RING",us_COPX:"gb_COPX",us_BITB:"gb_BITB",
-  hk_03455:"hk03455",hk_03132:"hk03132",hk_03147:"hk03147",hk_03110:"hk03110",hk_02840:"hk02840",
-  cn_513390:"sh513390",cn_159652:"sz159652",cn_588200:"sh588200",cn_515880:"sh515880",cn_518880:"sh518880",
-};
-
-// ==============================================
-// Z先生10只重点标的（所有人打开直接显示）
-// ==============================================
-const FIXED_MY_STOCKS = [
-  { market:"us", code:"MRVL",      name:"迈威尔科技",       date:"2026-01-01" },
-  { market:"us", code:"NVDA",      name:"英伟达",             date:"2026-01-01" },
-  { market:"us", code:"TSM",       name:"台积电",             date:"2026-01-01" },
-  { market:"cn", code:"601869",    name:"长光华芯",           date:"2026-01-01" },
-  { market:"cn", code:"603501",    name:"韦尔股份",           date:"2026-01-01" },
-  { market:"cn", code:"601899",    name:"紫金矿业",           date:"2026-01-01" },
-  { market:"cn", code:"601012",    name:"隆基绿能",           date:"2026-01-01" },
-  { market:"cn", code:"300750",    name:"宁德时代",           date:"2026-01-01" },
-  { market:"cn", code:"002594",    name:"比亚迪",             date:"2026-01-01" },
-  { market:"cn", code:"600519",    name:"贵州茅台",           date:"2026-01-01" },
-];
-
 const liveData = {};
 const IS_ADMIN = new URLSearchParams(window.location.search).get('admin') === '20260410';
 const STORAGE_KEY = 'lieflat_custom_v2';
-let customHoldings = FIXED_MY_STOCKS.concat(JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]'));
-
-function saveCustom(){
-  const userAdded = customHoldings.slice(FIXED_MY_STOCKS.length);
-  localStorage.setItem(STORAGE_KEY,JSON.stringify(userAdded));
-}
+let customHoldings = JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
+function saveCustom(){localStorage.setItem(STORAGE_KEY,JSON.stringify(customHoldings));}
 
 function pctTag(v){
   if(v===null||v===undefined||isNaN(v)) return '<span class="pct loading">--</span>';
@@ -413,32 +387,24 @@ function renderPortfolio(key){
 
 function renderCustom(){
   const tbody=document.getElementById('my-tbody');
+  const empty=document.getElementById('my-empty');
+  const tbl=document.getElementById('my-table');
+  if(customHoldings.length===0){tbody.innerHTML='';empty.style.display='block';tbl.style.display='none';return;}
+  empty.style.display='none'; tbl.style.display='';
   let rows='';
   for(let i=0;i<customHoldings.length;i++){
     const h=customHoldings[i], d=liveData[`custom_${i}`]||{};
     const mc={us:'var(--blue)',hk:'#1a8a3a',cn:'var(--red)'}[h.market]||'var(--purple)';
-    const isFixed = i < FIXED_MY_STOCKS.length;
     let sh=h.buyPrice&&!isNaN(d.currentPrice)&&d.currentPrice>0
       ?pctTag((d.currentPrice-h.buyPrice)/h.buyPrice*100)
       :'<span class="pct zero">--%</span>';
-    rows+=`<tr>
-      <td><span class="tk" style="color:${mc}">${h.code}</span></td>
-      <td><span class="nm">${h.name}</span><span class="sd">自 ${h.date}</span></td>
-      <td>${pctTag(d.today)}</td>
-      <td>${sh}</td>
-      <td>${!isFixed && IS_ADMIN ? `<button class="del-btn" onclick="removeCustom(${i})">✕</button>` : ''}</td>
-    </tr>`;
+    rows+=`<tr><td><span class="tk" style="color:${mc}">${h.code}</span></td><td><span class="nm">${h.name}</span><span class="sd">自 ${h.date}</span></td><td>${pctTag(d.today)}</td><td>${sh}</td><td>${IS_ADMIN?`<button class="del-btn" onclick="removeCustom(${i})">✕</button>`:''}</td></tr>`;
   }
   tbody.innerHTML=rows;
 }
 
 function removeCustom(i){
-  if(i < FIXED_MY_STOCKS.length) return;
-  if(confirm(`删除 ${customHoldings[i].name}？`)){
-    customHoldings.splice(i,1);
-    saveCustom();
-    renderCustom();
-  }
+  if(confirm(`删除 ${customHoldings[i].name}？`)){customHoldings.splice(i,1);saveCustom();renderCustom();}
 }
 
 document.querySelectorAll('.seg-btn').forEach(btn=>{
@@ -476,51 +442,44 @@ function addCustom(){
   document.getElementById('f-price').value='';
 }
 
-function getCustomSinaSymbol(h){
-  if(h.market==='us') return `gb_${h.code}`;
+const TENCENT_MAP={
+  us_QQQ:'usQQQ',us_SPY:'usSPY',us_RING:'usRING',us_COPX:'usCOPX',us_BITB:'usBITB',
+  hk_03455:'hk03455',hk_03132:'hk03132',hk_03147:'hk03147',hk_03110:'hk03110',hk_02840:'hk02840',
+  cn_513390:'sh513390',cn_159652:'sz159652',cn_588200:'sh588200',cn_515880:'sh515880',cn_518880:'sh518880',
+};
+function customSymbol(h){
+  if(h.market==='us') return `us${h.code}`;
   if(h.market==='hk') return `hk${h.code.padStart(5,'0')}`;
   const c=h.code;
   if(c.startsWith('6')) return `sh${c}`;
   if(c.startsWith('0')||c.startsWith('3')) return `sz${c}`;
   return c.startsWith('5')?`sh${c}`:`sz${c}`;
 }
-
 async function fetchAll(){
-  const allSymbols = {};
-  for(const [k,s] of Object.entries(SINA_MAP)) allSymbols[s] = k;
-  customHoldings.forEach((h,i)=>{
-    const sym = getCustomSinaSymbol(h);
-    allSymbols[sym] = `custom_${i}`;
-  });
-  const symList = Object.keys(allSymbols).join(',');
+  const PROXY='https://lieflat-proxy.jiawen96110.workers.dev';
+  const allSymbols={};
+  for(const [k,s] of Object.entries(TENCENT_MAP)) allSymbols[s]=k;
+  customHoldings.forEach((h,i)=>{allSymbols[customSymbol(h)]=`custom_${i}`;});
+  const symList=Object.keys(allSymbols).join(',');
   if(!symList){renderAll();return;}
   try{
-    const res = await fetch(`https://hq.sinajs.cn/list=${symList}`);
-    const text = await res.text();
-    const lines = text.split('\n');
-    for(const line of lines){
-      const match = line.match(/var hq_str_(.+?)="(.+?)";/);
-      if(!match) continue;
-      const sym = match[1];
-      const data = match[2].split(',');
-      const key = allSymbols[sym];
-      if(!key) continue;
-      if(!liveData[key]) liveData[key] = {};
-      const now = parseFloat(data[1]);
-      const pre = parseFloat(data[2]);
-      if(!isNaN(now) && !isNaN(pre)){
-        const chg = (now - pre) / pre * 100;
-        liveData[key].today = chg;
-        liveData[key].currentPrice = now;
+    const raw=await (await fetch(`${PROXY}?q=${symList}`)).text();
+    const re=/v_([a-zA-Z0-9]+)="([^"]+)"/g; let m;
+    while((m=re.exec(raw))!==null){
+      const sym=m[1],fields=m[2].split('~'),key=allSymbols[sym];
+      if(key){
+        if(!liveData[key]) liveData[key]={};
+        const p=parseFloat(fields[32]),pr=parseFloat(fields[3]);
+        if(!isNaN(p))  liveData[key].today=p;
+        if(!isNaN(pr)) liveData[key].currentPrice=pr;
       }
     }
   }catch(e){}
   renderAll();
-  document.getElementById('last-update').textContent = new Date().toTimeString().slice(0,8);
+  document.getElementById('last-update').textContent=new Date().toTimeString().slice(0,8);
 }
-
 function renderAll(){
-  for(const key of Object.keys(SINA_MAP)){
+  for(const key of Object.keys(TENCENT_MAP)){
     if(!liveData[key]) liveData[key]={};
     if(isNaN(liveData[key].ytd)   &&STATIC_DATA[key]) liveData[key].ytd=STATIC_DATA[key].ytd;
     if(isNaN(liveData[key].today) &&STATIC_DATA[key]) liveData[key].today=STATIC_DATA[key].today;
