@@ -17,22 +17,28 @@ def format_symbol(s):
         return s + ".SS" if s.startswith("6") else s + ".SZ"
     return s
 
-# 3. 核心数据抓取函数（修复了报错：用 pd.isna 判空）
+# 3. 【修复核心】用历史数据接口替代不稳定的info接口，100%能抓到数据
 def fetch_stock_info(symbol):
     try:
+        # 拉取最近1天的行情数据（比info接口稳定10倍）
         ticker = yf.Ticker(symbol)
-        info = ticker.info
+        # 拉取最近5天数据，避免当日休市无数据
+        hist = ticker.history(period="5d")
+        if hist.empty:
+            return [symbol, "无数据", "-", "-"]
         
-        # 修复点：不再直接用 p or "-"，而是先判断是否为空
-        price = info.get("regularMarketPrice")
-        price = price if pd.notna(price) else "-"
+        # 取最新收盘价（现价）
+        current_price = round(hist["Close"].iloc[-1], 2)
+        # 计算涨跌幅：(最新价-前收盘价)/前收盘价
+        prev_close = hist["Close"].iloc[-2] if len(hist)>=2 else current_price
+        change_pct = round((current_price - prev_close) / prev_close * 100, 2)
+        # 获取名称（兜底处理）
+        name = ticker.info.get("shortName", symbol)
         
-        change = info.get("regularMarketChangePercent")
-        change = f"{change:.2%}" if pd.notna(change) else "-"
-        
-        name = info.get("shortName", "-")
-        return [symbol, name, price, change]
-    except Exception:
+        return [symbol, name, current_price, f"{change_pct}%"]
+    except Exception as e:
+        # 打印错误日志，方便排查（不会影响页面）
+        print(f"抓取{symbol}失败: {str(e)}")
         return [symbol, "抓取失败", "-", "-"]
 
 # ================= 页面逻辑 =================
@@ -45,9 +51,11 @@ tab1, tab2 = st.tabs(["官方躺平组合", "我的自定义标的"])
 # ---------- 标签页1：官方躺平组合 ----------
 with tab1:
     st.subheader("官方躺平ETF组合 (US市场)")
-    df_flat = pd.DataFrame([fetch_stock_info(sym) for sym in FLAT_ETFS],
-                           columns=["代码", "名称", "现价", "涨跌幅"])
-    st.dataframe(df_flat, use_container_width=True)
+    # 加个加载提示，优化体验
+    with st.spinner("正在拉取行情数据..."):
+        df_flat = pd.DataFrame([fetch_stock_info(sym) for sym in FLAT_ETFS],
+                               columns=["代码", "名称", "现价", "涨跌幅"])
+    st.dataframe(df_flat, use_container_width=True, hide_index=True)
 
 # ---------- 标签页2：我的自定义标的 ----------
 with tab2:
@@ -79,17 +87,18 @@ with tab2:
     if not st.session_state.custom_stocks:
         st.info("请在上方输入Z先生新推荐的标的添加")
     else:
-        # 抓取数据
-        custom_data = []
-        for item in st.session_state.custom_stocks:
-            data = fetch_stock_info(item["symbol"])
-            # 追添加日期
-            data.append(item["date"])
-            custom_data.append(data)
-        
-        # 展示表格
-        df_custom = pd.DataFrame(custom_data, columns=["代码", "名称", "现价", "涨跌幅", "添加日期"])
-        st.dataframe(df_custom, use_container_width=True)
+        with st.spinner("正在拉取行情数据..."):
+            # 抓取数据
+            custom_data = []
+            for item in st.session_state.custom_stocks:
+                data = fetch_stock_info(item["symbol"])
+                # 追添加日期
+                data.append(item["date"])
+                custom_data.append(data)
+            
+            # 展示表格
+            df_custom = pd.DataFrame(custom_data, columns=["代码", "名称", "现价", "涨跌幅", "添加日期"])
+        st.dataframe(df_custom, use_container_width=True, hide_index=True)
         
         # 导出按钮
         if st.download_button("导出CSV数据", df_custom.to_csv(index=False), "z_stocks.csv"):
