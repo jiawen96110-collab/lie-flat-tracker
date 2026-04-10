@@ -221,10 +221,10 @@ td:first-child,td:nth-child(2){text-align:left}
     </div>
     <div class="watch-info-strip">
       <span class="strip-icon">📡</span>
-      <span class="strip-text">实时跟踪 Z 先生推荐标的 · <strong>累计涨跌</strong>从推荐日收盘价起算</span>
+      <span class="strip-text">实时跟踪 Z 先生分享标的 · <strong>累计涨跌</strong>从分享日收盘价起算</span>
     </div>
     <table>
-      <thead><tr><th>标的</th><th>行业/逻辑</th><th>今日</th><th>推荐以来</th></tr></thead>
+      <thead><tr><th>标的</th><th>行业/逻辑</th><th>今日</th><th>分享以来</th></tr></thead>
       <tbody id="watch-tbody"></tbody>
     </table>
   </div>
@@ -269,8 +269,8 @@ const WATCH = [
     ticker:  '300782',
     name:    '卓胜微',
     sym:     'sz300782',       // 腾讯API代码
-    date:    '2026-03-26',    // 推荐日
-    price:   87.00,           // 推荐日收盘价
+    date:    '2026-03-26',    // 分享日
+    price:   87.00,           // 分享日收盘价
     sector:  '射频芯片',
     note:    '国内射频前端芯片龙头，射频开关/LNA/PA/滤波器全覆盖，安卓手机国产替代核心标的'
   },
@@ -352,7 +352,7 @@ function renderWatch() {
   let rows='';
   for (let i=0;i<WATCH.length;i++) {
     const w=WATCH[i], d=live[`w${i}`]||{};
-    // 推荐以来 = (当前价 - 推荐日价) / 推荐日价
+    // 分享以来 = (当前价 - 分享日价) / 分享日价
     let sinceVal=null;
     if (w.price && d.price>0) sinceVal=(d.price-w.price)/w.price*100;
     const sinceDisplay = sinceVal!==null
@@ -362,7 +362,7 @@ function renderWatch() {
       <td>
         <span class="tk">${w.ticker}</span>
         <span class="nm">${w.name}</span>
-        <span class="watch-meta">推荐价 ¥${w.price.toFixed(2)} · 当前 ${d.price>0?'¥'+d.price.toFixed(2):'--'}</span>
+        <span class="watch-meta">分享价 ¥${w.price.toFixed(2)} · 当前 ${d.price>0?'¥'+d.price.toFixed(2):'--'}</span>
       </td>
       <td>
         <span style="display:inline-block;background:var(--gold-bg);color:#c47a00;font-size:10px;font-weight:600;padding:2px 6px;border-radius:4px;margin-bottom:4px">${w.sector}</span>
