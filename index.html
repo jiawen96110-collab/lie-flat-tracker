@@ -898,63 +898,45 @@ function customSymbol(h) {
   return `sz${c}`;
 }
 
-let fetchCount = 0;
-
-function fetchAll() {
-  fetchCount++;
-  const cb = `lieflat_cb_${fetchCount}`;
+async function fetchAll() {
+  const PROXY = 'https://lieflat-proxy.jiawen96110.workers.dev';
 
   // Collect all symbols
   const allSymbols = {};
   for (const [key, sym] of Object.entries(TENCENT_MAP)) {
     allSymbols[sym] = key;
   }
-  // Custom
   customHoldings.forEach((h, i) => {
     allSymbols[customSymbol(h)] = `custom_${i}`;
   });
 
   const symList = Object.keys(allSymbols).join(',');
-  if (!symList) return;
+  if (!symList) { renderAll(); return; }
 
-  window[cb] = function(data) {
-    try {
-      // Parse Tencent response: multiple `var v_SYMBOL="field1~field2~...";`
-      const lines = data.split('\n');
-      for (const line of lines) {
-        const m = line.match(/var v_(\w+)="([^"]+)"/);
-        if (!m) continue;
-        const sym = m[1];
-        const fields = m[2].split('~');
-        // field[3] = current price, field[31] = pct change today, field[32] = price change
-        // For now use field[31] for today's pct
-        const todayPct = parseFloat(fields[31]);
-        const currentPrice = parseFloat(fields[3]);
-        const key = allSymbols[sym];
-        if (key) {
-          if (!liveData[key]) liveData[key] = {};
-          if (!isNaN(todayPct)) liveData[key].today = todayPct;
-          if (!isNaN(currentPrice)) liveData[key].currentPrice = currentPrice;
-          // ytd we keep from static for fixed, or compute from custom buyPrice
-        }
+  try {
+    const resp = await fetch(`${PROXY}?q=${symList}`);
+    const rawText = await resp.text();
+    const lines = rawText.split('\n');
+    for (const line of lines) {
+      const m = line.match(/var v_(\w+)="([^"]+)"/);
+      if (!m) continue;
+      const sym = m[1];
+      const fields = m[2].split('~');
+      const todayPct = parseFloat(fields[31]);
+      const currentPrice = parseFloat(fields[3]);
+      const key = allSymbols[sym];
+      if (key) {
+        if (!liveData[key]) liveData[key] = {};
+        if (!isNaN(todayPct)) liveData[key].today = todayPct;
+        if (!isNaN(currentPrice)) liveData[key].currentPrice = currentPrice;
       }
-      useStatic = false;
-    } catch(e) {
-      useStatic = true;
     }
-    renderAll();
-    delete window[cb];
-  };
-
-  const script = document.createElement('script');
-  script.src = `https://qt.gtimg.cn/q=${symList}&callback=${cb}`;
-  script.onerror = () => {
+    useStatic = false;
+  } catch(e) {
     useStatic = true;
-    renderAll();
-    delete window[cb];
-  };
-  document.head.appendChild(script);
-  setTimeout(() => { try { document.head.removeChild(script); } catch(e){} }, 5000);
+  }
+
+  renderAll();
 
   // Update timestamp
   const now = new Date();
