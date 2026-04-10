@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>躺平 · 投资组合</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
+  :root {
+    --bg: #f7f7f5;
+    --card: #ffffff;
+    --border: #e8e8e4;
+    --text: #1a1a18;
+    --muted: #888880;
+    --green: #1a7a4a;
+    --green-bg: #edf7f1;
+    --red: #c0392b;
+    --red-bg: #fdf0ee;
+    --accent: #2c5f8a;
+    --accent-light: #eef4fb;
+    --gold: #b8860b;
+    --gold-bg: #fdf8ec;
+    --tag-us: #2c5f8a;
+    --tag-hk: #1a7a4a;
+    --tag-cn: #c0392b;
+    --tag-my: #7b4fa6;
+    --radius: 12px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans SC', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 48px;
+  }
+
+  /* Header */
+  .header {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 16px 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-inner {
+    max-width: 680px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .header-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .logo {
+    width: 36px; height: 36px;
+    background: var(--text);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  h1 {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+  h1 span { color: var(--muted); font-weight: 300; font-size: 13px; margin-left: 4px; }
+
+  .refresh-info {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    text-align: right;
+    line-height: 1.5;
+  }
+  .refresh-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    margin-right: 4px;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* Tabs */
+  .tabs {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 16px 16px 0;
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab {
+    flex-shrink: 0;
+    padding: 7px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1.5px solid var(--border);
+    background: var(--card);
+    color: var(--muted);
+    transition: all 0.2s;
+  }
+  .tab.active[data-tab="all"] { background: var(--text); border-color: var(--text); color: white; }
+  .tab.active[data-tab="us"] { background: var(--tag-us); border-color: var(--tag-us); color: white; }
+  .tab.active[data-tab="hk"] { background: var(--tag-hk); border-color: var(--tag-hk); color: white; }
+  .tab.active[data-tab="cn"] { background: var(--tag-cn); border-color: var(--tag-cn); color: white; }
+  .tab.active[data-tab="my"] { background: var(--tag-my); border-color: var(--tag-my); color: white; }
+
+  /* Main */
+  .main {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* Section Card */
+  .section-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .section-header {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .market-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 6px;
+    letter-spacing: 0.5px;
+  }
+  .tag-us { background: #ddeaf6; color: var(--tag-us); }
+  .tag-hk { background: #d8f0e4; color: var(--tag-hk); }
+  .tag-cn { background: #fde8e6; color: var(--tag-cn); }
+  .tag-my { background: #ede0f7; color: var(--tag-my); }
+  .tag-躺平 { background: #e8e8e4; color: var(--muted); }
+
+  .section-name {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .section-perf {
+    text-align: right;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  /* Table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  thead th {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 8px 16px;
+    border-bottom: 1px solid var(--border);
+    text-align: right;
+    font-family: 'DM Mono', monospace;
+  }
+  thead th:first-child { text-align: left; }
+  thead th:nth-child(2) { text-align: left; }
+
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--bg); }
+
+  td {
+    padding: 11px 16px;
+    font-size: 13px;
+    text-align: right;
+    vertical-align: middle;
+  }
+  td:first-child { text-align: left; }
+  td:nth-child(2) { text-align: left; }
+
+  .weight {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    width: 36px;
+  }
+  .ticker {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--accent);
+  }
+  .name-cell { line-height: 1.3; }
+  .etf-name {
+    font-size: 12px;
+    font-weight: 500;
+    display: block;
+  }
+  .etf-sub {
+    font-size: 10px;
+    color: var(--muted);
+    display: block;
+    margin-top: 1px;
+  }
+
+  .pct {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 4px 8px;
+    border-radius: 6px;
+    display: inline-block;
+    min-width: 64px;
+    text-align: center;
+  }
+  .pct.pos { color: var(--green); background: var(--green-bg); }
+  .pct.neg { color: var(--red); background: var(--red-bg); }
+  .pct.zero { color: var(--muted); background: var(--bg); }
+  .pct.loading { color: var(--muted); background: var(--bg); font-size: 11px; }
+
+  /* Custom Section */
+  .custom-section { border-color: #d4c8e8; }
+  .custom-section .section-header { background: #faf8fe; }
+
+  .add-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: var(--tag-my);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: 'Noto Sans SC', sans-serif;
+    transition: opacity 0.2s;
+  }
+  .add-btn:hover { opacity: 0.85; }
+
+  .empty-state {
+    padding: 32px 16px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 2;
+  }
+  .empty-state .hint { font-size: 11px; margin-top: 4px; }
+
+  /* Delete button */
+  .del-btn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 14px;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.15s;
+    opacity: 0.5;
+  }
+  .del-btn:hover { color: var(--red); opacity: 1; background: var(--red-bg); }
+
+  .since-date {
+    font-size: 10px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* Modal */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 200;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--card);
+    border-radius: 20px 20px 0 0;
+    padding: 24px 20px 40px;
+    width: 100%;
+    max-width: 680px;
+    animation: slideUp 0.25s ease;
+  }
+  @keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+  .modal-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+  .form-group {
+    margin-bottom: 14px;
+  }
+  .form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    margin-bottom: 6px;
+    letter-spacing: 0.3px;
+  }
+  .form-group input, .form-group select {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: 'Noto Sans SC', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-group input:focus, .form-group select:focus {
+    border-color: var(--tag-my);
+  }
+  .form-row { display: flex; gap: 10px; }
+  .form-row .form-group { flex: 1; }
+
+  .form-hint {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  .btn-cancel {
+    flex: 1;
+    padding: 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    background: none;
+    font-size: 14px;
+    font-family: 'Noto Sans SC', sans-serif;
+    cursor: pointer;
+    color: var(--muted);
+  }
+  .btn-add {
+    flex: 2;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    background: var(--tag-my);
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Noto Sans SC', sans-serif;
+    cursor: pointer;
+  }
+
+  /* Summary bar */
+  .summary-bar {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+  .summary-bar::-webkit-scrollbar { display: none; }
+  .summary-chip {
+    flex-shrink: 0;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    text-align: center;
+    min-width: 90px;
+  }
+  .chip-label {
+    font-size: 10px;
+    color: var(--muted);
+    margin-bottom: 4px;
+    font-family: 'DM Mono', monospace;
+  }
+  .chip-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  /* Sections hidden by tab */
+  .section-wrapper { display: block; }
+  .section-wrapper.hidden { display: none; }
+
+  @media (max-width: 400px) {
+    .pct { min-width: 52px; font-size: 12px; }
+    td { padding: 10px 10px; font-size: 12px; }
+    thead th { padding: 8px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="header-title">
+      <div class="logo">🛋️</div>
+      <div>
+        <h1>躺平组合 <span>· Portfolio</span></h1>
+      </div>
+    </div>
+    <div class="refresh-info">
+      <span class="refresh-dot"></span>实时更新<br>
+      <span id="last-update">--:--:--</span>
+    </div>
+  </div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" data-tab="all">全部</div>
+  <div class="tab" data-tab="us">🇺🇸 美股</div>
+  <div class="tab" data-tab="hk">🇭🇰 港股</div>
+  <div class="tab" data-tab="cn">🇨🇳 A股</div>
+  <div class="tab" data-tab="my">⭐ 自选</div>
+</div>
+
+<div class="main">
+
+  <!-- Summary chips -->
+  <div class="summary-bar">
+    <div class="summary-chip">
+      <div class="chip-label">美股 今日</div>
+      <div class="chip-value" id="chip-us-today">--</div>
+    </div>
+    <div class="summary-chip">
+      <div class="chip-label">美股 YTD</div>
+      <div class="chip-value" id="chip-us-ytd">--</div>
+    </div>
+    <div class="summary-chip">
+      <div class="chip-label">港股 今日</div>
+      <div class="chip-value" id="chip-hk-today">--</div>
+    </div>
+    <div class="summary-chip">
+      <div class="chip-label">港股 YTD</div>
+      <div class="chip-value" id="chip-hk-ytd">--</div>
+    </div>
+    <div class="summary-chip">
+      <div class="chip-label">A股 今日</div>
+      <div class="chip-value" id="chip-cn-today">--</div>
+    </div>
+    <div class="summary-chip">
+      <div class="chip-label">A股 YTD</div>
+      <div class="chip-value" id="chip-cn-ytd">--</div>
+    </div>
+  </div>
+
+  <!-- US Section -->
+  <div class="section-wrapper" data-section="us">
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-title">
+          <span class="market-tag tag-us">US</span>
+          <span class="section-name">美股躺平组合</span>
+          <span class="market-tag tag-躺平">躺平</span>
+        </div>
+        <div class="section-perf">
+          今日 <span class="pct-inline" id="us-today" style="color:var(--muted)">--</span><br>
+          YTD <span class="pct-inline" id="us-ytd" style="color:var(--muted)">--</span>
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>仓位</th>
+            <th>标的</th>
+            <th>今日</th>
+            <th>YTD</th>
+          </tr>
+        </thead>
+        <tbody id="us-tbody">
+          <tr><td colspan="4" style="text-align:center;padding:20px;color:var(--muted);font-size:12px;">加载中...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- HK Section -->
+  <div class="section-wrapper" data-section="hk">
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-title">
+          <span class="market-tag tag-hk">HK</span>
+          <span class="section-name">港股躺平组合</span>
+          <span class="market-tag tag-躺平">躺平</span>
+        </div>
+        <div class="section-perf">
+          今日 <span class="pct-inline" id="hk-today" style="color:var(--muted)">--</span><br>
+          YTD <span class="pct-inline" id="hk-ytd" style="color:var(--muted)">--</span>
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>仓位</th>
+            <th>标的</th>
+            <th>今日</th>
+            <th>YTD</th>
+          </tr>
+        </thead>
+        <tbody id="hk-tbody">
+          <tr><td colspan="4" style="text-align:center;padding:20px;color:var(--muted);font-size:12px;">加载中...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- CN Section -->
+  <div class="section-wrapper" data-section="cn">
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-title">
+          <span class="market-tag tag-cn">CN</span>
+          <span class="section-name">A股躺平组合</span>
+          <span class="market-tag tag-躺平">躺平</span>
+        </div>
+        <div class="section-perf">
+          今日 <span class="pct-inline" id="cn-today" style="color:var(--muted)">--</span><br>
+          YTD <span class="pct-inline" id="cn-ytd" style="color:var(--muted)">--</span>
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>仓位</th>
+            <th>标的</th>
+            <th>今日</th>
+            <th>YTD</th>
+          </tr>
+        </thead>
+        <tbody id="cn-tbody">
+          <tr><td colspan="4" style="text-align:center;padding:20px;color:var(--muted);font-size:12px;">加载中...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- My Section -->
+  <div class="section-wrapper" data-section="my">
+    <div class="section-card custom-section">
+      <div class="section-header">
+        <div class="section-title">
+          <span class="market-tag tag-my">MY</span>
+          <span class="section-name">我的自选</span>
+        </div>
+        <button class="add-btn" onclick="openModal()">＋ 添加标的</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>标的</th>
+            <th>名称</th>
+            <th>今日</th>
+            <th>自选以来</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="my-tbody">
+        </tbody>
+      </table>
+      <div class="empty-state" id="my-empty">
+        还没有自选标的<br>
+        <span class="hint">点击「添加标的」，输入代码+买入日期<br>自动计算从那天起的涨跌幅</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Add Modal -->
+<div class="modal-overlay" id="modal" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <div class="modal-title">添加自选标的</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>市场</label>
+        <select id="f-market">
+          <option value="us">🇺🇸 美股</option>
+          <option value="hk">🇭🇰 港股</option>
+          <option value="cn">🇨🇳 A股</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>代码</label>
+        <input type="text" id="f-code" placeholder="如 MRVL / 06690 / 159928" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label>名称（可自定义）</label>
+      <input type="text" id="f-name" placeholder="如 迈威尔 / 卓胜微 / 消费ETF" />
+    </div>
+    <div class="form-group">
+      <label>买入日期（自选起算日）</label>
+      <input type="date" id="f-date" />
+      <div class="form-hint">将自动计算从该日起的涨跌幅（需手动填入买入价）</div>
+    </div>
+    <div class="form-group">
+      <label>买入价格（可选，用于精确计算）</label>
+      <input type="number" id="f-price" placeholder="如 85.20" step="0.01" />
+      <div class="form-hint">留空则尝试用历史数据估算</div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">取消</button>
+      <button class="btn-add" onclick="addCustom()">添加</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── 固定组合数据 ───────────────────────────────────────────
+const PORTFOLIOS = {
+  us: {
+    label: 'us',
+    holdings: [
+      { weight: '25%', code: 'us_QQQ', ticker: 'QQQ', name: '纳指100 ETF', sub: 'Invesco QQQ' },
+      { weight: '25%', code: 'us_SPY', ticker: 'SPY', name: '标普500 ETF', sub: 'SPDR S&P 500' },
+      { weight: '20%', code: 'us_RING', ticker: 'RING', name: '黄金矿股 ETF', sub: 'iShares RING' },
+      { weight: '20%', code: 'us_COPX', ticker: 'COPX', name: '全球铜矿 ETF', sub: 'Global X COPX' },
+      { weight: '10%', code: 'us_BITB', ticker: 'BITB', name: '比特币 ETF', sub: 'Bitwise BITB' },
+    ]
+  },
+  hk: {
+    label: 'hk',
+    holdings: [
+      { weight: '25%', code: 'hk_03455', ticker: '03455', name: '纳指100 ETF', sub: '华夏' },
+      { weight: '20%', code: 'hk_03132', ticker: '03132', name: '全球半导体 ETF', sub: '南方' },
+      { weight: '20%', code: 'hk_03147', ticker: '03147', name: '中国创业板 ETF', sub: '华夏' },
+      { weight: '20%', code: 'hk_03110', ticker: '03110', name: '恒生高股息 ETF', sub: '华夏' },
+      { weight: '15%', code: 'hk_02840', ticker: '02840', name: '黄金 ETF', sub: '道富' },
+    ]
+  },
+  cn: {
+    label: 'cn',
+    holdings: [
+      { weight: '25%', code: 'cn_513390', ticker: '513390', name: '纳指100 ETF', sub: '华夏' },
+      { weight: '25%', code: 'cn_159652', ticker: '159652', name: '有色50 ETF', sub: '易方达' },
+      { weight: '25%', code: 'cn_588200', ticker: '588200', name: '科创芯片 ETF', sub: '华宝' },
+      { weight: '15%', code: 'cn_515880', ticker: '515880', name: '通信 ETF', sub: '国泰' },
+      { weight: '10%', code: 'cn_518880', ticker: '518880', name: '黄金 ETF', sub: '华安' },
+    ]
+  }
+};
+
+// Static fallback data (shown when API unavailable due to CORS)
+const STATIC_DATA = {
+  us_QQQ:  { today: +0.68, ytd: -0.55 },
+  us_SPY:  { today: +0.58, ytd: -0.02 },
+  us_RING: { today: +0.14, ytd: +14.83 },
+  us_COPX: { today: -0.57, ytd: +13.62 },
+  us_BITB: { today: +1.14, ytd: -17.41 },
+  hk_03455:{ today: +1.21, ytd: -0.53 },
+  hk_03132:{ today: +2.58, ytd: +25.08 },
+  hk_03147:{ today: +4.99, ytd: +11.40 },
+  hk_03110:{ today: +0.67, ytd: +9.10 },
+  hk_02840:{ today: +0.85, ytd: +10.25 },
+  cn_513390:{ today: +1.01, ytd: -5.03 },
+  cn_159652:{ today: -0.06, ytd: +8.54 },
+  cn_588200:{ today: +2.42, ytd: +10.16 },
+  cn_515880:{ today: +2.50, ytd: +19.77 },
+  cn_518880:{ today: +0.90, ytd: +7.48 },
+};
+
+// Live data store
+const liveData = {};
+let useStatic = false;
+
+// ─── Custom holdings (localStorage) ───────────────────────
+const STORAGE_KEY = 'lieflat_custom_v2';
+let customHoldings = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+
+function saveCustom() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(customHoldings));
+}
+
+// ─── Render helpers ────────────────────────────────────────
+function pctTag(val) {
+  if (val === null || val === undefined || isNaN(val)) return '<span class="pct loading">--</span>';
+  const cls = val > 0 ? 'pos' : val < 0 ? 'neg' : 'zero';
+  const sign = val > 0 ? '+' : '';
+  return `<span class="pct ${cls}">${sign}${val.toFixed(2)}%</span>`;
+}
+function pctInline(val) {
+  if (val === null || val === undefined || isNaN(val)) return '<span style="color:var(--muted)">--</span>';
+  const cls = val > 0 ? 'color:var(--green)' : val < 0 ? 'color:var(--red)' : 'color:var(--muted)';
+  const sign = val > 0 ? '+' : '';
+  return `<span style="${cls};font-family:DM Mono,monospace;font-size:12px;font-weight:600">${sign}${val.toFixed(2)}%</span>`;
+}
+function chipVal(val) {
+  if (val === null || isNaN(val)) return '<span style="color:var(--muted)">--</span>';
+  const cls = val > 0 ? 'var(--green)' : val < 0 ? 'var(--red)' : 'var(--muted)';
+  const sign = val > 0 ? '+' : '';
+  return `<span style="color:${cls}">${sign}${val.toFixed(2)}%</span>`;
+}
+
+// ─── Render fixed portfolios ───────────────────────────────
+function renderPortfolio(key) {
+  const p = PORTFOLIOS[key];
+  const tbody = document.getElementById(`${key}-tbody`);
+  let todayWt = 0, ytdWt = 0;
+  let rows = '';
+  for (const h of p.holdings) {
+    const d = liveData[h.code] || STATIC_DATA[h.code] || {};
+    const wNum = parseFloat(h.weight) / 100;
+    if (!isNaN(d.today)) todayWt += wNum * d.today;
+    if (!isNaN(d.ytd)) ytdWt += wNum * d.ytd;
+    rows += `<tr>
+      <td class="weight">${h.weight}</td>
+      <td class="name-cell">
+        <span class="ticker">${h.ticker}</span><br>
+        <span class="etf-name">${h.name}</span>
+      </td>
+      <td>${pctTag(d.today)}</td>
+      <td>${pctTag(d.ytd)}</td>
+    </tr>`;
+  }
+  tbody.innerHTML = rows;
+  document.getElementById(`${key}-today`).innerHTML = pctInline(todayWt);
+  document.getElementById(`${key}-ytd`).innerHTML = pctInline(ytdWt);
+  document.getElementById(`chip-${key}-today`).innerHTML = chipVal(todayWt);
+  document.getElementById(`chip-${key}-ytd`).innerHTML = chipVal(ytdWt);
+}
+
+// ─── Render custom holdings ────────────────────────────────
+function renderCustom() {
+  const tbody = document.getElementById('my-tbody');
+  const empty = document.getElementById('my-empty');
+  if (customHoldings.length === 0) {
+    tbody.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  let rows = '';
+  for (let i = 0; i < customHoldings.length; i++) {
+    const h = customHoldings[i];
+    const d = liveData[`custom_${i}`] || {};
+    const mktTag = { us: 'tag-us', hk: 'tag-hk', cn: 'tag-cn' }[h.market] || 'tag-my';
+    const mktLabel = { us: 'US', hk: 'HK', cn: 'CN' }[h.market] || '?';
+
+    let sinceHtml;
+    if (h.buyPrice && !isNaN(d.currentPrice) && d.currentPrice > 0) {
+      const since = (d.currentPrice - h.buyPrice) / h.buyPrice * 100;
+      sinceHtml = pctTag(since);
+    } else {
+      sinceHtml = '<span class="pct zero" title="请填写买入价">--%</span>';
+    }
+
+    rows += `<tr>
+      <td><span class="ticker">${h.code}</span><br><span class="market-tag ${mktTag}" style="margin-top:3px;display:inline-block">${mktLabel}</span></td>
+      <td class="name-cell">
+        <span class="etf-name">${h.name}</span>
+        <span class="since-date">自 ${h.date}</span>
+      </td>
+      <td>${pctTag(d.today)}</td>
+      <td>${sinceHtml}</td>
+      <td><button class="del-btn" onclick="removeCustom(${i})" title="删除">✕</button></td>
+    </tr>`;
+  }
+  tbody.innerHTML = rows;
+}
+
+function removeCustom(i) {
+  if (confirm(`删除 ${customHoldings[i].name}？`)) {
+    customHoldings.splice(i, 1);
+    saveCustom();
+    renderCustom();
+  }
+}
+
+// ─── Modal ─────────────────────────────────────────────────
+function openModal() {
+  document.getElementById('modal').classList.add('open');
+  // default date to today
+  const d = new Date();
+  document.getElementById('f-date').value = d.toISOString().split('T')[0];
+}
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+}
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('modal')) closeModal();
+}
+function addCustom() {
+  const market = document.getElementById('f-market').value;
+  const code = document.getElementById('f-code').value.trim().toUpperCase();
+  const name = document.getElementById('f-name').value.trim() || code;
+  const date = document.getElementById('f-date').value;
+  const price = parseFloat(document.getElementById('f-price').value);
+
+  if (!code || !date) { alert('代码和日期不能为空'); return; }
+
+  customHoldings.push({ market, code, name, date, buyPrice: isNaN(price) ? null : price });
+  saveCustom();
+  renderCustom();
+  closeModal();
+
+  // clear form
+  document.getElementById('f-code').value = '';
+  document.getElementById('f-name').value = '';
+  document.getElementById('f-price').value = '';
+}
+
+// ─── Tabs ──────────────────────────────────────────────────
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    const t = tab.dataset.tab;
+    document.querySelectorAll('.section-wrapper').forEach(s => {
+      if (t === 'all') s.classList.remove('hidden');
+      else s.classList.toggle('hidden', s.dataset.section !== t);
+    });
+  });
+});
+
+// ─── Data fetching via Tencent API (JSONP) ─────────────────
+// Maps our code keys → Tencent symbols
+const TENCENT_MAP = {
+  us_QQQ:   'usQQQ',
+  us_SPY:   'usSPY',
+  us_RING:  'usRING',
+  us_COPX:  'usCOPX',
+  us_BITB:  'usBITB',
+  hk_03455: 'hk03455',
+  hk_03132: 'hk03132',
+  hk_03147: 'hk03147',
+  hk_03110: 'hk03110',
+  hk_02840: 'hk02840',
+  cn_513390: 'sh513390',
+  cn_159652: 'sz159652',
+  cn_588200: 'sh588200',
+  cn_515880: 'sh515880',
+  cn_518880: 'sh518880',
+};
+
+// Custom holding Tencent symbol builder
+function customSymbol(h) {
+  if (h.market === 'us') return `us${h.code}`;
+  if (h.market === 'hk') return `hk${h.code.padStart(5,'0')}`;
+  // A-share: guess prefix by code range
+  const c = h.code;
+  if (c.startsWith('6')) return `sh${c}`;
+  if (c.startsWith('0') || c.startsWith('3')) return `sz${c}`;
+  if (c.startsWith('5') || c.startsWith('1')) {
+    // ETFs: 5xxxxx → sh, 1xxxxx → sz
+    return c.startsWith('5') ? `sh${c}` : `sz${c}`;
+  }
+  return `sz${c}`;
+}
+
+async function fetchAll() {
+  const PROXY = 'https://lieflat-proxy.jiawen96110.workers.dev';
+
+  // Collect all symbols
+  const allSymbols = {};
+  for (const [key, sym] of Object.entries(TENCENT_MAP)) {
+    allSymbols[sym] = key;
+  }
+  customHoldings.forEach((h, i) => {
+    allSymbols[customSymbol(h)] = `custom_${i}`;
+  });
+
+  const symList = Object.keys(allSymbols).join(',');
+  if (!symList) { renderAll(); return; }
+
+  try {
+    const resp = await fetch(`${PROXY}?q=${symList}`);
+    const rawText = await resp.text();
+    const regex = /v_([a-zA-Z0-9]+)="([^"]+)"/g;
+    let m;
+    while ((m = regex.exec(rawText)) !== null) {
+      const sym = m[1];
+      const fields = m[2].split('~');
+      const todayPct = parseFloat(fields[32]);
+      const currentPrice = parseFloat(fields[3]);
+      const key = allSymbols[sym];
+      if (key) {
+        if (!liveData[key]) liveData[key] = {};
+        if (!isNaN(todayPct)) liveData[key].today = todayPct;
+        if (!isNaN(currentPrice)) liveData[key].currentPrice = currentPrice;
+      }
+    }
+    useStatic = false;
+  } catch(e) {
+    useStatic = true;
+  }
+
+  renderAll();
+
+  // Update timestamp
+  const now = new Date();
+  document.getElementById('last-update').textContent =
+    now.toTimeString().slice(0,8);
+}
+
+function renderAll() {
+  // For YTD on fixed: use static data (Tencent doesn't provide YTD easily)
+  for (const key of Object.keys(TENCENT_MAP)) {
+    if (!liveData[key]) liveData[key] = {};
+    if (isNaN(liveData[key].ytd) && STATIC_DATA[key]) {
+      liveData[key].ytd = STATIC_DATA[key].ytd;
+    }
+    // If API failed, fallback today too
+    if (isNaN(liveData[key].today) && STATIC_DATA[key]) {
+      liveData[key].today = STATIC_DATA[key].today;
+    }
+  }
+  renderPortfolio('us');
+  renderPortfolio('hk');
+  renderPortfolio('cn');
+  renderCustom();
+}
+
+// ─── Init ──────────────────────────────────────────────────
+// Render with static data immediately
+for (const [key, d] of Object.entries(STATIC_DATA)) {
+  liveData[key] = { today: d.today, ytd: d.ytd };
+}
+renderAll();
+fetchAll();
+setInterval(fetchAll, 30000);
+</script>
+</body>
+</html>
