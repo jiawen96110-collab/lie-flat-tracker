@@ -3,383 +3,695 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>躺平组合 · Z先生机会跟踪</title>
+<title>躺平组合 · 专业行情版</title>
 <style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
-  }
-  body {
-    background: #f5f7fa;
-    padding-bottom: 70px;
-  }
-  .header {
-    background: #fff;
-    padding: 16px 20px;
-    border-bottom: 1px solid #e5e7eb;
-  }
-  .header h1 {
-    font-size: 20px;
-    margin-bottom: 4px;
-  }
-  .header .time {
-    font-size: 12px;
-    color: #888;
-  }
-  .tabs {
-    display: flex;
-    background: #fff;
-    padding: 0 12px;
-    gap: 8px;
-    border-bottom: 1px solid #e5e7eb;
-  }
-  .tab {
-    padding: 12px 10px;
-    font-size: 14px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #666;
-    position: relative;
-  }
-  .tab.active {
-    color: #0070e0;
-    font-weight: 500;
-  }
-  .tab.active::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: #0070e0;
-  }
-  .section {
-    display: none;
-    padding: 12px;
-  }
-  .section.active {
-    display: block;
-  }
-  .card {
-    background: #fff;
-    border-radius: 12px;
-    overflow: hidden;
-    margin-bottom: 10px;
-  }
-  .table-head {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    padding: 10px 12px;
-    font-size: 12px;
-    color: #888;
-    border-bottom: 1px solid #f0f0f0;
-  }
-  .table-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    padding: 12px;
-    border-bottom: 1px solid #f8f8f8;
-    align-items: center;
-  }
-  .table-row:last-child {
-    border-bottom: none;
-  }
-  .name {
-    font-weight: 500;
-  }
-  .code {
-    font-size: 12px;
-    color: #666;
-  }
-  .pct {
-    font-weight: 600;
-  }
-  .up {
-    color: #00b42a;
-  }
-  .down {
-    color: #f77272;
-  }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
 
-  /* 自选跟踪专用 */
-  .z-table-head {
-    grid-template-columns: 1.1fr 0.9fr 1fr 1.2fr 1fr 1fr !important;
-  }
-  .z-table-row {
-    grid-template-columns: 1.1fr 0.9fr 1fr 1.2fr 1fr 1fr !important;
-    padding: 12px;
-    align-items: center;
-  }
-  .note {
-    font-size: 12px;
-    color: #666;
-    line-height: 1.3;
-  }
+:root {
+--bg: #f5f7fa;
+--card: #ffffff;
+--border: #e4e7ec;
+--text-primary: #1d2129;
+--text-secondary: #4e5969;
+--text-tertiary: #86909c;
+--brand: #0070e0;
+--up: #00b42a;
+--down: #f77272;
+--flat-bg: #f2f3f5;
+--radius: 16px;
+--shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+--transition: all 0.25s cubic-bezier(0.32, 0.72, 0, 1);
+--font: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'PingFang SC', 'Helvetica Neue', sans-serif;
+--mono: 'SF Mono', Menlo, Monaco, Consolas, monospace;
+}
 
-  /* 管理员按钮 */
-  .admin-btn {
-    position: fixed;
-    right: 20px;
-    bottom: 20px;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: #7b1fa2;
-    color: #fff;
-    font-size: 22px;
-    border: none;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    cursor: pointer;
-  }
+body {
+font-family: var(--font);
+background: var(--bg);
+color: var(--text-primary);
+padding-bottom: 40px;
+-webkit-font-smoothing: antialiased;
+}
 
-  /* 弹窗 */
-  .modal {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.5);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-  }
-  .modal.show {
-    display: flex;
-  }
-  .modal-box {
-    background: #fff;
-    border-radius: 16px;
-    width: 90%;
-    max-width: 380px;
-    padding: 20px;
-  }
-  .modal-box h3 {
-    margin-bottom: 12px;
-    font-size: 16px;
-  }
-  .modal-box input {
-    width: 100%;
-    padding: 10px;
-    margin: 6px 0;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-  }
-  .modal-box button {
-    width: 100%;
-    padding: 10px;
-    background: #7b1fa2;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    margin-top: 10px;
-  }
+.header {
+position: sticky;
+top: 0;
+z-index: 99;
+background: rgba(255, 255, 255, 0.85);
+backdrop-filter: blur(20px);
+border-bottom: 0.5px solid var(--border);
+}
+
+.header-inner {
+max-width: 720px;
+margin: 0 auto;
+padding: 16px 20px 12px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+}
+
+.title-group h1 {
+font-size: 19px;
+font-weight: 600;
+line-height: 1.1;
+display: flex;
+align-items: center;
+gap: 6px;
+}
+
+.title-group .sub {
+font-size: 12px;
+color: var(--text-tertiary);
+margin-top: 2px;
+}
+
+.status-bar {
+display: flex;
+align-items: center;
+gap: 10px;
+font-size: 12px;
+color: var(--text-secondary);
+}
+
+#refreshBtn {
+padding: 6px 12px;
+border-radius: 12px;
+border: none;
+background: var(--brand);
+color: #fff;
+font-size: 12px;
+font-weight: 500;
+cursor: pointer;
+transition: var(--transition);
+}
+
+#refreshBtn:active {
+transform: scale(0.96);
+opacity: 0.9;
+}
+
+.tabbar {
+max-width: 720px;
+margin: 0 auto;
+padding: 8px 20px;
+}
+
+.tabs {
+display: flex;
+background: var(--flat-bg);
+border-radius: 12px;
+padding: 2px;
+gap: 2px;
+}
+
+.tab {
+flex: 1;
+padding: 8px 6px;
+border-radius: 10px;
+border: none;
+background: transparent;
+font-size: 13px;
+font-weight: 500;
+color: var(--text-secondary);
+cursor: pointer;
+transition: var(--transition);
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 4px;
+}
+
+.tab.active {
+background: var(--card);
+color: var(--text-primary);
+font-weight: 600;
+box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+/* 国旗图标样式 */
+.flag {
+width: 18px;
+height: 12px;
+border-radius: 2px;
+flex-shrink: 0;
+}
+.flag-us { background: linear-gradient(180deg, #B22234 33.3%, #fff 33.3%, #fff 66.6%, #3C3B6E 66.6%); }
+.flag-hk { background: linear-gradient(180deg, #EA2839 50%, #fff 50%); }
+.flag-cn { background: #DE2910; position: relative; }
+.flag-cn::after {
+content: '';
+position: absolute;
+top: 2px;
+left: 3px;
+width: 4px;
+height: 4px;
+background: #FFDE00;
+border-radius: 50%;
+box-shadow: 0 0 0 1px #FFDE00, 0 0 0 2px #FFDE00;
+}
+
+.container {
+max-width: 720px;
+margin: 0 auto;
+padding: 8px 20px 20px;
+display: flex;
+flex-direction: column;
+gap: 12px;
+}
+
+.card {
+background: var(--card);
+border-radius: var(--radius);
+box-shadow: var(--shadow);
+overflow: hidden;
+transition: var(--transition);
+}
+
+.section.hidden {
+display: none;
+}
+
+.card-header {
+padding: 16px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+border-bottom: 0.5px solid var(--border);
+}
+
+.card-left {
+display: flex;
+align-items: center;
+gap: 8px;
+}
+
+.badge {
+padding: 4px 8px;
+border-radius: 8px;
+font-size: 11px;
+font-weight: 600;
+line-height: 1;
+white-space: nowrap;
+display: flex;
+align-items: center;
+gap: 4px;
+}
+
+.badge-us {
+background: rgba(0, 112, 224, 0.1);
+color: var(--brand);
+}
+
+.badge-hk {
+background: rgba(0, 180, 42, 0.1);
+color: var(--up);
+}
+
+.badge-cn {
+background: rgba(247, 114, 114, 0.1);
+color: var(--down);
+}
+
+.badge-z {
+background: rgba(123, 31, 162, 0.1);
+color: #7b1fa2;
+}
+
+.card-title {
+font-size: 15px;
+font-weight: 600;
+}
+
+.card-stats {
+text-align: right;
+font-size: 12px;
+line-height: 1.4;
+}
+
+.stat-label {
+color: var(--text-tertiary);
+margin-right: 4px;
+}
+
+.stat-value {
+font-weight: 600;
+font-family: var(--mono);
+}
+
+.stat-up {
+color: var(--up);
+}
+.stat-down {
+color: var(--down);
+}
+
+.table-wrap {
+width: 100%;
+}
+table {
+width: 100%;
+border-collapse: collapse;
+}
+
+thead th {
+padding: 10px 16px 8px;
+font-size: 11px;
+font-weight: 500;
+color: var(--text-tertiary);
+text-align: right;
+border-bottom: 0.5px solid var(--border);
+}
+
+thead th:first-child,
+thead th:nth-child(2) {
+text-align: left;
+}
+
+tbody tr {
+border-bottom: 0.5px solid var(--border);
+}
+tbody tr:last-child {
+border-bottom: none;
+}
+
+td {
+padding: 14px 16px;
+font-size: 14px;
+text-align: right;
+vertical-align: middle;
+}
+
+td:first-child,
+td:nth-child(2) {
+text-align: left;
+}
+
+.weight {
+font-family: var(--mono);
+font-size: 12px;
+color: var(--text-secondary);
+}
+
+.code {
+font-family: var(--mono);
+font-size: 14px;
+font-weight: 600;
+color: var(--brand);
+display: block;
+line-height: 1.1;
+}
+
+.name {
+font-size: 13px;
+color: var(--text-secondary);
+margin-top: 2px;
+}
+
+.pct {
+display: inline-block;
+min-width: 72px;
+padding: 6px 8px;
+border-radius: 10px;
+font-family: var(--mono);
+font-size: 13px;
+font-weight: 600;
+text-align: center;
+line-height: 1;
+}
+
+.pct-up {
+color: var(--up);
+background: rgba(0, 180, 42, 0.08);
+}
+.pct-down {
+color: var(--down);
+background: rgba(247, 114, 114, 0.08);
+}
+.pct-flat {
+color: var(--text-secondary);
+background: var(--flat-bg);
+}
+.pct-loading {
+color: var(--text-tertiary);
+background: var(--flat-bg);
+font-size: 12px;
+}
+
+.footer {
+max-width: 720px;
+margin: 0 auto;
+padding: 12px 20px;
+text-align: center;
+font-size: 11px;
+color: var(--text-tertiary);
+line-height: 1.5;
+}
 </style>
+
 </head>
+
 <body>
 
 <div class="header">
-  <h1>躺平组合 · Z先生机会跟踪</h1>
-  <div class="time" id="nowTime">加载中...</div>
-</div>
-
-<div class="tabs">
-  <div class="tab active" data-target="us">美股</div>
-  <div class="tab" data-target="hk">港股</div>
-  <div class="tab" data-target="a">A股</div>
-  <div class="tab" data-target="z">⭐ 自选跟踪</div>
-</div>
-
-<!-- 美股 -->
-<div class="section active" id="us">
-  <div class="card">
-    <div class="table-head">
-      <div>标的</div>
-      <div>代码</div>
-      <div>当日</div>
-      <div>今年</div>
+  <div class="header-inner">
+    <div class="title-group">
+      <h1>📈 躺平组合</h1>
+      <div class="sub">ETF 全天候跟踪</div>
     </div>
-    <div class="table-row">
-      <div><div class="name">纳指100</div><div class="code">QQQ</div></div>
-      <div></div>
-      <div><span class="pct up">+1.22%</span></div>
-      <div><span class="pct up">+8.77%</span></div>
+    <div class="status-bar">
+      <span id="last-update">--:--:--</span>
+      <button id="refreshBtn">刷新</button>
     </div>
-    <div class="table-row">
-      <div><div class="name">标普500</div><div class="code">SPY</div></div>
-      <div></div>
-      <div><span class="pct up">+0.85%</span></div>
-      <div><span class="pct up">+6.21%</span></div>
+  </div>
+
+  <div class="tabbar">
+    <div class="tabs">
+      <button class="tab active" data-target="all">全部</button>
+      <button class="tab" data-target="us">
+        <span class="flag flag-us"></span> 美股
+      </button>
+      <button class="tab" data-target="hk">
+        <span class="flag flag-hk"></span> 港股
+      </button>
+      <button class="tab" data-target="cn">
+        <span class="flag flag-cn"></span> A股
+      </button>
+      <button class="tab" data-target="z">
+        ⭐ 自选跟踪
+      </button>
     </div>
   </div>
 </div>
 
-<!-- 港股 -->
-<div class="section" id="hk">
-  <div class="card">
-    <div class="table-head">
-      <div>标的</div>
-      <div>代码</div>
-      <div>当日</div>
-      <div>今年</div>
+<div class="container">
+
+  <div class="card section" data-section="us">
+    <div class="card-header">
+      <div class="card-left">
+        <div class="badge badge-us">
+          <span class="flag flag-us"></span> US
+        </div>
+        <div class="card-title">美股躺平组合</div>
+      </div>
+      <div class="card-stats">
+        <div><span class="stat-label">今日</span><span id="us-today" class="stat-value">--</span></div>
+        <div><span class="stat-label">今年</span><span id="us-ytd" class="stat-value">--</span></div>
+      </div>
     </div>
-    <div class="table-row">
-      <div><div class="name">恒生科技</div><div class="code">02800.HK</div></div>
-      <div></div>
-      <div><span class="pct up">+2.11%</span></div>
-      <div><span class="pct up">+12.34%</span></div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>仓位</th>
+            <th>标的</th>
+            <th>今日</th>
+            <th>今年</th>
+          </tr>
+        </thead>
+        <tbody id="us-tbody"></tbody>
+      </table>
     </div>
   </div>
+
+  <div class="card section" data-section="hk">
+    <div class="card-header">
+      <div class="card-left">
+        <div class="badge badge-hk">
+          <span class="flag flag-hk"></span> HK
+        </div>
+        <div class="card-title">港股躺平组合</div>
+      </div>
+      <div class="card-stats">
+        <div><span class="stat-label">今日</span><span id="hk-today" class="stat-value">--</span></div>
+        <div><span class="stat-label">今年</span><span id="hk-ytd" class="stat-value">--</span></div>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>仓位</th>
+            <th>标的</th>
+            <th>今日</th>
+            <th>今年</th>
+          </tr>
+        </thead>
+        <tbody id="hk-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card section" data-section="cn">
+    <div class="card-header">
+      <div class="card-left">
+        <div class="badge badge-cn">
+          <span class="flag flag-cn"></span> CN
+        </div>
+        <div class="card-title">A股躺平组合</div>
+      </div>
+      <div class="card-stats">
+        <div><span class="stat-label">今日</span><span id="cn-today" class="stat-value">--</span></div>
+        <div><span class="stat-label">今年</span><span id="cn-ytd" class="stat-value">--</span></div>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>仓位</th>
+            <th>标的</th>
+            <th>今日</th>
+            <th>今年</th>
+          </tr>
+        </thead>
+        <tbody id="cn-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ================== 新增：Z先生自选跟踪 ================== -->
+  <div class="card section" data-section="z">
+    <div class="card-header">
+      <div class="card-left">
+        <div class="badge badge-z">
+          ⭐ Z
+        </div>
+        <div class="card-title">Z先生机会跟踪</div>
+      </div>
+      <div class="card-stats">
+        <div>分享日期 · 累计收益</div>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>名称</th>
+            <th>代码</th>
+            <th>分享日期</th>
+            <th>备注</th>
+            <th>今日</th>
+            <th>至今累计</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="code">卓胜微</div>
+              <div class="name">射频前端芯片</div>
+            </td>
+            <td><span class="code">300782</span></td>
+            <td>2026-03-16</td>
+            <td><span class="name">Z先生3月16日分享</span></td>
+            <td><span class="pct pct-up">+1.85%</span></td>
+            <td><span class="pct pct-up">+9.42%</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
 </div>
 
-<!-- A股 -->
-<div class="section" id="a">
-  <div class="card">
-    <div class="table-head">
-      <div>标的</div>
-      <div>代码</div>
-      <div>当日</div>
-      <div>今年</div>
-    </div>
-    <div class="table-row">
-      <div><div class="name">黄金ETF</div><div class="code">518880</div></div>
-      <div></div>
-      <div><span class="pct up">+0.65%</span></div>
-      <div><span class="pct up">+15.22%</span></div>
-    </div>
-  </div>
-</div>
-
-<!-- ⭐ 自选跟踪（Z先生机会） -->
-<div class="section" id="z">
-  <div class="card">
-    <div class="table-head z-table-head">
-      <div>名称</div>
-      <div>代码</div>
-      <div>分享日期</div>
-      <div>备注</div>
-      <div>当日</div>
-      <div>至今累计</div>
-    </div>
-    <div id="zList">
-      <!-- 这里自动生成 -->
-    </div>
-  </div>
-</div>
-
-<!-- 管理员添加 -->
-<button class="admin-btn" onclick="showPwModal()">⚙️</button>
-
-<div class="modal" id="pwModal">
-  <div class="modal-box">
-    <h3>管理员验证</h3>
-    <input type="password" id="pw" placeholder="请输入密码">
-    <button onclick="checkPw()">确认</button>
-  </div>
-</div>
-
-<div class="modal" id="addModal">
-  <div class="modal-box">
-    <h3>添加 Z 先生机会</h3>
-    <input id="stockName" placeholder="股票名称">
-    <input id="stockCode" placeholder="股票代码">
-    <input id="shareDate" placeholder="分享日期 如：2026-03-16">
-    <input id="note" placeholder="备注：公司业务/逻辑">
-    <button onclick="addStock()">添加</button>
-  </div>
+<div class="footer">
+  数据来源：腾讯财经 · 每30秒自动刷新 · 手动刷新秒级更新<br>
+  仅供参考，不构成投资建议
 </div>
 
 <script>
-// 时间自动刷新
-function updateTime() {
-  const now = new Date();
-  document.getElementById('nowTime').innerText = now.toLocaleString();
-}
-setInterval(updateTime, 1000);
-updateTime();
+const PORTFOLIOS = {
+  us:{holdings:[
+    {weight:'25%',code:'us_QQQ',ticker:'QQQ',name:'纳指100 ETF'},
+    {weight:'25%',code:'us_SPY',ticker:'SPY',name:'标普500 ETF'},
+    {weight:'20%',code:'us_RING',ticker:'RING',name:'黄金矿股 ETF'},
+    {weight:'20%',code:'us_COPX',ticker:'COPX',name:'全球铜矿 ETF'},
+    {weight:'10%',code:'us_BITB',ticker:'BITB',name:'比特币 ETF'},
+  ]},
+  hk:{holdings:[
+    {weight:'25%',code:'hk_03455',ticker:'03455',name:'纳指100 ETF'},
+    {weight:'20%',code:'hk_03132',ticker:'03132',name:'全球半导体 ETF'},
+    {weight:'20%',code:'hk_03147',ticker:'03147',name:'中国创业板 ETF'},
+    {weight:'20%',code:'hk_03110',ticker:'03110',name:'恒生高股息 ETF'},
+    {weight:'15%',code:'hk_02840',ticker:'02840',name:'黄金 ETF'},
+  ]},
+  cn:{holdings:[
+    {weight:'25%',code:'cn_513390',ticker:'513390',name:'纳指100 ETF'},
+    {weight:'25%',code:'cn_159652',ticker:'159652',name:'有色50 ETF'},
+    {weight:'25%',code:'cn_588200',ticker:'588200',name:'科创芯片 ETF'},
+    {weight:'15%',code:'cn_515880',ticker:'515880',name:'通信 ETF'},
+    {weight:'10%',code:'cn_518880',ticker:'518880',name:'黄金 ETF'},
+  ]}
+};
 
-// 标签切换
+const STATIC_DATA = {
+  us_QQQ:{today:+0.68,ytd:-0.55},
+  us_SPY:{today:+0.58,ytd:-0.02},
+  us_RING:{today:+0.14,ytd:+14.83},
+  us_COPX:{today:-0.57,ytd:+13.62},
+  us_BITB:{today:+1.14,ytd:-17.41},
+  hk_03455:{today:+1.21,ytd:-0.53},
+  hk_03132:{today:+2.58,ytd:+25.08},
+  hk_03147:{today:+4.99,ytd:+11.40},
+  hk_03110:{today:+0.67,ytd:+9.10},
+  hk_02840:{today:+0.85,ytd:+10.25},
+  cn_513390:{today:+1.01,ytd:-5.03},
+  cn_159652:{today:-0.06,ytd:+8.54},
+  cn_588200:{today:+2.42,ytd:+10.16},
+  cn_515880:{today:+2.50,ytd:+19.77},
+  cn_518880:{today:+0.90,ytd:+7.48},
+};
+
+const liveData = {};
+
+const TENCENT_MAP = {
+  us_QQQ:'usQQQ',
+  us_SPY:'usSPY',
+  us_RING:'usRING',
+  us_COPX:'usCOPX',
+  us_BITB:'usBITB',
+  hk_03455:'hk03455',
+  hk_03132:'hk03132',
+  hk_03147:'hk03147',
+  hk_03110:'hk03110',
+  hk_02840:'hk02840',
+  cn_513390:'sh513390',
+  cn_159652:'sz159652',
+  cn_588200:'sh588200',
+  cn_515880:'sh515880',
+  cn_518880:'sh518880',
+};
+
+function pctTag(v) {
+  if (isNaN(v)) return `<span class="pct-loading">--</span>`;
+  const cls = v > 0 ? 'pct-up' : v < 0 ? 'pct-down' : 'pct-flat';
+  const sign = v > 0 ? '+' : '';
+  return `<span class="${cls}">${sign}${v.toFixed(2)}%</span>`;
+}
+
+function statTag(v) {
+  if (isNaN(v)) return '--';
+  const cls = v > 0 ? 'stat-up' : v < 0 ? 'stat-down' : '';
+  const sign = v > 0 ? '+' : '';
+  return `<span class="${cls}">${sign}${v.toFixed(2)}%</span>`;
+}
+
+function renderPortfolio(key) {
+  const group = PORTFOLIOS[key];
+  const tbody = document.getElementById(`${key}-tbody`);
+  let sumToday = 0, sumYtd = 0;
+  let html = '';
+
+  for (const item of group.holdings) {
+    const d = liveData[item.code] || STATIC_DATA[item.code] || {};
+    const w = parseFloat(item.weight) / 100;
+    if (!isNaN(d.today)) sumToday += w * d.today;
+    if (!isNaN(d.ytd)) sumYtd += w * d.ytd;
+
+    html += `
+    <tr>
+      <td><div class="weight">${item.weight}</div></td>
+      <td>
+        <div class="code">${item.ticker}</div>
+        <div class="name">${item.name}</div>
+      </td>
+      <td>${pctTag(d.today)}</td>
+      <td>${pctTag(d.ytd)}</td>
+    </tr>`;
+  }
+
+  tbody.innerHTML = html;
+  document.getElementById(`${key}-today`).innerHTML = statTag(sumToday);
+  document.getElementById(`${key}-ytd`).innerHTML = statTag(sumYtd);
+}
+
 document.querySelectorAll('.tab').forEach(tab => {
   tab.addEventListener('click', () => {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
     tab.classList.add('active');
-    document.getElementById(tab.dataset.target).classList.add('active');
+    const target = tab.dataset.target;
+
+    document.querySelectorAll('.section').forEach(sec => {
+      sec.classList.toggle('hidden', target !== 'all' && sec.dataset.section !== target);
+    });
   });
 });
 
-// Z自选本地存储
-const STORE_KEY = 'zStockList';
-const PASSWORD = 'z666';
+async function fetchAll() {
+  const proxy = 'https://lieflat-proxy.jiawen96110.workers.dev';
+  const symbolMap = {};
+  for (const [code, s] of Object.entries(TENCENT_MAP)) symbolMap[s] = code;
+  const symbols = Object.keys(symbolMap).join(',');
 
-function getZList() {
-  return JSON.parse(localStorage.getItem(STORE_KEY) || '[]');
-}
-function setZList(list) {
-  localStorage.setItem(STORE_KEY, JSON.stringify(list));
-  renderZList();
-}
+  try {
+    const res = await fetch(`${proxy}?q=${symbols}`);
+    const text = await res.text();
+    const reg = /v_([a-zA-Z0-9]+)="([^"]+)"/g;
+    let match;
+    while ((match = reg.exec(text)) !== null) {
+      const s = match[1];
+      const fields = match[2].split('~');
+      const code = symbolMap[s];
+      if (!code) continue;
+      const p = parseFloat(fields[32]);
+      if (!isNaN(p)) {
+        if (!liveData[code]) liveData[code] = {};
+        liveData[code].today = p;
+      }
+    }
+  } catch (e) {}
 
-// 渲染自选列表
-function renderZList() {
-  const list = getZList();
-  const el = document.getElementById('zList');
-  el.innerHTML = '';
-  list.forEach(item => {
-    const row = document.createElement('div');
-    row.className = 'table-row z-table-row';
-    
-    // 随机模拟行情，正式可对接新浪/腾讯
-    const day = (Math.random() * 3 - 1).toFixed(2);
-    const total = (Math.random() * 25 + 2).toFixed(2);
-    
-    row.innerHTML = `
-      <div class="name">${item.name}</div>
-      <div class="code">${item.code}</div>
-      <div>${item.date}</div>
-      <div class="note">${item.note || '-'}</div>
-      <div><span class="pct ${day>0?'up':'down'}">${day>0?'+':''}${day}%</span></div>
-      <div><span class="pct ${total>0?'up':'down'}">${total>0?'+':''}${total}%</span></div>
-    `;
-    el.appendChild(row);
-  });
+  renderAll();
+  document.getElementById('last-update').textContent = new Date().toTimeString().slice(0,8);
 }
 
-// 添加股票
-function addStock() {
-  const name = document.getElementById('stockName').value.trim();
-  const code = document.getElementById('stockCode').value.trim();
-  const date = document.getElementById('shareDate').value.trim();
-  const note = document.getElementById('note').value.trim();
-  if (!name || !code || !date) {
-    alert('请填写名称、代码、分享日期');
-    return;
+function renderAll() {
+  for (const k of Object.keys(STATIC_DATA)) {
+    if (!liveData[k]) liveData[k] = { ...STATIC_DATA[k] };
+    if (isNaN(liveData[k].today)) liveData[k].today = STATIC_DATA[k].today;
+    if (isNaN(liveData[k].ytd)) liveData[k].ytd = STATIC_DATA[k].ytd;
   }
-  const list = getZList();
-  list.unshift({ name, code, date, note });
-  setZList(list);
-  document.getElementById('addModal').classList.remove('show');
+  renderPortfolio('us');
+  renderPortfolio('hk');
+  renderPortfolio('cn');
 }
 
-// 弹窗控制
-function showPwModal() {
-  document.getElementById('pwModal').classList.add('show');
-}
-function checkPw() {
-  const pw = document.getElementById('pw').value;
-  if (pw === PASSWORD) {
-    document.getElementById('pwModal').classList.remove('show');
-    document.getElementById('addModal').classList.add('show');
-  } else {
-    alert('密码错误');
-  }
-}
+for (const k in STATIC_DATA) liveData[k] = { ...STATIC_DATA[k] };
+renderAll();
+fetchAll();
+setInterval(fetchAll, 30000);
 
-// 初始化
-renderZList();
+setInterval(() => {
+  document.getElementById('last-update').textContent = new Date().toTimeString().slice(0,8);
+}, 1000);
+
+document.getElementById('refreshBtn').onclick = fetchAll;
 </script>
+
 </body>
 </html>
