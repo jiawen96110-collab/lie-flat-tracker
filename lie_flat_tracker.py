@@ -1,3 +1,6 @@
+from streamlit_autorefresh import st_autorefresh
+# 每5分钟自动刷新（单位：毫秒）
+st_autorefresh(interval=5*60*1000, key="refresh")
 import streamlit as st
 import yfinance as yf
 import pandas as pd
