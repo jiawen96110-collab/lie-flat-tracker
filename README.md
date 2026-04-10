@@ -1,2 +1,2 @@
 # lie-flat-tracker
-躺平追踪器 
+我的躺平追踪器 
