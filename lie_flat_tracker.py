@@ -68,12 +68,13 @@ def get_ytd(ticker):
         today = date.today()
         start = f"{today.year}-01-01"
         data = yf.download(ticker, start=start, progress=False)
-        if len(data) < 1: return 0
+        if len(data) < 1:
+            return 0.0
         first = data['Close'].iloc[0]
         last = data['Close'].iloc[-1]
         return round((last - first) / first * 100, 2)
     except:
-        return 0
+        return 0.0
 
 def add_custom(ticker_input, market, name_input, notes):
     t = ticker_input.strip().upper()
@@ -114,7 +115,7 @@ with tab1:
             y = get_ytd(row["ticker"])
             prices.append(p or "-")
             daily_pcts.append(d or "-")
-            ytd_pcts.append(y or "-")
+            ytd_pcts.append(round(y, 2) if y is not None and isinstance(y, (int, float)) else "-")
         df["当前价格"] = prices
         df["当日涨跌"] = daily_pcts
         df["年初至今"] = ytd_pcts
