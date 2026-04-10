@@ -83,7 +83,7 @@ with tab2:
         custom_data = []
         for item in st.session_state.custom_stocks:
             data = fetch_stock_info(item["symbol"])
-            # 追加添加日期
+            # 追添加日期
             data.append(item["date"])
             custom_data.append(data)
         
@@ -94,10 +94,3 @@ with tab2:
         # 导出按钮
         if st.download_button("导出CSV数据", df_custom.to_csv(index=False), "z_stocks.csv"):
             st.success("导出成功！")
-
-        styled = df_custom[["name", "ticker", "添加日期", "add_price", "当前价格", "自添加日起涨跌幅(%)", "notes"]].style.map(color_pct, subset=["自添加日起涨跌幅(%)"])
-        st.dataframe(styled, use_container_width=True, hide_index=True)
-    else:
-        st.info("还没有添加自定义标的")
-
-st.caption("数据每5分钟刷新 | 本地JSON保存 | 仅供个人使用")
