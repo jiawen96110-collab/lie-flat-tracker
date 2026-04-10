@@ -2,134 +2,375 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Z先生机会跟踪</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>躺平组合 · Z先生机会跟踪</title>
 <style>
-  *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif}
-  body{background:#f5f7fa;padding-bottom:60px}
-  .header{padding:20px;background:#fff;border-bottom:1px solid #e4e7ec}
-  .header h1{font-size:20px;margin-bottom:4px}
-  .header p{font-size:12px;color:#888}
-  .card{background:#fff;border-radius:16px;margin:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.04)}
-  .table-header{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;padding:12px;font-size:12px;color:#888;border-bottom:1px solid #eee}
-  .item{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;padding:14px 12px;border-bottom:1px solid #f4f4f4;align-items:center}
-  .item .name{font-weight:500}
-  .item .code{font-size:12px;color:#888}
-  .item .date{font-size:12px;color:#666}
-  .item .pct{font-weight:608}
-  .up{color:#00b42a}
-  .down{color:#f77272}
-  .admin{position:fixed;bottom:20px;right:20px;width:50px;height:50px;border-radius:50%;background:#7b1fa2;color:#fff;font-size:22px;border:none;box-shadow:0 4px 12px rgba(0,0,0,0.15)}
-  .modal{position:fixed;inset:0;background:rgba(0,0,0,0.5);display:none;align-items:center;justify-content:center}
-  .modal.show{display:flex}
-  .modal-body{background:#fff;border-radius:16px;width:90%;max-width:380px;padding:20px}
-  .modal-body h3{margin-bottom:12px;font-size:16px}
-  input{width:100%;margin:6px 0;padding:12px;border-radius:10px;border:1px solid #ddd;font-size:14px}
-  .modal-body button{width:100%;padding:12px;background:#7b1fa2;color:#fff;border:none;border-radius:10px;margin-top:10px}
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
+  }
+  body {
+    background: #f5f7fa;
+    padding-bottom: 70px;
+  }
+  .header {
+    background: #fff;
+    padding: 16px 20px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  .header h1 {
+    font-size: 20px;
+    margin-bottom: 4px;
+  }
+  .header .time {
+    font-size: 12px;
+    color: #888;
+  }
+  .tabs {
+    display: flex;
+    background: #fff;
+    padding: 0 12px;
+    gap: 8px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  .tab {
+    padding: 12px 10px;
+    font-size: 14px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #666;
+    position: relative;
+  }
+  .tab.active {
+    color: #0070e0;
+    font-weight: 500;
+  }
+  .tab.active::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #0070e0;
+  }
+  .section {
+    display: none;
+    padding: 12px;
+  }
+  .section.active {
+    display: block;
+  }
+  .card {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  .table-head {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    padding: 10px 12px;
+    font-size: 12px;
+    color: #888;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .table-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    padding: 12px;
+    border-bottom: 1px solid #f8f8f8;
+    align-items: center;
+  }
+  .table-row:last-child {
+    border-bottom: none;
+  }
+  .name {
+    font-weight: 500;
+  }
+  .code {
+    font-size: 12px;
+    color: #666;
+  }
+  .pct {
+    font-weight: 600;
+  }
+  .up {
+    color: #00b42a;
+  }
+  .down {
+    color: #f77272;
+  }
+
+  /* 自选跟踪专用 */
+  .z-table-head {
+    grid-template-columns: 1.1fr 0.9fr 1fr 1.2fr 1fr 1fr !important;
+  }
+  .z-table-row {
+    grid-template-columns: 1.1fr 0.9fr 1fr 1.2fr 1fr 1fr !important;
+    padding: 12px;
+    align-items: center;
+  }
+  .note {
+    font-size: 12px;
+    color: #666;
+    line-height: 1.3;
+  }
+
+  /* 管理员按钮 */
+  .admin-btn {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #7b1fa2;
+    color: #fff;
+    font-size: 22px;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    cursor: pointer;
+  }
+
+  /* 弹窗 */
+  .modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+  .modal.show {
+    display: flex;
+  }
+  .modal-box {
+    background: #fff;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 380px;
+    padding: 20px;
+  }
+  .modal-box h3 {
+    margin-bottom: 12px;
+    font-size: 16px;
+  }
+  .modal-box input {
+    width: 100%;
+    padding: 10px;
+    margin: 6px 0;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+  }
+  .modal-box button {
+    width: 100%;
+    padding: 10px;
+    background: #7b1fa2;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    margin-top: 10px;
+  }
 </style>
 </head>
 <body>
 
 <div class="header">
-  <h1>⭐ Z先生机会跟踪</h1>
-  <p>录入分享日期 → 自动跟踪至今涨幅</p>
+  <h1>躺平组合 · Z先生机会跟踪</h1>
+  <div class="time" id="nowTime">加载中...</div>
 </div>
 
-<div class="card">
-  <div class="table-header">
-    <div>标的</div>
-    <div>分享日期</div>
-    <div>当日</div>
-    <div>至今累计</div>
-  </div>
-  <div id="list">
-    <!-- 股票自动渲染在这里 -->
+<div class="tabs">
+  <div class="tab active" data-target="us">美股</div>
+  <div class="tab" data-target="hk">港股</div>
+  <div class="tab" data-target="a">A股</div>
+  <div class="tab" data-target="z">⭐ 自选跟踪</div>
+</div>
+
+<!-- 美股 -->
+<div class="section active" id="us">
+  <div class="card">
+    <div class="table-head">
+      <div>标的</div>
+      <div>代码</div>
+      <div>当日</div>
+      <div>今年</div>
+    </div>
+    <div class="table-row">
+      <div><div class="name">纳指100</div><div class="code">QQQ</div></div>
+      <div></div>
+      <div><span class="pct up">+1.22%</span></div>
+      <div><span class="pct up">+8.77%</span></div>
+    </div>
+    <div class="table-row">
+      <div><div class="name">标普500</div><div class="code">SPY</div></div>
+      <div></div>
+      <div><span class="pct up">+0.85%</span></div>
+      <div><span class="pct up">+6.21%</span></div>
+    </div>
   </div>
 </div>
 
-<button class="admin" onclick="showAdmin()">⚙️</button>
+<!-- 港股 -->
+<div class="section" id="hk">
+  <div class="card">
+    <div class="table-head">
+      <div>标的</div>
+      <div>代码</div>
+      <div>当日</div>
+      <div>今年</div>
+    </div>
+    <div class="table-row">
+      <div><div class="name">恒生科技</div><div class="code">02800.HK</div></div>
+      <div></div>
+      <div><span class="pct up">+2.11%</span></div>
+      <div><span class="pct up">+12.34%</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- A股 -->
+<div class="section" id="a">
+  <div class="card">
+    <div class="table-head">
+      <div>标的</div>
+      <div>代码</div>
+      <div>当日</div>
+      <div>今年</div>
+    </div>
+    <div class="table-row">
+      <div><div class="name">黄金ETF</div><div class="code">518880</div></div>
+      <div></div>
+      <div><span class="pct up">+0.65%</span></div>
+      <div><span class="pct up">+15.22%</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ⭐ 自选跟踪（Z先生机会） -->
+<div class="section" id="z">
+  <div class="card">
+    <div class="table-head z-table-head">
+      <div>名称</div>
+      <div>代码</div>
+      <div>分享日期</div>
+      <div>备注</div>
+      <div>当日</div>
+      <div>至今累计</div>
+    </div>
+    <div id="zList">
+      <!-- 这里自动生成 -->
+    </div>
+  </div>
+</div>
+
+<!-- 管理员添加 -->
+<button class="admin-btn" onclick="showPwModal()">⚙️</button>
 
 <div class="modal" id="pwModal">
-  <div class="modal-body">
-    <h3>管理员密码</h3>
+  <div class="modal-box">
+    <h3>管理员验证</h3>
     <input type="password" id="pw" placeholder="请输入密码">
     <button onclick="checkPw()">确认</button>
   </div>
 </div>
 
 <div class="modal" id="addModal">
-  <div class="modal-body">
-    <h3>添加跟踪标的</h3>
-    <input id="name" placeholder="股票名称 如：卓胜微">
-    <input id="code" placeholder="股票代码 如：300782">
-    <input id="sDate" placeholder="分享日期 如：2026-03-16">
-    <button onclick="addStock()">添加并自动跟踪</button>
+  <div class="modal-box">
+    <h3>添加 Z 先生机会</h3>
+    <input id="stockName" placeholder="股票名称">
+    <input id="stockCode" placeholder="股票代码">
+    <input id="shareDate" placeholder="分享日期 如：2026-03-16">
+    <input id="note" placeholder="备注：公司业务/逻辑">
+    <button onclick="addStock()">添加</button>
   </div>
 </div>
 
 <script>
-const KEY = 'zStockList';
+// 时间自动刷新
+function updateTime() {
+  const now = new Date();
+  document.getElementById('nowTime').innerText = now.toLocaleString();
+}
+setInterval(updateTime, 1000);
+updateTime();
+
+// 标签切换
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(tab.dataset.target).classList.add('active');
+  });
+});
+
+// Z自选本地存储
+const STORE_KEY = 'zStockList';
 const PASSWORD = 'z666';
 
-// 本地存储股票列表
-function getList() {
-  return JSON.parse(localStorage.getItem(KEY) || '[]');
+function getZList() {
+  return JSON.parse(localStorage.getItem(STORE_KEY) || '[]');
 }
-function setList(list) {
-  localStorage.setItem(KEY, JSON.stringify(list));
-  render();
+function setZList(list) {
+  localStorage.setItem(STORE_KEY, JSON.stringify(list));
+  renderZList();
 }
 
-// 渲染列表
-function render() {
-  const list = getList();
-  const el = document.getElementById('list');
+// 渲染自选列表
+function renderZList() {
+  const list = getZList();
+  const el = document.getElementById('zList');
   el.innerHTML = '';
-  list.forEach(stock => {
-    const item = document.createElement('div');
-    item.className = 'item';
-    item.innerHTML = `
-      <div><div class="name">${stock.name}</div><div class="code">${stock.code}</div></div>
-      <div class="date">${stock.date}</div>
-      <div><span class="pct up">--%</span></div>
-      <div><span class="pct up">计算中...</span></div>
+  list.forEach(item => {
+    const row = document.createElement('div');
+    row.className = 'table-row z-table-row';
+    
+    // 随机模拟行情，正式可对接新浪/腾讯
+    const day = (Math.random() * 3 - 1).toFixed(2);
+    const total = (Math.random() * 25 + 2).toFixed(2);
+    
+    row.innerHTML = `
+      <div class="name">${item.name}</div>
+      <div class="code">${item.code}</div>
+      <div>${item.date}</div>
+      <div class="note">${item.note || '-'}</div>
+      <div><span class="pct ${day>0?'up':'down'}">${day>0?'+':''}${day}%</span></div>
+      <div><span class="pct ${total>0?'up':'down'}">${total>0?'+':''}${total}%</span></div>
     `;
-    el.appendChild(item);
+    el.appendChild(row);
   });
-  fetchRealPrice();
 }
 
 // 添加股票
 function addStock() {
-  const name = document.getElementById('name').value.trim();
-  const code = document.getElementById('code').value.trim();
-  const date = document.getElementById('sDate').value.trim();
-  if (!name || !code || !date) return alert('请完整填写');
-  const list = getList();
-  list.unshift({ name, code, date });
-  setList(list);
-  document.querySelectorAll('.modal').forEach(m => m.classList.remove('show'));
+  const name = document.getElementById('stockName').value.trim();
+  const code = document.getElementById('stockCode').value.trim();
+  const date = document.getElementById('shareDate').value.trim();
+  const note = document.getElementById('note').value.trim();
+  if (!name || !code || !date) {
+    alert('请填写名称、代码、分享日期');
+    return;
+  }
+  const list = getZList();
+  list.unshift({ name, code, date, note });
+  setZList(list);
+  document.getElementById('addModal').classList.remove('show');
 }
 
-// 模拟实时行情（正式版可对接新浪/腾讯）
-async function fetchRealPrice() {
-  const items = document.querySelectorAll('.item');
-  items.forEach((item, i) => {
-    setTimeout(() => {
-      const dayPct = (Math.random() * 4 - 1).toFixed(2);
-      const totalPct = (Math.random() * 20 + 5).toFixed(2);
-      item.querySelector('.pct').textContent = dayPct > 0 ? `+${dayPct}%` : `${dayPct}%`;
-      item.querySelector('.pct:last-child').textContent = `+${totalPct}%`;
-    }, i * 100);
-  });
-}
-
-// 管理员面板
-function showAdmin() {
+// 弹窗控制
+function showPwModal() {
   document.getElementById('pwModal').classList.add('show');
 }
 function checkPw() {
-  if (document.getElementById('pw').value === PASSWORD) {
+  const pw = document.getElementById('pw').value;
+  if (pw === PASSWORD) {
     document.getElementById('pwModal').classList.remove('show');
     document.getElementById('addModal').classList.add('show');
   } else {
@@ -138,7 +379,7 @@ function checkPw() {
 }
 
 // 初始化
-render();
+renderZList();
 </script>
 </body>
 </html>
