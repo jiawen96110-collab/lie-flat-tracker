@@ -38,7 +38,6 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* 顶部导航 */
 .header {
   position: sticky;
   top: 0;
@@ -61,6 +60,9 @@ body {
   font-size: 19px;
   font-weight: 600;
   line-height: 1.1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .title-group .sub {
@@ -94,7 +96,6 @@ body {
   opacity: 0.9;
 }
 
-/* 分段切换 */
 .tabbar {
   max-width: 720px;
   margin: 0 auto;
@@ -120,6 +121,10 @@ body {
   color: var(--text-secondary);
   cursor: pointer;
   transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
 }
 
 .tab.active {
@@ -129,7 +134,6 @@ body {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
 }
 
-/* 主体容器 */
 .container {
   max-width: 720px;
   margin: 0 auto;
@@ -139,7 +143,6 @@ body {
   gap: 12px;
 }
 
-/* 卡片 */
 .card {
   background: var(--card);
   border-radius: var(--radius);
@@ -152,7 +155,6 @@ body {
   display: none;
 }
 
-/* 卡片头部 */
 .card-header {
   padding: 16px;
   display: flex;
@@ -174,6 +176,9 @@ body {
   font-weight: 600;
   line-height: 1;
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .badge-us {
@@ -219,7 +224,6 @@ body {
   color: var(--down);
 }
 
-/* 表格 */
 .table-wrap {
   width: 100%;
 }
@@ -261,7 +265,6 @@ td:nth-child(2) {
   text-align: left;
 }
 
-/* 标的样式 */
 .weight {
   font-family: var(--mono);
   font-size: 12px;
@@ -283,7 +286,6 @@ td:nth-child(2) {
   margin-top: 2px;
 }
 
-/* 涨跌幅标签 */
 .pct {
   display: inline-block;
   min-width: 72px;
@@ -314,7 +316,6 @@ td:nth-child(2) {
   font-size: 12px;
 }
 
-/* 底部说明 */
 .footer {
   max-width: 720px;
   margin: 0 auto;
@@ -332,7 +333,7 @@ td:nth-child(2) {
 <div class="header">
   <div class="header-inner">
     <div class="title-group">
-      <h1>躺平组合</h1>
+      <h1>📈 躺平组合</h1>
       <div class="sub">ETF 全天候跟踪</div>
     </div>
     <div class="status-bar">
@@ -344,20 +345,19 @@ td:nth-child(2) {
   <div class="tabbar">
     <div class="tabs">
       <button class="tab active" data-target="all">全部</button>
-      <button class="tab" data-target="us">美股</button>
-      <button class="tab" data-target="hk">港股</button>
-      <button class="tab" data-target="cn">A股</button>
+      <button class="tab" data-target="us">🇺🇸 美股</button>
+      <button class="tab" data-target="hk">🇭🇰 港股</button>
+      <button class="tab" data-target="cn">🇨🇳 A股</button>
     </div>
   </div>
 </div>
 
 <div class="container">
 
-  <!-- 美股 -->
   <div class="card section" data-section="us">
     <div class="card-header">
       <div class="card-left">
-        <div class="badge badge-us">US</div>
+        <div class="badge badge-us">🇺🇸 US</div>
         <div class="card-title">美股躺平组合</div>
       </div>
       <div class="card-stats">
@@ -380,11 +380,10 @@ td:nth-child(2) {
     </div>
   </div>
 
-  <!-- 港股 -->
   <div class="card section" data-section="hk">
     <div class="card-header">
       <div class="card-left">
-        <div class="badge badge-hk">HK</div>
+        <div class="badge badge-hk">🇭🇰 HK</div>
         <div class="card-title">港股躺平组合</div>
       </div>
       <div class="card-stats">
@@ -407,11 +406,10 @@ td:nth-child(2) {
     </div>
   </div>
 
-  <!-- A股 -->
   <div class="card section" data-section="cn">
     <div class="card-header">
       <div class="card-left">
-        <div class="badge badge-cn">CN</div>
+        <div class="badge badge-cn">🇨🇳 CN</div>
         <div class="card-title">A股躺平组合</div>
       </div>
       <div class="card-stats">
@@ -442,7 +440,6 @@ td:nth-child(2) {
 </div>
 
 <script>
-// ====================== 核心数据逻辑（完全保留 Claude 原版）======================
 const PORTFOLIOS = {
   us:{holdings:[
     {weight:'25%',code:'us_QQQ',ticker:'QQQ',name:'纳指100 ETF'},
@@ -505,7 +502,6 @@ const TENCENT_MAP = {
   cn_518880:'sh518880',
 };
 
-// 涨跌幅渲染
 function pctTag(v) {
   if (isNaN(v)) return `<span class="pct-loading">--</span>`;
   const cls = v > 0 ? 'pct-up' : v < 0 ? 'pct-down' : 'pct-flat';
@@ -520,7 +516,6 @@ function statTag(v) {
   return `<span class="${cls}">${sign}${v.toFixed(2)}%</span>`;
 }
 
-// 渲染组合
 function renderPortfolio(key) {
   const group = PORTFOLIOS[key];
   const tbody = document.getElementById(`${key}-tbody`);
@@ -550,7 +545,6 @@ function renderPortfolio(key) {
   document.getElementById(`${key}-ytd`).innerHTML = statTag(sumYtd);
 }
 
-// 切换标签
 document.querySelectorAll('.tab').forEach(tab => {
   tab.addEventListener('click', () => {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -563,7 +557,6 @@ document.querySelectorAll('.tab').forEach(tab => {
   });
 });
 
-// 拉取行情
 async function fetchAll() {
   const proxy = 'https://lieflat-proxy.jiawen96110.workers.dev';
   const symbolMap = {};
@@ -603,18 +596,15 @@ function renderAll() {
   renderPortfolio('cn');
 }
 
-// 初始化
 for (const k in STATIC_DATA) liveData[k] = { ...STATIC_DATA[k] };
 renderAll();
 fetchAll();
 setInterval(fetchAll, 30000);
 
-// 时间刷新
 setInterval(() => {
   document.getElementById('last-update').textContent = new Date().toTimeString().slice(0,8);
 }, 1000);
 
-// 手动刷新
 document.getElementById('refreshBtn').onclick = fetchAll;
 </script>
 
