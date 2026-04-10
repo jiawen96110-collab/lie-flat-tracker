@@ -301,15 +301,28 @@ async function fetchAll(){
       const sym = m[1], data = m[2].split(',');
       for(const [code, s] of Object.entries(SINA_MAP)){
         if(s === sym){
-          const now = parseFloat(data[1]);
-          const pre = parseFloat(data[2]);
-          if(!isNaN(now)&&!isNaN(pre)){
-            liveData[code] = { today:(now-pre)/pre*100, ytd:STATIC_DATA[code]?.ytd };
+          let now, pre;
+          // 区分不同市场的字段（新浪接口不同市场字段顺序不同）
+          if(s.startsWith('sh') || s.startsWith('sz')){ // A股
+            now = parseFloat(data[3]); // 现价
+            pre = parseFloat(data[2]); // 昨日收盘价
+          } else if(s.startsWith('hk')){ // 港股
+            now = parseFloat(data[6]); // 现价
+            pre = parseFloat(data[5]); // 昨日收盘价
+          } else if(s.startsWith('gb_')){ // 美股
+            now = parseFloat(data[1]); // 现价
+            pre = parseFloat(data[3]); // 昨日收盘价
+          }
+          if(!isNaN(now)&&!isNaN(pre)&&pre>0){
+            liveData[code] = { 
+              today: (now - pre) / pre * 100, 
+              ytd: STATIC_DATA[code]?.ytd 
+            };
           }
         }
       }
     }
-  }catch(e){}
+  }catch(e){console.error('行情拉取失败:',e);}
   renderAll();
   document.getElementById('last-update').textContent = new Date().toTimeString().slice(0,8);
 }
