@@ -308,66 +308,141 @@
   }
 
   /* Modal */
+  /* ── Apple-style Modal ── */
   .modal-overlay {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.4);
+    background: rgba(0,0,0,0.45);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     z-index: 200;
     align-items: flex-end;
     justify-content: center;
   }
   .modal-overlay.open { display: flex; }
+
   .modal {
-    background: var(--card);
-    border-radius: 20px 20px 0 0;
-    padding: 24px 20px 40px;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    border-radius: 28px 28px 0 0;
+    padding: 8px 0 40px;
     width: 100%;
     max-width: 680px;
-    animation: slideUp 0.25s ease;
+    box-shadow: 0 -2px 40px rgba(0,0,0,0.12), 0 0 0 0.5px rgba(0,0,0,0.06);
+    animation: slideUp 0.38s cubic-bezier(0.32, 0.72, 0, 1);
   }
+
   @keyframes slideUp {
-    from { transform: translateY(100%); }
-    to { transform: translateY(0); }
+    from { transform: translateY(100%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
   }
+
+  .modal-handle {
+    width: 36px; height: 4px;
+    background: rgba(0,0,0,0.18);
+    border-radius: 2px;
+    margin: 10px auto 20px;
+  }
+
+  .modal-inner { padding: 0 20px; }
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+
   .modal-title {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 700;
+    letter-spacing: -0.4px;
+    color: var(--text);
+  }
+
+  .modal-close-btn {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.07);
+    border: none;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    color: var(--muted);
+    transition: background 0.15s;
+  }
+  .modal-close-btn:hover { background: rgba(0,0,0,0.13); }
+
+  /* Market selector pills */
+  .market-pills {
+    display: flex;
+    gap: 8px;
     margin-bottom: 20px;
   }
-  .form-group {
-    margin-bottom: 14px;
-  }
-  .form-group label {
-    display: block;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--muted);
-    margin-bottom: 6px;
-    letter-spacing: 0.3px;
-  }
-  .form-group input, .form-group select {
-    width: 100%;
-    padding: 11px 14px;
+  .market-pill {
+    flex: 1;
+    padding: 10px 6px;
+    border-radius: 12px;
     border: 1.5px solid var(--border);
-    border-radius: 10px;
+    background: var(--bg);
+    font-size: 13px;
+    font-weight: 500;
+    font-family: 'Noto Sans SC', sans-serif;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.18s;
+    color: var(--muted);
+  }
+  .market-pill.active-us { background: #ddeaf6; border-color: var(--tag-us); color: var(--tag-us); }
+  .market-pill.active-hk { background: #d8f0e4; border-color: var(--tag-hk); color: var(--tag-hk); }
+  .market-pill.active-cn { background: #fde8e6; border-color: var(--tag-cn); color: var(--tag-cn); }
+
+  /* Grouped form fields - iOS style */
+  .field-group {
+    background: var(--bg);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 12px;
+    border: 1px solid var(--border);
+  }
+  .field-row {
+    display: flex;
+    align-items: center;
+    padding: 13px 16px;
+    gap: 12px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+  .field-row:last-child { border-bottom: none; }
+  .field-row:focus-within { background: rgba(124,92,182,0.04); }
+
+  .field-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    white-space: nowrap;
+    min-width: 72px;
+  }
+  .field-input {
+    flex: 1;
+    border: none;
+    background: transparent;
     font-size: 14px;
     font-family: 'Noto Sans SC', sans-serif;
-    background: var(--bg);
     color: var(--text);
     outline: none;
-    transition: border-color 0.2s;
+    text-align: right;
   }
-  .form-group input:focus, .form-group select:focus {
-    border-color: var(--tag-my);
-  }
-  .form-row { display: flex; gap: 10px; }
-  .form-row .form-group { flex: 1; }
+  .field-input::placeholder { color: #bbb; }
+  .field-input[type="date"] { color-scheme: light; }
 
-  .form-hint {
+  .field-hint {
     font-size: 11px;
     color: var(--muted);
-    margin-top: 4px;
+    padding: 6px 16px 10px;
+    line-height: 1.5;
   }
 
   .modal-actions {
@@ -377,27 +452,39 @@
   }
   .btn-cancel {
     flex: 1;
-    padding: 12px;
-    border: 1.5px solid var(--border);
-    border-radius: 10px;
-    background: none;
-    font-size: 14px;
+    padding: 14px;
+    border: none;
+    border-radius: 14px;
+    background: rgba(0,0,0,0.07);
+    font-size: 15px;
+    font-weight: 500;
     font-family: 'Noto Sans SC', sans-serif;
     cursor: pointer;
-    color: var(--muted);
+    color: var(--text);
+    transition: background 0.15s;
   }
+  .btn-cancel:hover { background: rgba(0,0,0,0.12); }
   .btn-add {
     flex: 2;
-    padding: 12px;
+    padding: 14px;
     border: none;
-    border-radius: 10px;
-    background: var(--tag-my);
+    border-radius: 14px;
+    background: linear-gradient(135deg, #7b4fa6 0%, #5b6cf5 100%);
     color: white;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 600;
     font-family: 'Noto Sans SC', sans-serif;
     cursor: pointer;
+    box-shadow: 0 4px 16px rgba(123,79,166,0.35);
+    transition: opacity 0.15s, transform 0.1s;
   }
+  .btn-add:hover { opacity: 0.92; }
+  .btn-add:active { transform: scale(0.98); }
+
+  /* legacy compat */
+  .form-group { margin-bottom: 0; }
+  .form-row { display: none; }
+  .form-hint { display: none; }
 
 
 
@@ -566,38 +653,49 @@
 <!-- Add Modal -->
 <div class="modal-overlay" id="modal" onclick="closeModalOutside(event)">
   <div class="modal">
-    <div class="modal-title">添加自选标的</div>
-    <div class="form-row">
-      <div class="form-group">
-        <label>市场</label>
-        <select id="f-market">
-          <option value="us">🇺🇸 美股</option>
-          <option value="hk">🇭🇰 港股</option>
-          <option value="cn">🇨🇳 A股</option>
-        </select>
+    <div class="modal-handle"></div>
+    <div class="modal-inner">
+      <div class="modal-header">
+        <div class="modal-title">添加自选标的</div>
+        <button class="modal-close-btn" onclick="closeModal()">✕</button>
       </div>
-      <div class="form-group">
-        <label>代码</label>
-        <input type="text" id="f-code" placeholder="如 MRVL / 06690 / 159928" />
+
+      <!-- Market pills -->
+      <div class="market-pills">
+        <button class="market-pill active-us" data-market="us" onclick="selectMarket('us')">🇺🇸 美股</button>
+        <button class="market-pill" data-market="hk" onclick="selectMarket('hk')">🇭🇰 港股</button>
+        <button class="market-pill" data-market="cn" onclick="selectMarket('cn')">🇨🇳 A股</button>
       </div>
-    </div>
-    <div class="form-group">
-      <label>名称（可自定义）</label>
-      <input type="text" id="f-name" placeholder="如 迈威尔 / 卓胜微 / 消费ETF" />
-    </div>
-    <div class="form-group">
-      <label>买入日期（自选起算日）</label>
-      <input type="date" id="f-date" />
-      <div class="form-hint">将自动计算从该日起的涨跌幅（需手动填入买入价）</div>
-    </div>
-    <div class="form-group">
-      <label>买入价格（可选，用于精确计算）</label>
-      <input type="number" id="f-price" placeholder="如 85.20" step="0.01" />
-      <div class="form-hint">留空则尝试用历史数据估算</div>
-    </div>
-    <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeModal()">取消</button>
-      <button class="btn-add" onclick="addCustom()">添加</button>
+      <input type="hidden" id="f-market" value="us" />
+
+      <!-- Grouped fields -->
+      <div class="field-group">
+        <div class="field-row">
+          <span class="field-label">代码</span>
+          <input class="field-input" type="text" id="f-code" placeholder="如 MRVL / 06690 / 159928" />
+        </div>
+        <div class="field-row">
+          <span class="field-label">名称</span>
+          <input class="field-input" type="text" id="f-name" placeholder="如 迈威尔 / 卓胜微" />
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-row">
+          <span class="field-label">买入日期</span>
+          <input class="field-input" type="date" id="f-date" />
+        </div>
+        <div class="field-row">
+          <span class="field-label">买入价格</span>
+          <input class="field-input" type="number" id="f-price" placeholder="可选" step="0.01" />
+        </div>
+      </div>
+      <div class="field-hint">买入日期用于计算自选以来涨跌幅，买入价格填写后计算更精准</div>
+
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeModal()">取消</button>
+        <button class="btn-add" onclick="addCustom()">添加</button>
+      </div>
     </div>
   </div>
 </div>
@@ -767,6 +865,13 @@ function openModal() {
   // default date to today
   const d = new Date();
   document.getElementById('f-date').value = d.toISOString().split('T')[0];
+}
+function selectMarket(m) {
+  document.getElementById('f-market').value = m;
+  document.querySelectorAll('.market-pill').forEach(p => {
+    p.className = 'market-pill';
+    if (p.dataset.market === m) p.classList.add('active-' + m);
+  });
 }
 function closeModal() {
   document.getElementById('modal').classList.remove('open');
