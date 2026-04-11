@@ -55,7 +55,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100
 /* ── WRAP ── */
 .wrap{max-width:760px;margin:0 auto;padding:0 20px;display:flex;flex-direction:column;gap:16px}
 
-/* ── SUMMARY ROW (修复对齐) ── */
+/* ── SUMMARY ROW ── */
 .sum-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .sum-card{
   background:var(--card);border-radius:18px;padding:18px 16px 16px;
@@ -70,15 +70,14 @@ body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100
 .sum-mkt{font-size:13px;color:var(--t3);margin-bottom:8px;font-weight:500;display:flex;align-items:center;gap:6px}
 .sum-today{font-family:var(--mono);font-size:22px;font-weight:700;letter-spacing:-0.8px;line-height:1}
 .sum-ytd-row{display:flex;align-items:center;gap:6px;margin-top:10px}
-.sum-ytd-lbl{font-size:13px;color:var(--t4);min-width:42px}
-.sum-ytd-val{font-family:var(--mono);font-size:14px;font-weight:600}
+.sum-ytd-lbl{font-size:12px;color:var(--t4)}
+.sum-ytd-val{font-family:var(--mono);font-size:13px;font-weight:600}
 
 /* ── SECTION CARD ── */
 .sc{
   background:var(--card);border-radius:20px;overflow:hidden;
   box-shadow:0 6px 20px rgba(0,0,0,0.07),0 1px 3px rgba(0,0,0,0.05);
 }
-.sc.hide{display:none}
 .sc-hd{
   padding:18px 20px 14px;
   display:flex;align-items:center;justify-content:space-between;
@@ -101,38 +100,22 @@ body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100
 
 .sc-hd-r{text-align:right}
 .hd-row{font-size:13px;color:var(--t3);display:flex;align-items:center;gap:8px;justify-content:flex-end;margin-top:4px}
-.hd-lbl{font-size:12px;color:var(--t4);font-weight:500;min-width:32px;text-align:left}
+.hd-lbl{font-size:12px;color:var(--t4);font-weight:500}
 
 /* ── TABLE ── */
-table{width:100%;border-collapse:collapse;table-layout:fixed}
-thead th{font-size:12px;font-weight:500;color:var(--t4);padding:12px 16px 8px;text-align:right;letter-spacing:0.3px}
-thead th:first-child{text-align:left;width:14%}
-thead th:nth-child(2){text-align:left;width:38%}
-thead th:nth-child(3){text-align:right;width:20%}
-thead th:nth-child(4){text-align:right;width:28%}
+table{width:100%;border-collapse:collapse}
+thead th{font-size:12px;font-weight:500;color:var(--t4);padding:12px 20px 8px;text-align:right;letter-spacing:0.3px}
+thead th:first-child,thead th:nth-child(2){text-align:left}
 tbody tr{border-bottom:1px solid var(--sep)}
 tbody tr:last-child{border-bottom:none}
 @media(hover:hover){tbody tr:hover{background:rgba(0,0,0,0.018)}}
 
-td{padding:14px 16px;font-size:15px;text-align:right;vertical-align:middle}
-td:first-child{text-align:left;width:14%}
-td:nth-child(2){text-align:left;width:38%}
-td:nth-child(3){text-align:right;width:20%}
-td:nth-child(4){text-align:right;width:28%}
+td{padding:14px 20px;font-size:15px;text-align:right;vertical-align:top}
+td:first-child,td:nth-child(2){text-align:left}
 .wt{font-family:var(--mono);font-size:13px;color:var(--t4);font-weight:600}
 .tk{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--blue);display:block;line-height:1.1}
 .nm{font-size:13.5px;color:var(--t2);display:block;margin-top:3px;line-height:1.35}
 .wm{font-size:11px;color:var(--t4);display:block;margin-top:4px}
-
-/* 自选表格列宽 */
-.watch-table thead th:nth-child(1){width:16%}
-.watch-table thead th:nth-child(2){width:34%}
-.watch-table thead th:nth-child(3){width:16%}
-.watch-table thead th:nth-child(4){width:34%}
-.watch-table td:nth-child(1){width:16%}
-.watch-table td:nth-child(2){width:34%}
-.watch-table td:nth-child(3){width:16%}
-.watch-table td:nth-child(4){width:34%}
 
 /* ── PCT PILL ── */
 .p{
@@ -140,8 +123,8 @@ td:nth-child(4){text-align:right;width:28%}
   padding:6px 10px;border-radius:8px;display:inline-block;min-width:72px;
   text-align:center;letter-spacing:-0.3px
 }
-.p.g{color:var(--red);background:rgba(255,45,85,0.10)}
-.p.r{color:var(--green);background:rgba(0,176,80,0.10)}
+.p.g{color:var(--red);background:rgba(255,45,85,0.10)}   /* 涨 = 红 */
+.p.r{color:var(--green);background:rgba(0,176,80,0.10)}   /* 跌 = 绿 */
 .p.z{color:var(--t3);background:var(--fill)}
 
 .pi{font-family:var(--mono);font-weight:700;font-size:15px}
@@ -164,64 +147,8 @@ td:nth-child(4){text-align:right;width:28%}
   background:rgba(255,149,0,0.12);color:#c47a00;
 }
 .note-wrap{font-size:12.5px;color:var(--t3);line-height:1.5}
-
-/* 自选收益卡片 - 修复显示不全 */
-.since-card{
-  background:var(--fill);
-  border-radius:14px;
-  padding:12px 14px;
-  margin-top:4px;
-  border:1px solid var(--sep);
-  width:100%;
-  min-width:180px;
-}
-.since-main{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-bottom:10px;
-  flex-wrap:wrap;
-  gap:6px;
-}
-.since-pct{
-  font-family:var(--mono);
-  font-size:20px;
-  font-weight:700;
-  letter-spacing:-0.5px;
-  line-height:1.2;
-}
-.since-badge{
-  font-size:11px;
-  background:rgba(0,0,0,0.04);
-  padding:4px 10px;
-  border-radius:20px;
-  color:var(--t3);
-  white-space:nowrap;
-}
-.since-detail{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  font-size:12.5px;
-  color:var(--t2);
-  background:rgba(255,255,255,0.7);
-  padding:8px 10px;
-  border-radius:10px;
-  backdrop-filter:blur(4px);
-  flex-wrap:wrap;
-  gap:6px;
-}
-.since-price{
-  display:flex;
-  align-items:center;
-  gap:4px;
-  white-space:nowrap;
-}
-.since-arrow{
-  color:var(--t4);
-  font-size:14px;
-  margin:0 4px;
-}
+.since-big{font-family:var(--mono);font-size:17px;font-weight:700;display:block;line-height:1.1;letter-spacing:-0.4px}
+.since-sub{font-size:11.5px;color:var(--t4);display:block;margin-top:4px;font-family:var(--mono)}
 
 /* Footer */
 .footer{
@@ -231,15 +158,11 @@ td:nth-child(4){text-align:right;width:28%}
 }
 
 /* 响应式优化 */
-@media(max-width:500px){
+@media(max-width:440px){
   .sum-today{font-size:19px}
   .p{min-width:64px;font-size:13px}
-  td{padding:12px 12px}
-  .sc-hd{padding:16px 12px 12px}
-  .since-main{flex-direction:column;align-items:flex-start}
-  .since-detail{flex-direction:column;align-items:flex-start}
-  .since-price{white-space:normal;word-break:break-word}
-  .sum-ytd-lbl{min-width:36px}
+  td{padding:12px 16px}
+  .sc-hd{padding:16px 16px 12px}
 }
 </style>
 </head>
@@ -273,31 +196,22 @@ td:nth-child(4){text-align:right;width:28%}
 
 <div class="wrap">
 
-  <!-- 概览 - 修复标签对齐 -->
+  <!-- 概览 -->
   <div class="sum-row" id="sum-row">
     <div class="sum-card us">
       <div class="sum-mkt">🇺🇸 美股市场</div>
       <div class="sum-today" id="s-us-t">--</div>
-      <div class="sum-ytd-row">
-        <span class="sum-ytd-lbl">今年</span>
-        <span class="sum-ytd-val" id="s-us-y">--</span>
-      </div>
+      <div class="sum-ytd-row"><span class="sum-ytd-lbl">今年</span><span class="sum-ytd-val" id="s-us-y">--</span></div>
     </div>
     <div class="sum-card hk">
       <div class="sum-mkt">🇭🇰 港股市场</div>
       <div class="sum-today" id="s-hk-t">--</div>
-      <div class="sum-ytd-row">
-        <span class="sum-ytd-lbl">今年</span>
-        <span class="sum-ytd-val" id="s-hk-y">--</span>
-      </div>
+      <div class="sum-ytd-row"><span class="sum-ytd-lbl">今年</span><span class="sum-ytd-val" id="s-hk-y">--</span></div>
     </div>
     <div class="sum-card cn">
       <div class="sum-mkt">🇨🇳 A股市场</div>
       <div class="sum-today" id="s-cn-t">--</div>
-      <div class="sum-ytd-row">
-        <span class="sum-ytd-lbl">今年</span>
-        <span class="sum-ytd-val" id="s-cn-y">--</span>
-      </div>
+      <div class="sum-ytd-row"><span class="sum-ytd-lbl">今年以来</span><span class="sum-ytd-val" id="s-cn-y">--</span></div>
     </div>
   </div>
 
@@ -365,15 +279,12 @@ td:nth-child(4){text-align:right;width:28%}
         <span class="mkt m-watch">⭐</span>
         <span class="sc-title">Z先生分享标的追踪</span>
       </div>
-      <div class="sc-hd-r">
-        <span style="font-size:12px;color:var(--t4)">分享以来收益</span>
-      </div>
     </div>
     <div class="watch-banner">
       <span class="wb-icon">📡</span>
       <span class="wb-text">实时跟踪 Z 先生无偿分享的标的<br><strong>推荐以来表现</strong>（从推荐日收盘价起算）</span>
     </div>
-    <table class="watch-table">
+    <table>
       <thead><tr><th>标的</th><th>行业 / 逻辑</th><th>今日涨跌</th><th>分享以来</th></tr></thead>
       <tbody id="watch-body"></tbody>
     </table>
@@ -413,7 +324,7 @@ const ETF = {
   ]}
 };
 
-// Z先生分享自选追踪
+// Z先生分享自选追踪（可继续添加）
 const WATCH = [
   {
     ticker:  '300782',
@@ -424,6 +335,7 @@ const WATCH = [
     sector:  '射频芯片',
     note:    '国内射频前端芯片龙头，射频开关/LNA/PA/滤波器全覆盖，安卓手机国产替代核心标的'
   },
+  // 新增格式同上
 ];
 
 // YTD 静态兜底数据
@@ -443,7 +355,7 @@ const PROXY = 'https://lieflat-proxy.jiawen96110.workers.dev';
 const live = {};
 let apiOK = false;
 
-// 涨跌样式
+// 涨跌样式（中国人习惯：涨红 跌绿）
 function pill(v) {
   if (v===null||v===undefined||isNaN(v)) return '<span class="p z">--</span>';
   const isUp = v > 0;
@@ -488,6 +400,7 @@ function renderETF(key) {
   document.getElementById(`${key}-t`).innerHTML = inl(todayDisp, '13px');
   document.getElementById(`${key}-y`).innerHTML = inl(yw, '13px');
 
+  // 概览卡片
   const st = document.getElementById(`s-${key}-t`);
   const sy = document.getElementById(`s-${key}-y`);
   if (st) st.innerHTML = inl(todayDisp, '22px');
@@ -513,24 +426,12 @@ function renderWatch() {
       const isUp = pct > 0;
       const cls = isUp ? 'g' : 'r';
       const sign = isUp ? '+' : '';
-      const arrow = isUp ? '↗' : '↘';
-      
-      sinceHtml = `<div class="since-card">
-        <div class="since-main">
-          <span class="since-pct pi ${cls}">${sign}${pct.toFixed(2)}%</span>
-          <span class="since-badge">📅 ${w.date}</span>
-        </div>
-        <div class="since-detail">
-          <span class="since-price">📌 分享价 ¥${w.price.toFixed(2)}</span>
-          <span class="since-arrow">${arrow}</span>
-          <span class="since-price">📊 最新 ¥${d.price.toFixed(2)}</span>
-        </div>
-      </div>`;
+      sinceHtml = `<span class="since-big pi ${cls}">${sign}${pct.toFixed(2)}%</span>
+        <span class="since-sub">参考价 ¥${w.price.toFixed(2)} → ¥${d.price.toFixed(2)}</span>
+        <span class="since-sub">自 ${w.date}</span>`;
     } else {
-      sinceHtml = `<div class="since-card">
-        <div class="since-main"><span class="since-pct" style="color:var(--t4);font-size:20px">——</span><span class="since-badge">📅 ${w.date}</span></div>
-        <div class="since-detail"><span>分享价 ¥${w.price?.toFixed(2)||'--'}</span><span class="since-arrow">—</span><span>等待数据</span></div>
-      </div>`;
+      sinceHtml = `<span class="since-big" style="color:var(--t4)">--%</span>
+        <span class="since-sub">自 ${w.date}</span>`;
     }
 
     rows += `<tr>
@@ -557,8 +458,7 @@ document.querySelectorAll('.seg').forEach(btn => {
     const t = btn.dataset.tab;
     document.getElementById('sum-row').style.display = t === 'all' ? '' : 'none';
     document.querySelectorAll('.sc').forEach(c => {
-      if (t === 'all') c.classList.remove('hide');
-      else c.classList.toggle('hide', c.dataset.sec !== t);
+      c.classList.toggle('hide', t !== 'all' && c.dataset.sec !== t);
     });
   });
 });
@@ -614,10 +514,10 @@ function renderAll(){
 }
 
 // 初始化
-renderAll();
-fetchAll();
+renderAll();       // 先显示YTD
+fetchAll();        // 获取实时数据
 setInterval(fetchAll, 30000);
 </script>
 
 </body>
-</html>
+</html>帮我优化一下页面，我跑了一下这个代码，有的页面文字没有对齐，最下面的自选页面逻辑部分简介一下，分享以来的收益那个板块再优化一下展示方式
