@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -17,25 +18,22 @@
 body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100vh;padding-bottom:60px;-webkit-font-smoothing:antialiased}
 
 /* ── NAV ── */
-.nav{position:sticky;top:0;z-index:100;background:rgba(248,249,250,.95);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--border)}
+.nav{position:sticky;top:0;z-index:100;background:rgba(248,249,250,.95);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(–border)}
 .nav-inner{max-width:760px;margin:0 auto;padding:16px 20px 12px;display:flex;align-items:center;justify-content:space-between;gap:12px}
 .nav-brand h1{font-size:20px;font-weight:700;letter-spacing:-.6px}
-.nav-brand .sub{font-size:13px;color:var(--t3);margin-top:3px}
+.nav-brand .sub{font-size:13px;color:var(–t3);margin-top:3px}
 .nav-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
-.clock-wrap{display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--border);padding:6px 14px;border-radius:9999px;font-size:13px;font-weight:500;color:var(--t2);box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.clock-wrap{display:flex;align-items:center;gap:6px;background:var(–card);border:1px solid var(–border);padding:6px 14px;border-radius:9999px;font-size:13px;font-weight:500;color:var(–t2);box-shadow:0 2px 8px rgba(0,0,0,.04)}
 .live-dot{width:7px;height:7px;border-radius:50%;background:#34c759;flex-shrink:0;animation:blink 2s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-.clock{font-family:var(--mono);font-weight:600;color:var(--t1);min-width:58px;letter-spacing:.5px}
-.refresh-btn{width:36px;height:36px;border-radius:50%;border:none;background:var(--fill);color:var(--t2);cursor:pointer;font-size:17px;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
-.refresh-btn:hover{background:#e5e5ea;color:var(--blue)}
-.refresh-btn.spinning{animation:spin .7s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
+.clock-date{font-size:12px;color:var(–t3);font-weight:500;letter-spacing:.2px}
+.clock-time{font-family:var(–mono);font-weight:600;color:var(–t1);letter-spacing:.5px}
 
 /* ── SEGMENT ── */
 .seg-wrap{max-width:760px;margin:0 auto;padding:10px 20px}
-.segment{display:flex;background:var(--fill);border-radius:12px;padding:3px;gap:2px}
-.seg{flex:1;padding:9px 4px;border:none;background:transparent;border-radius:9px;font-size:13.5px;font-weight:600;font-family:var(--font);color:var(--t3);cursor:pointer;transition:all .22s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;display:flex;align-items:center;justify-content:center;gap:3px}
-.seg.on{background:var(--card);color:var(--t1);box-shadow:0 2px 8px rgba(0,0,0,.08),0 0 0 1px rgba(0,0,0,.05)}
+.segment{display:flex;background:var(–fill);border-radius:12px;padding:3px;gap:2px}
+.seg{flex:1;padding:9px 4px;border:none;background:transparent;border-radius:9px;font-size:13.5px;font-weight:600;font-family:var(–font);color:var(–t3);cursor:pointer;transition:all .22s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;display:flex;align-items:center;justify-content:center;gap:3px}
+.seg.on{background:var(–card);color:var(–t1);box-shadow:0 2px 8px rgba(0,0,0,.08),0 0 0 1px rgba(0,0,0,.05)}
 
 /* ── WRAP ── */
 .wrap{max-width:760px;margin:0 auto;padding:0 20px;display:flex;flex-direction:column;gap:16px}
@@ -43,81 +41,81 @@ body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100
 /* ── SUMMARY ROW ── */
 .sum-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .sum-card{
-background:var(--card);border-radius:18px;
+background:var(–card);border-radius:18px;
 padding:16px 14px 14px;
 box-shadow:0 4px 12px rgba(0,0,0,.06),0 1px 3px rgba(0,0,0,.04);
 position:relative;overflow:hidden;
 display:flex;flex-direction:column;
 }
-.sum-card::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;border-radius:18px 18px 0 0}
+.sum-card::before{content:””;position:absolute;top:0;left:0;right:0;height:3px;border-radius:18px 18px 0 0}
 .sum-card.us::before{background:linear-gradient(90deg,#0071e3,#5ac8fa)}
 .sum-card.hk::before{background:linear-gradient(90deg,#34c759,#30d158)}
 .sum-card.cn::before{background:linear-gradient(90deg,#ff3b30,#ff6961)}
-.sum-mkt{font-size:12px;color:var(--t3);font-weight:500;margin-bottom:8px;margin-top:2px;display:flex;align-items:center;gap:4px;white-space:nowrap}
+.sum-mkt{font-size:12px;color:var(–t3);font-weight:500;margin-bottom:8px;margin-top:2px;display:flex;align-items:center;gap:4px;white-space:nowrap}
 .sum-today{
-font-family:var(--mono);font-size:20px;font-weight:700;
+font-family:var(–mono);font-size:20px;font-weight:700;
 letter-spacing:-.8px;line-height:1;
 height:24px;
 display:flex;align-items:center;
 }
-.sum-divider{height:.5px;background:var(--sep);margin:10px 0}
+.sum-divider{height:.5px;background:var(–sep);margin:10px 0}
 .sum-ytd-row{display:flex;align-items:center;gap:6px}
-.sum-ytd-lbl{font-size:11.5px;color:var(--t4);flex-shrink:0}
-.sum-ytd-val{font-family:var(--mono);font-size:12px;font-weight:600}
+.sum-ytd-lbl{font-size:11.5px;color:var(–t4);flex-shrink:0}
+.sum-ytd-val{font-family:var(–mono);font-size:12px;font-weight:600}
 
 /* ── SECTION CARD ── */
-.sc{background:var(--card);border-radius:20px;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,.07),0 1px 3px rgba(0,0,0,.05)}
+.sc{background:var(–card);border-radius:20px;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,.07),0 1px 3px rgba(0,0,0,.05)}
 .sc.hide{display:none}
-.sc-hd{padding:16px 20px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--sep)}
+.sc-hd{padding:16px 20px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(–sep)}
 .sc-hd.us-hd{background:linear-gradient(135deg,rgba(0,113,227,.06),rgba(90,200,250,.03))}
 .sc-hd.hk-hd{background:linear-gradient(135deg,rgba(52,199,89,.06),rgba(48,209,88,.03))}
 .sc-hd.cn-hd{background:linear-gradient(135deg,rgba(255,59,48,.06),rgba(255,105,97,.03))}
 .sc-hd.watch-hd{background:linear-gradient(135deg,rgba(255,149,0,.07),rgba(175,82,222,.04))}
 .sc-hd-l{display:flex;align-items:center;gap:10px}
-.mkt{font-family:var(--mono);font-size:11px;font-weight:700;padding:4px 9px;border-radius:6px;letter-spacing:.4px}
+.mkt{font-family:var(–mono);font-size:11px;font-weight:700;padding:4px 9px;border-radius:6px;letter-spacing:.4px}
 .m-us{background:rgba(0,113,227,.12);color:#0066cc}
 .m-hk{background:rgba(52,199,89,.12);color:#1a8a3a}
 .m-cn{background:rgba(255,59,48,.12);color:#c0281e}
 .m-watch{background:rgba(255,149,0,.15);color:#c47a00}
 .sc-title{font-size:17px;font-weight:700;letter-spacing:-.4px}
-.sc-tag{font-size:10px;background:var(--fill);color:var(--t3);padding:3px 8px;border-radius:6px;font-weight:600}
+.sc-tag{font-size:10px;background:var(–fill);color:var(–t3);padding:3px 8px;border-radius:6px;font-weight:600}
 .sc-hd-r{text-align:right;flex-shrink:0}
-.hd-row{font-size:13px;color:var(--t3);display:flex;align-items:center;gap:8px;justify-content:flex-end;margin-top:4px}
-.hd-lbl{font-size:12px;color:var(--t4);font-weight:500}
+.hd-row{font-size:13px;color:var(–t3);display:flex;align-items:center;gap:8px;justify-content:flex-end;margin-top:4px}
+.hd-lbl{font-size:12px;color:var(–t4);font-weight:500}
 
 /* ── TABLE ── */
 table{width:100%;border-collapse:collapse}
-thead th{font-size:12px;font-weight:500;color:var(--t4);padding:10px 20px 8px;text-align:right;letter-spacing:.3px}
+thead th{font-size:12px;font-weight:500;color:var(–t4);padding:10px 20px 8px;text-align:right;letter-spacing:.3px}
 thead th:first-child,thead th:nth-child(2){text-align:left}
-tbody tr{border-bottom:1px solid var(--sep)}
+tbody tr{border-bottom:1px solid var(–sep)}
 tbody tr:last-child{border-bottom:none}
 @media(hover:hover){tbody tr:hover{background:rgba(0,0,0,.018)}}
 td{padding:14px 20px;font-size:15px;text-align:right;vertical-align:middle}
 td:first-child,td:nth-child(2){text-align:left}
-.wt{font-family:var(--mono);font-size:13px;color:var(--t4);font-weight:600}
-.tk{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--blue);display:block;line-height:1.1}
-.nm{font-size:13.5px;color:var(--t2);display:block;margin-top:3px}
+.wt{font-family:var(–mono);font-size:13px;color:var(–t4);font-weight:600}
+.tk{font-family:var(–mono);font-size:15px;font-weight:700;color:var(–blue);display:block;line-height:1.1}
+.nm{font-size:13.5px;color:var(–t2);display:block;margin-top:3px}
 
 /* ── PCT PILL（涨红跌绿）── */
-.p{font-family:var(--mono);font-size:14px;font-weight:700;padding:6px 10px;border-radius:8px;display:inline-block;min-width:76px;text-align:center;letter-spacing:-.3px}
-.p.up{color:var(--red);background:rgba(255,45,85,.10)}
-.p.dn{color:var(--green);background:rgba(0,176,80,.10)}
-.p.z{color:var(--t3);background:var(--fill)}
-.pi{font-family:var(--mono);font-weight:700}
-.pi.up{color:var(--red)}.pi.dn{color:var(--green)}.pi.z{color:var(--t3)}
+.p{font-family:var(–mono);font-size:14px;font-weight:700;padding:6px 10px;border-radius:8px;display:inline-block;min-width:76px;text-align:center;letter-spacing:-.3px}
+.p.up{color:var(–red);background:rgba(255,45,85,.10)}
+.p.dn{color:var(–green);background:rgba(0,176,80,.10)}
+.p.z{color:var(–t3);background:var(–fill)}
+.pi{font-family:var(–mono);font-weight:700}
+.pi.up{color:var(–red)}.pi.dn{color:var(–green)}.pi.z{color:var(–t3)}
 
 /* ── 自选卡片 ── */
 .watch-banner{
 background:linear-gradient(135deg,rgba(255,149,0,.08),rgba(175,82,222,.06));
-border-bottom:1px solid var(--sep);padding:12px 20px;
+border-bottom:1px solid var(–sep);padding:12px 20px;
 display:flex;align-items:center;gap:10px;
 }
-.wb-text{font-size:13px;color:var(--t2);line-height:1.5}
-.wb-text strong{color:var(--t1);font-weight:600}
+.wb-text{font-size:13px;color:var(–t2);line-height:1.5}
+.wb-text strong{color:var(–t1);font-weight:600}
 
 .watch-item{
 padding:16px 20px;
-border-bottom:1px solid var(--sep);
+border-bottom:1px solid var(–sep);
 display:grid;
 grid-template-columns:1fr auto;
 gap:12px;
@@ -126,18 +124,18 @@ align-items:center;
 .watch-item:last-child{border-bottom:none}
 .watch-left{}
 .watch-header{display:flex;align-items:center;gap:6px;margin-bottom:6px;flex-wrap:wrap}
-.watch-ticker{font-family:var(--mono);font-size:16px;font-weight:700;color:var(--blue)}
-.watch-name{font-size:14px;color:var(--t2);font-weight:500}
+.watch-ticker{font-family:var(–mono);font-size:16px;font-weight:700;color:var(–blue)}
+.watch-name{font-size:14px;color:var(–t2);font-weight:500}
 .sector-tag{font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:5px;background:rgba(255,149,0,.13);color:#c47a00}
 .logic-tag{font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:5px;background:rgba(0,113,227,.10);color:#0066cc;margin-left:2px}
-.watch-note{font-size:12px;color:var(--t3);line-height:1.5;margin-top:5px}
-.watch-meta{font-size:11px;color:var(--t4);font-family:var(--mono);margin-top:5px}
+.watch-note{font-size:12px;color:var(–t3);line-height:1.5;margin-top:5px}
+.watch-meta{font-size:11px;color:var(–t4);font-family:var(–mono);margin-top:5px}
 .watch-right{text-align:right;flex-shrink:0;min-width:110px}
-.since-pct{font-family:var(--mono);font-size:22px;font-weight:700;letter-spacing:-.5px;display:block;line-height:1.1}
-.since-date{font-size:11px;color:var(--t4);font-family:var(--mono);margin-top:4px;display:block}
+.since-pct{font-family:var(–mono);font-size:22px;font-weight:700;letter-spacing:-.5px;display:block;line-height:1.1}
+.since-date{font-size:11px;color:var(–t4);font-family:var(–mono);margin-top:4px;display:block}
 
 /* ── FOOTER ── */
-.footer{text-align:center;font-size:12.5px;color:var(--t4);line-height:1.7;padding:24px 20px 40px;max-width:760px;margin:0 auto}
+.footer{text-align:center;font-size:12.5px;color:var(–t4);line-height:1.7;padding:24px 20px 40px;max-width:760px;margin:0 auto}
 
 /* 手机适配 */
 @media(max-width:430px){
@@ -152,6 +150,7 @@ td{padding:12px 14px}
 .wrap{padding:0 16px}
 }
 </style>
+
 </head>
 <body>
 
@@ -162,10 +161,12 @@ td{padding:12px 14px}
       <div class="sub">跟踪 · 京城Z先生无偿分享</div>
     </div>
     <div class="nav-right">
-      <button class="refresh-btn" id="refreshBtn" onclick="manualRefresh()" title="刷新">↻</button>
+      <!-- 刷新按钮已移除 -->
       <div class="clock-wrap">
         <div class="live-dot"></div>
-        <span class="clock" id="clock">--:--:--</span>
+        <span class="clock-date" id="clock-date">--</span>
+        &nbsp;
+        <span class="clock-time" id="clock-time">--:--:--</span>
       </div>
     </div>
   </div>
@@ -183,6 +184,7 @@ td{padding:12px 14px}
 <div class="wrap">
 
   <!-- 概览 -->
+
   <div class="sum-row" id="sum-row">
     <div class="sum-card us">
       <div class="sum-mkt">🇺🇸 美股</div>
@@ -214,6 +216,7 @@ td{padding:12px 14px}
   </div>
 
   <!-- US -->
+
   <div class="sc" data-sec="us">
     <div class="sc-hd us-hd">
       <div class="sc-hd-l">
@@ -233,6 +236,7 @@ td{padding:12px 14px}
   </div>
 
   <!-- HK -->
+
   <div class="sc" data-sec="hk">
     <div class="sc-hd hk-hd">
       <div class="sc-hd-l">
@@ -252,6 +256,7 @@ td{padding:12px 14px}
   </div>
 
   <!-- CN -->
+
   <div class="sc" data-sec="cn">
     <div class="sc-hd cn-hd">
       <div class="sc-hd-l">
@@ -271,6 +276,7 @@ td{padding:12px 14px}
   </div>
 
   <!-- 自选 -->
+
   <div class="sc" data-sec="watch">
     <div class="sc-hd watch-hd">
       <div class="sc-hd-l">
@@ -292,7 +298,7 @@ td{padding:12px 14px}
 
 <script>
 // ═══════════════════════════════════════════
-// ETF 组合（精简版）
+// ETF 组合
 const ETF = {
   us: {h: [
     {w:'25%',c:'us_QQQ',t:'QQQ',n:'纳斯达克100 ETF'},
@@ -317,8 +323,7 @@ const ETF = {
   ]}
 };
 
-// ═══════════════════════════════════════════
-// Z先生分享自选（已新增3.18光模块最贴切标的）
+// Z先生分享自选
 const WATCH = [
   {
     ticker:  '300782',
@@ -338,28 +343,33 @@ const WATCH = [
     price:   68.28,
     sector:  'AI光互连',
     logic:   '高速互连芯片平台',
-    note:    '3.18 Z先生分享光模块机会中最贴切的美股标的（XPO MSA Module Partners之一）。Marvell不只是“光模块概念”，而是更上游、更核心的AI网络与高速互连芯片平台。AI集群越大，对交换、DSP、互连的需求越强，Marvell的位置很硬。与Accelink、Ciena、Lumentum、Coherent等光模块巨头同台，是AI光互连长期受益的核心标的。'
+    note:    '3.18 Z先生分享光模块机会中最贴切的美股标的（XPO MSA Module Partners之一）。Marvell不只是"光模块概念"，而是更上游、更核心的AI网络与高速互连芯片平台。AI集群越大，对交换、DSP、互连的需求越强，Marvell的位置很硬。与Accelink、Ciena、Lumentum、Coherent等光模块巨头同台，是AI光互连长期受益的核心标的。'
   }
 ];
 
-// YTD 静态兜底（今日实时覆盖）
+// YTD 静态兜底
 const YTD = {
   us_QQQ:-0.55,us_SPY:-0.02,us_RING:14.83,us_COPX:13.62,us_BITB:-17.41,
   hk_03455:-0.53,hk_03132:25.08,hk_03147:11.40,hk_03110:9.10,hk_02840:10.25,
   cn_513390:-5.03,cn_159652:8.54,cn_588200:10.16,cn_515880:19.77,cn_518880:7.48
 };
 
+// 腾讯财经 symbol map
 const TMAP = {
   us_QQQ:'usQQQ',us_SPY:'usSPY',us_RING:'usRING',us_COPX:'usCOPX',us_BITB:'usBITB',
   hk_03455:'hk03455',hk_03132:'hk03132',hk_03147:'hk03147',hk_03110:'hk03110',hk_02840:'hk02840',
   cn_513390:'sh513390',cn_159652:'sz159652',cn_588200:'sh588200',cn_515880:'sh515880',cn_518880:'sh518880'
 };
 
+// 两个数据源：优先 proxy，失败走腾讯直链（JSONP 解析）
 const PROXY = 'https://lieflat-proxy.jiawen96110.workers.dev';
+// 腾讯财经直连（通过 script 标签 JSONP 方式拉取，绕过 CORS）
+const TENCENT_BASE = 'https://qt.gtimg.cn/q=';
+
 const live = {};
 let apiOK = false;
 
-// 涨红跌绿统一函数
+// ── 涨红跌绿 ──
 function pill(v) {
   if (v===null||v===undefined||isNaN(v)) return '<span class="p z">--</span>';
   const cls = v>0 ? 'up' : 'dn';
@@ -373,16 +383,16 @@ function inl(v, fs='13px') {
   return `<span class="pi ${cls}" style="font-size:${fs}">${s}${v.toFixed(2)}%</span>`;
 }
 
-// 渲染ETF
+// ── 渲染 ETF ──
 function renderETF(key) {
   const g = ETF[key];
   const tbody = document.getElementById(`${key}-body`);
-  let tw = 0, yw = 0, rows = '';
+  let tw = 0, yw = 0, tValid = false, rows = '';
   for (const h of g.h) {
-    const today = apiOK ? (live[h.c]?.today ?? null) : null;
+    const today = (live[h.c] !== undefined && live[h.c].today !== undefined) ? live[h.c].today : null;
     const ytd = YTD[h.c] ?? null;
     const w = parseFloat(h.w)/100;
-    if (today !== null && !isNaN(today)) tw += w * today;
+    if (today !== null && !isNaN(today)) { tw += w * today; tValid = true; }
     if (ytd !== null) yw += w * ytd;
     rows += `<tr>
       <td class="wt">${h.w}</td>
@@ -392,14 +402,14 @@ function renderETF(key) {
     </tr>`;
   }
   tbody.innerHTML = rows;
-  const td = apiOK ? tw : null;
+  const td = tValid ? tw : null;
   document.getElementById(`${key}-t`).innerHTML = inl(td, '13px');
   document.getElementById(`${key}-y`).innerHTML = inl(yw, '13px');
   document.getElementById(`s-${key}-t`).innerHTML = inl(td, '20px');
   document.getElementById(`s-${key}-y`).innerHTML = inl(yw, '12px');
 }
 
-// 渲染自选（已新增迈威尔）
+// ── 渲染自选 ──
 function renderWatch() {
   const container = document.getElementById('watch-list');
   if (!WATCH.length) {
@@ -435,7 +445,7 @@ function renderWatch() {
   container.innerHTML = html;
 }
 
-// Tab切换
+// ── Tab 切换 ──
 document.querySelectorAll('.seg').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.seg').forEach(b => b.classList.remove('on'));
@@ -448,40 +458,79 @@ document.querySelectorAll('.seg').forEach(btn => {
   });
 });
 
-// 时钟
-setInterval(() => {
-  document.getElementById('clock').textContent = new Date().toTimeString().slice(0, 8);
-}, 1000);
-document.getElementById('clock').textContent = new Date().toTimeString().slice(0, 8);
+// ── 时钟（含年月日）──
+function updateClock() {
+  const now = new Date();
+  const y = now.getFullYear();
+  const mo = String(now.getMonth()+1).padStart(2,'0');
+  const d  = String(now.getDate()).padStart(2,'0');
+  const h  = String(now.getHours()).padStart(2,'0');
+  const mi = String(now.getMinutes()).padStart(2,'0');
+  const s  = String(now.getSeconds()).padStart(2,'0');
+  document.getElementById('clock-date').textContent = `${y}-${mo}-${d}`;
+  document.getElementById('clock-time').textContent = `${h}:${mi}:${s}`;
+}
+updateClock();
+setInterval(updateClock, 1000);
 
-// 手动刷新
-function manualRefresh() {
-  const btn = document.getElementById('refreshBtn');
-  btn.classList.add('spinning');
-  fetchAll().finally(() => setTimeout(() => btn.classList.remove('spinning'), 700));
+// ── 解析腾讯财经返回的文本 ──
+function parseTencentText(raw, symMap) {
+  const re = /v_([a-zA-Z0-9]+)="([^"]+)"/g;
+  let m, hit = false;
+  while ((m = re.exec(raw)) !== null) {
+    const sym = m[1], f = m[2].split('~'), key = symMap[sym];
+    if (!key) continue;
+    if (!live[key]) live[key] = {};
+    // 字段32=涨跌幅，字段3=现价，字段31=昨收
+    const pct = parseFloat(f[32]);
+    const pr  = parseFloat(f[3]);
+    if (!isNaN(pct)) { live[key].today = pct; hit = true; }
+    if (!isNaN(pr))  { live[key].price = pr; }
+  }
+  return hit;
 }
 
-// 数据拉取
+// ── 方案A：走 Proxy ──
+async function fetchViaProxy(ql, symMap) {
+  const raw = await (await fetch(`${PROXY}?q=${ql}`, {signal: AbortSignal.timeout(8000)})).text();
+  return parseTencentText(raw, symMap);
+}
+
+// ── 方案B：直接请求腾讯财经（JSONP script tag 方式）──
+function fetchViaTencent(ql, symMap) {
+  return new Promise((resolve) => {
+    const cbName = '_txCb_' + Date.now();
+    const s = document.createElement('script');
+    // 腾讯 qt.gtimg.cn 不支持真正 JSONP，但 pv=0 可返回文本；
+    // 这里用 fetch + no-cors 兜底尝试，拿不到内容时 resolve false
+    // 改用 fetch mode cors 尝试
+    fetch(`${TENCENT_BASE}${ql}`, {mode:'cors', signal: AbortSignal.timeout(8000)})
+      .then(r => r.text())
+      .then(raw => resolve(parseTencentText(raw, symMap)))
+      .catch(() => resolve(false));
+  });
+}
+
+// ── 主拉取逻辑 ──
 async function fetchAll() {
   const symMap = {};
   for (const [k, s] of Object.entries(TMAP)) symMap[s] = k;
   WATCH.forEach((w, i) => { symMap[w.sym] = `w${i}`; });
   const ql = Object.keys(symMap).join(',');
+
+  let ok = false;
   try {
-    const raw = await (await fetch(`${PROXY}?q=${ql}`)).text();
-    const re = /v_([a-zA-Z0-9]+)="([^"]+)"/g;
-    let m;
-    while ((m = re.exec(raw)) !== null) {
-      const sym = m[1], f = m[2].split('~'), key = symMap[sym];
-      if (!key) continue;
-      if (!live[key]) live[key] = {};
-      const pct = parseFloat(f[32]);
-      const pr = parseFloat(f[3]);
-      if (!isNaN(pct)) live[key].today = pct;
-      if (!isNaN(pr)) live[key].price = pr;
-      apiOK = true;
-    }
-  } catch (e) {}
+    ok = await fetchViaProxy(ql, symMap);
+  } catch(e) { ok = false; }
+
+  if (!ok) {
+    // proxy 失败，尝试直连腾讯
+    try {
+      ok = await fetchViaTencent(ql, symMap);
+    } catch(e) { ok = false; }
+  }
+
+  if (ok) apiOK = true;
   renderAll();
 }
 
@@ -497,5 +546,6 @@ renderAll();
 fetchAll();
 setInterval(fetchAll, 30000);
 </script>
+
 </body>
 </html>
