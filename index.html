@@ -102,11 +102,11 @@ td:first-child,td:nth-child(2){text-align:left}
 
 /* ── PCT PILL（中国习惯：涨红跌绿）── */
 .p{font-family:var(–mono);font-size:14px;font-weight:700;padding:6px 10px;border-radius:8px;display:inline-block;min-width:76px;text-align:center;letter-spacing:-.3px}
-.p.g{color:var(–red);background:rgba(255,45,85,.10)}
-.p.r{color:var(–green);background:rgba(0,176,80,.10)}
+.p.up{color:var(–red);background:rgba(255,45,85,.10)}
+.p.dn{color:var(–green);background:rgba(0,176,80,.10)}
 .p.z{color:var(–t3);background:var(–fill)}
 .pi{font-family:var(–mono);font-weight:700}
-.pi.g{color:var(–red)}.pi.r{color:var(–green)}.pi.z{color:var(–t3)}
+.pi.up{color:var(–red)}.pi.dn{color:var(–green)}.pi.z{color:var(–t3)}
 
 /* ── 自选：精简版，两列布局 ── */
 .watch-banner{
@@ -128,10 +128,11 @@ align-items:center;
 }
 .watch-item:last-child{border-bottom:none}
 .watch-left{}
-.watch-header{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.watch-header{display:flex;align-items:center;gap:6px;margin-bottom:6px;flex-wrap:wrap}
 .watch-ticker{font-family:var(–mono);font-size:16px;font-weight:700;color:var(–blue)}
 .watch-name{font-size:14px;color:var(–t2);font-weight:500}
 .sector-tag{font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:5px;background:rgba(255,149,0,.13);color:#c47a00}
+.logic-tag{font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:5px;background:rgba(0,113,227,.10);color:#0066cc;margin-left:2px}
 .watch-note{font-size:12px;color:var(–t3);line-height:1.5;margin-top:5px}
 .watch-meta{font-size:11px;color:var(–t4);font-family:var(–mono);margin-top:5px}
 .watch-right{text-align:right;flex-shrink:0;min-width:110px}
@@ -151,7 +152,6 @@ align-items:center;
 td{padding:12px 14px}
 .sc-hd{padding:14px 14px 12px}
 .watch-item{padding:14px 16px}
-.since-pct{font-size:19px}
 .nav-inner{padding:14px 16px 10px}
 .seg-wrap{padding:8px 16px}
 .wrap{padding:0 16px}
@@ -339,9 +339,10 @@ const WATCH = [
     name:    '卓胜微',
     sym:     'sz300782',
     date:    '2026-03-26',
-    price:   87.00,            // 推荐日收盘价
+    price:   87.00,
     sector:  '射频芯片',
-    note:    '国内射频前端芯片龙头，射频开关/LNA/PA全覆盖，安卓手机国产替代核心标的'
+    logic:   'AI手机射频升级 + 国产替代',
+    note:    '国内射频前端龙头，垄断安卓高端机射频模组，受益AI手机射频复杂度提升与美国制裁替代窗口'
   },
   // 新增格式：{ ticker, name, sym, date, price, sector, note }
 ];
@@ -367,14 +368,14 @@ let apiOK = false;
 // ─── 渲染工具（涨红跌绿）──────────────────
 function pill(v) {
   if (v===null||v===undefined||isNaN(v)) return '<span class="p z">--</span>';
-  const c=v>0?'g':'r', s=v>0?'+':'';
-  return `<span class="p ${c}">${s}${v.toFixed(2)}%</span>`;
+  const cls=v>0?'up':'dn', s=v>0?'+':'';
+  return `<span class="p ${cls}">${s}${v.toFixed(2)}%</span>`;
 }
 function inl(v, fs='13px') {
   if (v===null||v===undefined||isNaN(v))
     return `<span style="color:var(--t4);font-family:var(--mono);font-size:${fs};font-weight:700">--</span>`;
-  const c=v>0?'g':'r', s=v>0?'+':'';
-  return `<span class="pi ${c}" style="font-size:${fs}">${s}${v.toFixed(2)}%</span>`;
+  const cls=v>0?'up':'dn', s=v>0?'+':'';
+  return `<span class="pi ${cls}" style="font-size:${fs}">${s}${v.toFixed(2)}%</span>`;
 }
 
 // ─── 渲染 ETF 组合 ────────────────────────
@@ -419,7 +420,7 @@ function renderWatch() {
     let sinceHtml, sinceClass='';
     if (w.price && d.price>0) {
       const pct=(d.price-w.price)/w.price*100;
-      sinceClass=pct>0?'g':pct<0?'r':'z';
+      sinceClass=pct>0?'up':pct<0?'dn':'z';
       const s=pct>0?'+':'';
       sinceHtml=`<span class="since-pct pi ${sinceClass}">${s}${pct.toFixed(2)}%</span>
         <span class="since-date">自 ${w.date}<br>¥${w.price.toFixed(2)} → ¥${d.price.toFixed(2)}</span>`;
@@ -433,6 +434,7 @@ function renderWatch() {
           <span class="watch-ticker">${w.ticker}</span>
           <span class="watch-name">${w.name}</span>
           <span class="sector-tag">${w.sector}</span>
+          ${w.logic ? `<span class="logic-tag">${w.logic}</span>` : ''}
         </div>
         <div class="watch-note">${w.note}</div>
         <div class="watch-meta">今日 ${pill(d.today)}</div>
