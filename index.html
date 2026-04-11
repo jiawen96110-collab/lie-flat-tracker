@@ -461,14 +461,23 @@ function manualRefresh() {
   fetchAll().finally(() => setTimeout(() => btn.classList.remove('spinning'), 700));
 }
 
-// 数据拉取
+// === 替换原来的 fetchAll 函数 ===
 async function fetchAll() {
   const symMap = {};
   for (const [k, s] of Object.entries(TMAP)) symMap[s] = k;
   WATCH.forEach((w, i) => { symMap[w.sym] = `w${i}`; });
   const ql = Object.keys(symMap).join(',');
+
   try {
-    const raw = await (await fetch(`${PROXY}?q=${ql}`)).text();
+    // 你的原代理 + 添加伪装头，提高成功率
+    const res = await fetch(`${PROXY}?q=${ql}`, {
+      headers: {
+        'Referer': 'https://finance.qq.com/',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+      }
+    });
+    const raw = await res.text();
+
     const re = /v_([a-zA-Z0-9]+)="([^"]+)"/g;
     let m;
     while ((m = re.exec(raw)) !== null) {
@@ -481,7 +490,10 @@ async function fetchAll() {
       if (!isNaN(pr)) live[key].price = pr;
       apiOK = true;
     }
-  } catch (e) {}
+  } catch (e) {
+    console.warn('腾讯代理失败，尝试新浪备用...', e);
+    // 可选：这里可以再加新浪作为备用
+  }
   renderAll();
 }
 
