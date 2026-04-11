@@ -1,135 +1,157 @@
 <!DOCTYPE html>
-
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>躺平组合 · 京城Z先生</title>
+<title>躺平组合 · 京城Z先生无偿分享</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
-  --bg:#f0f2f5;
-  --card:#ffffff;
-  --t1:#1a1a2e;--t2:#3d3d5c;--t3:#6b6b8a;--t4:#9999b3;
-  --sep:rgba(60,60,100,.07);--border:rgba(60,60,100,.10);
-  --fill:rgba(100,100,140,.08);
-  --red:#e8192c;--red-bg:rgba(232,25,44,.09);
-  --green:#07a35a;--green-bg:rgba(7,163,90,.09);
-  --blue:#1565d8;--gold:#d4930a;
-  --font:'PingFang SC',-apple-system,'SF Pro Text','Helvetica Neue',sans-serif;
-  --mono:'SF Mono','Menlo','Monaco','Courier New',monospace;
-  --radius:18px;
+  --bg:#f8f9fa;--card:#ffffff;
+  --t1:#1d1d1f;--t2:#3a3a3c;--t3:#666;--t4:#8e8e93;
+  --sep:rgba(60,60,67,.08);--border:rgba(60,60,67,.12);--fill:rgba(118,118,128,.09);
+  --green:#00b050;--red:#ff2d55;--blue:#0071e3;--gold:#ff9500;
+  --font:-apple-system,'SF Pro Display','SF Pro Text','PingFang SC','Helvetica Neue',sans-serif;
+  --mono:'SF Mono','Menlo','Monaco',monospace;
 }
-body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100vh;padding-bottom:80px;-webkit-font-smoothing:antialiased}
-body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse 800px 500px at 20% -10%,rgba(21,101,216,.06) 0%,transparent 70%),radial-gradient(ellipse 600px 400px at 80% 110%,rgba(7,163,90,.05) 0%,transparent 70%);pointer-events:none;z-index:0}
+body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100vh;padding-bottom:60px;-webkit-font-smoothing:antialiased}
 
-.nav{position:sticky;top:0;z-index:100;background:rgba(240,242,245,.92);backdrop-filter:saturate(200%) blur(24px);-webkit-backdrop-filter:saturate(200%) blur(24px);border-bottom:1px solid var(–border)}
-.nav-inner{max-width:780px;margin:0 auto;padding:14px 20px 10px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.nav-brand h1{font-size:21px;font-weight:800;letter-spacing:-.5px;background:linear-gradient(135deg,var(–blue),#5b9ef4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.nav-brand .sub{font-size:12px;color:var(–t3);margin-top:2px;letter-spacing:.3px}
-.clock-pill{display:flex;align-items:center;gap:7px;background:var(–card);border:1px solid var(–border);padding:7px 14px;border-radius:999px;box-shadow:0 2px 10px rgba(0,0,0,.06)}
-.dot{width:7px;height:7px;border-radius:50%;background:#2dbc52;flex-shrink:0;animation:blink 2s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
-.clock-date{font-size:11.5px;color:var(–t3);font-weight:500;letter-spacing:.2px}
-.clock-sep{color:var(–border);font-size:13px;margin:0 1px}
-.clock-time{font-family:var(–mono);font-size:13px;font-weight:700;color:var(–t1);letter-spacing:.5px;min-width:56px}
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;background:rgba(248,249,250,.95);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:760px;margin:0 auto;padding:16px 20px 12px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.nav-brand h1{font-size:20px;font-weight:700;letter-spacing:-.6px}
+.nav-brand .sub{font-size:13px;color:var(--t3);margin-top:3px}
+.nav-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.clock-wrap{display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--border);padding:6px 14px;border-radius:9999px;font-size:13px;font-weight:500;color:var(--t2);box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.live-dot{width:7px;height:7px;border-radius:50%;background:#34c759;flex-shrink:0;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.clock{font-family:var(--mono);font-weight:600;color:var(--t1);min-width:58px;letter-spacing:.5px}
+.refresh-btn{width:36px;height:36px;border-radius:50%;border:none;background:var(--fill);color:var(--t2);cursor:pointer;font-size:17px;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.refresh-btn:hover{background:#e5e5ea;color:var(--blue)}
+.refresh-btn.spinning{animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-.seg-wrap{max-width:780px;margin:0 auto;padding:8px 20px}
-.segment{display:flex;background:rgba(100,100,140,.10);border-radius:14px;padding:3px;gap:2px}
-.seg{flex:1;padding:8px 4px;border:none;background:transparent;border-radius:11px;font-size:13px;font-weight:600;font-family:var(–font);color:var(–t3);cursor:pointer;transition:all .2s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;display:flex;align-items:center;justify-content:center;gap:3px}
-.seg.on{background:var(–card);color:var(–t1);box-shadow:0 2px 10px rgba(0,0,0,.09),0 0 0 .5px rgba(0,0,0,.06)}
+/* ── SEGMENT ── */
+.seg-wrap{max-width:760px;margin:0 auto;padding:10px 20px}
+.segment{display:flex;background:var(--fill);border-radius:12px;padding:3px;gap:2px}
+.seg{flex:1;padding:9px 4px;border:none;background:transparent;border-radius:9px;font-size:13.5px;font-weight:600;font-family:var(--font);color:var(--t3);cursor:pointer;transition:all .22s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;display:flex;align-items:center;justify-content:center;gap:3px}
+.seg.on{background:var(--card);color:var(--t1);box-shadow:0 2px 8px rgba(0,0,0,.08),0 0 0 1px rgba(0,0,0,.05)}
 
-.wrap{max-width:780px;margin:0 auto;padding:16px 20px;display:flex;flex-direction:column;gap:16px;position:relative;z-index:1}
+/* ── WRAP ── */
+.wrap{max-width:760px;margin:0 auto;padding:0 20px;display:flex;flex-direction:column;gap:16px}
 
-.status-bar{display:flex;align-items:center;justify-content:space-between;padding:9px 16px;background:var(–card);border-radius:12px;border:1px solid var(–border);font-size:12px;color:var(–t3);box-shadow:0 1px 4px rgba(0,0,0,.04)}
-.status-left{display:flex;align-items:center;gap:8px}
-.status-src{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;background:var(–fill);color:var(–t3);padding:3px 9px;border-radius:6px;transition:all .4s}
-.status-ok .status-src{background:rgba(7,163,90,.10);color:var(–green)}
-.status-fail .status-src{background:rgba(232,25,44,.09);color:var(–red)}
-.status-time{font-family:var(–mono);font-size:11px;color:var(–t4)}
-
+/* ── SUMMARY ROW ── */
 .sum-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.sum-card{background:var(–card);border-radius:var(–radius);padding:16px 14px 14px;box-shadow:0 4px 16px rgba(0,0,0,.07),0 1px 3px rgba(0,0,0,.04);position:relative;overflow:hidden}
-.sum-card::before{content:””;position:absolute;top:0;left:0;right:0;height:3px;border-radius:var(–radius) var(–radius) 0 0}
-.sum-card.us::before{background:linear-gradient(90deg,#1565d8,#60a5fa)}
-.sum-card.hk::before{background:linear-gradient(90deg,#07a35a,#34d399)}
-.sum-card.cn::before{background:linear-gradient(90deg,#e8192c,#f87171)}
-.sum-mkt{font-size:11.5px;color:var(–t3);font-weight:600;margin-bottom:10px;margin-top:2px}
-.sum-today{font-family:var(–mono);font-size:19px;font-weight:800;letter-spacing:-1px;line-height:1;min-height:22px;display:flex;align-items:center}
-.sum-divider{height:.5px;background:var(–sep);margin:10px 0}
-.sum-ytd-row{display:flex;align-items:center;justify-content:space-between}
-.sum-ytd-lbl{font-size:11px;color:var(–t4);font-weight:500}
-.sum-ytd-val{font-family:var(–mono);font-size:12px;font-weight:700}
+.sum-card{
+background:var(--card);border-radius:18px;
+padding:16px 14px 14px;
+box-shadow:0 4px 12px rgba(0,0,0,.06),0 1px 3px rgba(0,0,0,.04);
+position:relative;overflow:hidden;
+display:flex;flex-direction:column;
+}
+.sum-card::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;border-radius:18px 18px 0 0}
+.sum-card.us::before{background:linear-gradient(90deg,#0071e3,#5ac8fa)}
+.sum-card.hk::before{background:linear-gradient(90deg,#34c759,#30d158)}
+.sum-card.cn::before{background:linear-gradient(90deg,#ff3b30,#ff6961)}
+.sum-mkt{font-size:12px;color:var(--t3);font-weight:500;margin-bottom:8px;margin-top:2px;display:flex;align-items:center;gap:4px;white-space:nowrap}
+.sum-today{
+font-family:var(--mono);font-size:20px;font-weight:700;
+letter-spacing:-.8px;line-height:1;
+height:24px;
+display:flex;align-items:center;
+}
+.sum-divider{height:.5px;background:var(--sep);margin:10px 0}
+.sum-ytd-row{display:flex;align-items:center;gap:6px}
+.sum-ytd-lbl{font-size:11.5px;color:var(--t4);flex-shrink:0}
+.sum-ytd-val{font-family:var(--mono);font-size:12px;font-weight:600}
 
-.sc{background:var(–card);border-radius:20px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.08),0 1px 4px rgba(0,0,0,.04)}
+/* ── SECTION CARD ── */
+.sc{background:var(--card);border-radius:20px;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,.07),0 1px 3px rgba(0,0,0,.05)}
 .sc.hide{display:none}
-.sc-hd{padding:16px 20px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(–sep)}
-.sc-hd.us-hd{background:linear-gradient(135deg,rgba(21,101,216,.06) 0%,rgba(255,255,255,0) 100%)}
-.sc-hd.hk-hd{background:linear-gradient(135deg,rgba(7,163,90,.06) 0%,rgba(255,255,255,0) 100%)}
-.sc-hd.cn-hd{background:linear-gradient(135deg,rgba(232,25,44,.06) 0%,rgba(255,255,255,0) 100%)}
-.sc-hd.watch-hd{background:linear-gradient(135deg,rgba(212,147,10,.07) 0%,rgba(255,255,255,0) 100%)}
-.sc-hd-l{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.mkt-badge{font-family:var(–mono);font-size:11px;font-weight:800;padding:4px 10px;border-radius:7px;letter-spacing:.5px}
-.m-us{background:rgba(21,101,216,.12);color:#1565d8}
-.m-hk{background:rgba(7,163,90,.12);color:#07a35a}
-.m-cn{background:rgba(232,25,44,.12);color:#c0281e}
-.m-watch{background:rgba(212,147,10,.14);color:#b07a00}
-.sc-title{font-size:17px;font-weight:800;letter-spacing:-.4px}
-.sc-tag{font-size:10px;background:var(–fill);color:var(–t3);padding:3px 8px;border-radius:6px;font-weight:600}
+.sc-hd{padding:16px 20px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--sep)}
+.sc-hd.us-hd{background:linear-gradient(135deg,rgba(0,113,227,.06),rgba(90,200,250,.03))}
+.sc-hd.hk-hd{background:linear-gradient(135deg,rgba(52,199,89,.06),rgba(48,209,88,.03))}
+.sc-hd.cn-hd{background:linear-gradient(135deg,rgba(255,59,48,.06),rgba(255,105,97,.03))}
+.sc-hd.watch-hd{background:linear-gradient(135deg,rgba(255,149,0,.07),rgba(175,82,222,.04))}
+.sc-hd-l{display:flex;align-items:center;gap:10px}
+.mkt{font-family:var(--mono);font-size:11px;font-weight:700;padding:4px 9px;border-radius:6px;letter-spacing:.4px}
+.m-us{background:rgba(0,113,227,.12);color:#0066cc}
+.m-hk{background:rgba(52,199,89,.12);color:#1a8a3a}
+.m-cn{background:rgba(255,59,48,.12);color:#c0281e}
+.m-watch{background:rgba(255,149,0,.15);color:#c47a00}
+.sc-title{font-size:17px;font-weight:700;letter-spacing:-.4px}
+.sc-tag{font-size:10px;background:var(--fill);color:var(--t3);padding:3px 8px;border-radius:6px;font-weight:600}
 .sc-hd-r{text-align:right;flex-shrink:0}
-.hd-row{display:flex;align-items:center;gap:8px;justify-content:flex-end;margin-top:5px}
-.hd-lbl{font-size:11.5px;color:var(–t4);font-weight:500}
+.hd-row{font-size:13px;color:var(--t3);display:flex;align-items:center;gap:8px;justify-content:flex-end;margin-top:4px}
+.hd-lbl{font-size:12px;color:var(--t4);font-weight:500}
 
+/* ── TABLE ── */
 table{width:100%;border-collapse:collapse}
-thead th{font-size:11.5px;font-weight:600;color:var(–t4);padding:10px 20px 8px;text-align:right;letter-spacing:.3px}
+thead th{font-size:12px;font-weight:500;color:var(--t4);padding:10px 20px 8px;text-align:right;letter-spacing:.3px}
 thead th:first-child,thead th:nth-child(2){text-align:left}
-tbody tr{border-bottom:.5px solid var(–sep);transition:background .15s}
+tbody tr{border-bottom:1px solid var(--sep)}
 tbody tr:last-child{border-bottom:none}
-@media(hover:hover){tbody tr:hover{background:rgba(21,101,216,.025)}}
+@media(hover:hover){tbody tr:hover{background:rgba(0,0,0,.018)}}
 td{padding:14px 20px;font-size:15px;text-align:right;vertical-align:middle}
 td:first-child,td:nth-child(2){text-align:left}
-.wt{font-family:var(–mono);font-size:12.5px;color:var(–t4);font-weight:700}
-.tk{font-family:var(–mono);font-size:15px;font-weight:800;color:var(–blue);display:block;line-height:1.1}
-.nm{font-size:13px;color:var(–t2);display:block;margin-top:3px;font-weight:400}
+.wt{font-family:var(--mono);font-size:13px;color:var(--t4);font-weight:600}
+.tk{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--blue);display:block;line-height:1.1}
+.nm{font-size:13.5px;color:var(--t2);display:block;margin-top:3px}
 
-/* 涨红跌绿 */
-.p{font-family:var(–mono);font-size:13.5px;font-weight:800;padding:6px 10px;border-radius:9px;display:inline-block;min-width:78px;text-align:center;letter-spacing:-.2px}
-.p.up{color:var(–red);background:var(–red-bg)}
-.p.dn{color:var(–green);background:var(–green-bg)}
-.p.z{color:var(–t4);background:var(–fill)}
-.pi{font-family:var(–mono);font-weight:800}
-.pi.up{color:var(–red)}.pi.dn{color:var(–green)}.pi.z{color:var(–t4)}
+/* ── PCT PILL（涨红跌绿）── */
+.p{font-family:var(--mono);font-size:14px;font-weight:700;padding:6px 10px;border-radius:8px;display:inline-block;min-width:76px;text-align:center;letter-spacing:-.3px}
+.p.up{color:var(--red);background:rgba(255,45,85,.10)}
+.p.dn{color:var(--green);background:rgba(0,176,80,.10)}
+.p.z{color:var(--t3);background:var(--fill)}
+.pi{font-family:var(--mono);font-weight:700}
+.pi.up{color:var(--red)}.pi.dn{color:var(--green)}.pi.z{color:var(--t3)}
 
-.watch-banner{background:linear-gradient(90deg,rgba(212,147,10,.07),rgba(21,101,216,.04));border-bottom:.5px solid var(–sep);padding:11px 20px;font-size:12.5px;color:var(–t2)}
-.watch-banner strong{color:var(–t1);font-weight:700}
-.watch-item{padding:18px 20px;border-bottom:.5px solid var(–sep);display:grid;grid-template-columns:1fr auto;gap:14px;align-items:start;transition:background .15s}
+/* ── 自选卡片 ── */
+.watch-banner{
+background:linear-gradient(135deg,rgba(255,149,0,.08),rgba(175,82,222,.06));
+border-bottom:1px solid var(--sep);padding:12px 20px;
+display:flex;align-items:center;gap:10px;
+}
+.wb-text{font-size:13px;color:var(--t2);line-height:1.5}
+.wb-text strong{color:var(--t1);font-weight:600}
+
+.watch-item{
+padding:16px 20px;
+border-bottom:1px solid var(--sep);
+display:grid;
+grid-template-columns:1fr auto;
+gap:12px;
+align-items:center;
+}
 .watch-item:last-child{border-bottom:none}
-@media(hover:hover){.watch-item:hover{background:rgba(21,101,216,.02)}}
-.watch-header{display:flex;align-items:center;gap:6px;margin-bottom:7px;flex-wrap:wrap}
-.watch-ticker{font-family:var(–mono);font-size:16px;font-weight:800;color:var(–blue)}
-.watch-name{font-size:14px;color:var(–t2);font-weight:600}
-.sector-tag{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;background:rgba(212,147,10,.12);color:#9a6a00}
-.logic-tag{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;background:rgba(21,101,216,.10);color:#1565d8}
-.watch-note{font-size:12px;color:var(–t3);line-height:1.65;margin-top:4px}
-.watch-meta{font-size:11.5px;color:var(–t4);margin-top:8px;display:flex;align-items:center;gap:8px}
-.watch-right{text-align:right;flex-shrink:0;min-width:108px;padding-top:2px}
-.since-pct{font-family:var(–mono);font-size:24px;font-weight:900;letter-spacing:-1px;display:block;line-height:1}
-.since-date{font-size:10.5px;color:var(–t4);font-family:var(–mono);margin-top:5px;display:block;line-height:1.5}
+.watch-left{}
+.watch-header{display:flex;align-items:center;gap:6px;margin-bottom:6px;flex-wrap:wrap}
+.watch-ticker{font-family:var(--mono);font-size:16px;font-weight:700;color:var(--blue)}
+.watch-name{font-size:14px;color:var(--t2);font-weight:500}
+.sector-tag{font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:5px;background:rgba(255,149,0,.13);color:#c47a00}
+.logic-tag{font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:5px;background:rgba(0,113,227,.10);color:#0066cc;margin-left:2px}
+.watch-note{font-size:12px;color:var(--t3);line-height:1.5;margin-top:5px}
+.watch-meta{font-size:11px;color:var(--t4);font-family:var(--mono);margin-top:5px}
+.watch-right{text-align:right;flex-shrink:0;min-width:110px}
+.since-pct{font-family:var(--mono);font-size:22px;font-weight:700;letter-spacing:-.5px;display:block;line-height:1.1}
+.since-date{font-size:11px;color:var(--t4);font-family:var(--mono);margin-top:4px;display:block}
 
-.disclaimer{background:var(–card);border-radius:14px;padding:16px 20px;border:1px solid var(–border);font-size:12px;color:var(–t3);line-height:1.8;box-shadow:0 2px 8px rgba(0,0,0,.04)}
-.disclaimer strong{color:var(–t2)}
-.footer{text-align:center;font-size:12px;color:var(–t4);line-height:1.8;padding:8px 20px 40px;max-width:780px;margin:0 auto}
+/* ── FOOTER ── */
+.footer{text-align:center;font-size:12.5px;color:var(--t4);line-height:1.7;padding:24px 20px 40px;max-width:760px;margin:0 auto}
 
-@media(max-width:440px){
-.sum-today{font-size:17px}.sum-mkt{font-size:11px}
-.p{min-width:68px;font-size:12.5px;padding:5px 8px}
-td{padding:12px 14px}.sc-hd{padding:14px 14px 12px}
-.watch-item{padding:14px 14px}.nav-inner{padding:12px 16px 8px}
-.seg-wrap{padding:6px 16px}.wrap{padding:12px 14px;gap:12px}
-.since-pct{font-size:20px}.clock-date{display:none}.clock-sep{display:none}
+/* 手机适配 */
+@media(max-width:430px){
+.sum-today{font-size:17px}
+.sum-mkt{font-size:11px}
+.p{min-width:66px;font-size:13px}
+td{padding:12px 14px}
+.sc-hd{padding:14px 14px 12px}
+.watch-item{padding:14px 16px}
+.nav-inner{padding:14px 16px 10px}
+.seg-wrap{padding:8px 16px}
+.wrap{padding:0 16px}
 }
 </style>
-
 </head>
 <body>
 
@@ -139,11 +161,12 @@ td{padding:12px 14px}.sc-hd{padding:14px 14px 12px}
       <h1>躺平组合</h1>
       <div class="sub">跟踪 · 京城Z先生无偿分享</div>
     </div>
-    <div class="clock-pill">
-      <div class="dot"></div>
-      <span class="clock-date" id="clock-date">--</span>
-      <span class="clock-sep">|</span>
-      <span class="clock-time" id="clock-time">--:--:--</span>
+    <div class="nav-right">
+      <button class="refresh-btn" id="refreshBtn" onclick="manualRefresh()" title="刷新">↻</button>
+      <div class="clock-wrap">
+        <div class="live-dot"></div>
+        <span class="clock" id="clock">--:--:--</span>
+      </div>
     </div>
   </div>
   <div class="seg-wrap">
@@ -159,48 +182,42 @@ td{padding:12px 14px}.sc-hd{padding:14px 14px 12px}
 
 <div class="wrap">
 
-  <div class="status-bar" id="status-bar">
-    <div class="status-left">
-      <span class="status-src" id="status-src">● 连接中...</span>
-      <span>数据来源：东方财富 · 每30秒刷新</span>
-    </div>
-    <span class="status-time" id="status-time">--</span>
-  </div>
-
+  <!-- 概览 -->
   <div class="sum-row" id="sum-row">
     <div class="sum-card us">
-      <div class="sum-mkt">🇺🇸 美股组合</div>
-      <div class="sum-today" id="s-us-t"><span style="color:var(--t4);font-size:15px;font-family:var(--mono)">--</span></div>
+      <div class="sum-mkt">🇺🇸 美股</div>
+      <div class="sum-today" id="s-us-t">--</div>
       <div class="sum-divider"></div>
       <div class="sum-ytd-row">
-        <span class="sum-ytd-lbl">今年以来</span>
-        <span class="sum-ytd-val pi z" id="s-us-y">--</span>
+        <span class="sum-ytd-lbl">今年</span>
+        <span class="sum-ytd-val" id="s-us-y">--</span>
       </div>
     </div>
     <div class="sum-card hk">
-      <div class="sum-mkt">🇭🇰 港股组合</div>
-      <div class="sum-today" id="s-hk-t"><span style="color:var(--t4);font-size:15px;font-family:var(--mono)">--</span></div>
+      <div class="sum-mkt">🇭🇰 港股</div>
+      <div class="sum-today" id="s-hk-t">--</div>
       <div class="sum-divider"></div>
       <div class="sum-ytd-row">
-        <span class="sum-ytd-lbl">今年以来</span>
-        <span class="sum-ytd-val pi z" id="s-hk-y">--</span>
+        <span class="sum-ytd-lbl">今年</span>
+        <span class="sum-ytd-val" id="s-hk-y">--</span>
       </div>
     </div>
     <div class="sum-card cn">
-      <div class="sum-mkt">🇨🇳 A股组合</div>
-      <div class="sum-today" id="s-cn-t"><span style="color:var(--t4);font-size:15px;font-family:var(--mono)">--</span></div>
+      <div class="sum-mkt">🇨🇳 A股</div>
+      <div class="sum-today" id="s-cn-t">--</div>
       <div class="sum-divider"></div>
       <div class="sum-ytd-row">
-        <span class="sum-ytd-lbl">今年以来</span>
-        <span class="sum-ytd-val pi z" id="s-cn-y">--</span>
+        <span class="sum-ytd-lbl">今年</span>
+        <span class="sum-ytd-val" id="s-cn-y">--</span>
       </div>
     </div>
   </div>
 
+  <!-- US -->
   <div class="sc" data-sec="us">
     <div class="sc-hd us-hd">
       <div class="sc-hd-l">
-        <span class="mkt-badge m-us">US</span>
+        <span class="mkt m-us">US</span>
         <span class="sc-title">美股躺平组合</span>
         <span class="sc-tag">被动指数</span>
       </div>
@@ -215,10 +232,11 @@ td{padding:12px 14px}.sc-hd{padding:14px 14px 12px}
     </table>
   </div>
 
+  <!-- HK -->
   <div class="sc" data-sec="hk">
     <div class="sc-hd hk-hd">
       <div class="sc-hd-l">
-        <span class="mkt-badge m-hk">HK</span>
+        <span class="mkt m-hk">HK</span>
         <span class="sc-title">港股躺平组合</span>
         <span class="sc-tag">被动指数</span>
       </div>
@@ -233,10 +251,11 @@ td{padding:12px 14px}.sc-hd{padding:14px 14px 12px}
     </table>
   </div>
 
+  <!-- CN -->
   <div class="sc" data-sec="cn">
     <div class="sc-hd cn-hd">
       <div class="sc-hd-l">
-        <span class="mkt-badge m-cn">CN</span>
+        <span class="mkt m-cn">CN</span>
         <span class="sc-title">A股躺平组合</span>
         <span class="sc-tag">被动指数</span>
       </div>
@@ -251,213 +270,120 @@ td{padding:12px 14px}.sc-hd{padding:14px 14px 12px}
     </table>
   </div>
 
+  <!-- 自选 -->
   <div class="sc" data-sec="watch">
     <div class="sc-hd watch-hd">
       <div class="sc-hd-l">
-        <span class="mkt-badge m-watch">⭐ Z先生</span>
-        <span class="sc-title">分享标的追踪</span>
+        <span class="mkt m-watch">⭐</span>
+        <span class="sc-title">Z先生分享标的追踪</span>
       </div>
     </div>
     <div class="watch-banner">
-      📡 实时跟踪 · <strong>分享以来涨跌</strong>从推荐日收盘价起算
+      <span class="wb-text">📡 实时跟踪 · <strong>分享以来涨跌</strong>从推荐日收盘价起算</span>
     </div>
     <div id="watch-list"></div>
   </div>
 
-  <div class="disclaimer">
-    ⚠️ <strong>重要提示：</strong>本页面数据仅供<strong>参考跟踪</strong>使用，不构成任何投资建议。Z先生所有分享均为个人经验总结，无偿公开。股市有风险，入市需谨慎，请独立判断，自负盈亏。
+  <div class="footer">
+    数据来源：腾讯财经 &nbsp;·&nbsp; 每30秒自动更新 &nbsp;·&nbsp; 仅供参考，不构成任何投资建议<br>
+    Z先生所有分享均为个人经验无偿公开，祝大家投资顺利 🙏
   </div>
-
-  <div class="footer">© 躺平组合跟踪 · 利己利他 · 祝大家投资顺利 🙏</div>
 </div>
 
 <script>
-// ═══ 组合配置 ═══
-// 东方财富 secid 格式：美股107. 港股116. 沪市1. 深市0.
+// ═══════════════════════════════════════════
+// ETF 组合（精简版）
 const ETF = {
-  us:{h:[
-    {w:'25%',c:'us_QQQ',  t:'QQQ',   n:'纳斯达克100 ETF', em:'107.QQQ'},
-    {w:'25%',c:'us_SPY',  t:'SPY',   n:'标普500 ETF',     em:'107.SPY'},
-    {w:'20%',c:'us_RING', t:'RING',  n:'黄金矿业 ETF',    em:'107.RING'},
-    {w:'20%',c:'us_COPX', t:'COPX',  n:'全球铜矿 ETF',    em:'107.COPX'},
-    {w:'10%',c:'us_BITB', t:'BITB',  n:'比特币 ETF',      em:'107.BITB'},
+  us: {h: [
+    {w:'25%',c:'us_QQQ',t:'QQQ',n:'纳斯达克100 ETF'},
+    {w:'25%',c:'us_SPY',t:'SPY',n:'标普500 ETF'},
+    {w:'20%',c:'us_RING',t:'RING',n:'黄金矿业 ETF'},
+    {w:'20%',c:'us_COPX',t:'COPX',n:'全球铜矿 ETF'},
+    {w:'10%',c:'us_BITB',t:'BITB',n:'比特币 ETF'}
   ]},
-  hk:{h:[
-    {w:'25%',c:'hk_03455',t:'03455', n:'纳斯达克100 ETF', em:'116.03455'},
-    {w:'20%',c:'hk_03132',t:'03132', n:'全球半导体 ETF',  em:'116.03132'},
-    {w:'20%',c:'hk_03147',t:'03147', n:'中国创业板 ETF',  em:'116.03147'},
-    {w:'20%',c:'hk_03110',t:'03110', n:'恒生高股息 ETF',  em:'116.03110'},
-    {w:'15%',c:'hk_02840',t:'02840', n:'黄金 ETF',        em:'116.02840'},
+  hk: {h: [
+    {w:'25%',c:'hk_03455',t:'03455',n:'纳斯达克100 ETF'},
+    {w:'20%',c:'hk_03132',t:'03132',n:'全球半导体 ETF'},
+    {w:'20%',c:'hk_03147',t:'03147',n:'中国创业板 ETF'},
+    {w:'20%',c:'hk_03110',t:'03110',n:'恒生高股息 ETF'},
+    {w:'15%',c:'hk_02840',t:'02840',n:'黄金 ETF'}
   ]},
-  cn:{h:[
-    {w:'25%',c:'cn_513390',t:'513390',n:'纳斯达克100 ETF', em:'1.513390'},
-    {w:'25%',c:'cn_159652',t:'159652',n:'有色金属50 ETF',  em:'0.159652'},
-    {w:'25%',c:'cn_588200',t:'588200',n:'科创芯片 ETF',    em:'1.588200'},
-    {w:'15%',c:'cn_515880',t:'515880',n:'通信设备 ETF',    em:'1.515880'},
-    {w:'10%',c:'cn_518880',t:'518880',n:'黄金 ETF',        em:'1.518880'},
+  cn: {h: [
+    {w:'25%',c:'cn_513390',t:'513390',n:'纳斯达克100 ETF'},
+    {w:'25%',c:'cn_159652',t:'159652',n:'有色金属50 ETF'},
+    {w:'25%',c:'cn_588200',t:'588200',n:'科创芯片 ETF'},
+    {w:'15%',c:'cn_515880',t:'515880',n:'通信设备 ETF'},
+    {w:'10%',c:'cn_518880',t:'518880',n:'黄金 ETF'}
   ]}
 };
 
+// ═══════════════════════════════════════════
+// Z先生分享自选（已新增3.18光模块最贴切标的）
 const WATCH = [
   {
-    ticker:'300782', name:'卓胜微', date:'2026-03-26', price:87.00,
-    em:'0.300782', sector:'射频芯片', logic:'AI手机射频升级 + 国产替代',
-    note:'国内射频前端龙头，垄断安卓高端机射频模组。12英寸SiGe产线产能7000片/月，良率92%+，成本较6英寸低50%。是国内极少数能承接Tower转单的厂商，已实现12英寸SiGe规模化量产。Tower美股已暴涨，行业普遍缺货下市场预期差巨大。'
+    ticker:  '300782',
+    name:    '卓胜微',
+    sym:     'sz300782',
+    date:    '2026-03-26',
+    price:   87.00,
+    sector:  '射频芯片',
+    logic:   'AI手机射频升级 + 国产替代',
+    note:    '国内射频前端龙头，垄断安卓高端机射频模组。12英寸SiGe产线当前产能7000片/月，良率稳定92%以上，成本较6英寸低50%，兼容SOI工艺，平台直接对标以色列Tower半导体（全球70%高端SiGe产能由Tower垄断）。地缘政治+产能稀缺性下，卓胜微是国内极少数能承接转单的厂商，已实现12英寸SiGe规模化量产。未来计划扩产至1万→1.5万片/月，满足光通信电芯片（Driver/TIA）和射频前端长期需求。Tower美股已暴涨，行业普遍缺货下市场预期差巨大。'
   },
   {
-    ticker:'MRVL', name:'迈威尔', date:'2025-03-18', price:68.28,
-    em:'107.MRVL', sector:'AI光互连', logic:'高速互连芯片平台',
-    note:'3.18 Z先生光模块机会中最贴切的美股标的。Marvell是更上游、更核心的AI网络与高速互连芯片平台——AI集群越大，对交换、DSP、互连的需求越强，Marvell的位置很硬。AI光互连长期受益核心标的。'
+    ticker:  'MRVL',
+    name:    '迈威尔',
+    sym:     'usMRVL',
+    date:    '2025-03-18',
+    price:   68.28,
+    sector:  'AI光互连',
+    logic:   '高速互连芯片平台',
+    note:    '3.18 Z先生分享光模块机会中最贴切的美股标的（XPO MSA Module Partners之一）。Marvell不只是“光模块概念”，而是更上游、更核心的AI网络与高速互连芯片平台。AI集群越大，对交换、DSP、互连的需求越强，Marvell的位置很硬。与Accelink、Ciena、Lumentum、Coherent等光模块巨头同台，是AI光互连长期受益的核心标的。'
   }
 ];
 
-// YTD 静态兜底
+// YTD 静态兜底（今日实时覆盖）
 const YTD = {
   us_QQQ:-0.55,us_SPY:-0.02,us_RING:14.83,us_COPX:13.62,us_BITB:-17.41,
   hk_03455:-0.53,hk_03132:25.08,hk_03147:11.40,hk_03110:9.10,hk_02840:10.25,
   cn_513390:-5.03,cn_159652:8.54,cn_588200:10.16,cn_515880:19.77,cn_518880:7.48
 };
 
-const live = {};
-let dataOK = false, lastUpdate = null;
-
-// ═══ 颜色工具（涨红跌绿）═══
-const cls  = v => v > 0 ? 'up' : v < 0 ? 'dn' : 'z';
-const sign = v => v > 0 ? '+' : '';
-
-function pill(v){
-  if(v === null || v === undefined || isNaN(v)) return '<span class="p z">--</span>';
-  return `<span class="p ${cls(v)}">${sign(v)}${v.toFixed(2)}%</span>`;
-}
-function inl(v, fs='13px'){
-  if(v === null || v === undefined || isNaN(v))
-    return `<span style="color:var(--t4);font-family:var(--mono);font-size:${fs};font-weight:800">--</span>`;
-  return `<span class="pi ${cls(v)}" style="font-size:${fs}">${sign(v)}${v.toFixed(2)}%</span>`;
-}
-
-// ═══ 东方财富 JSONP（支持美股/港股/A股）═══
-// API: push2.eastmoney.com/api/qt/ulist.np/get
-// f2=现价 f3=涨跌幅 f12=股票代码
-// 东方财富对浏览器直请求支持 JSONP，公共接口无需登录
-function fetchEM(secids, codeMap){
-  return new Promise(resolve => {
-    const cb = '_em_' + Date.now();
-    const t  = setTimeout(() => { try{delete window[cb]}catch(e){} resolve(false); }, 10000);
-
-    window[cb] = function(data){
-      clearTimeout(t);
-      try { delete window[cb]; } catch(e){}
-      try{
-        const diff = data?.data?.diff;
-        if(!diff || !diff.length){ resolve(false); return; }
-        let hit = false;
-        diff.forEach(item => {
-          const code = String(item.f12 || '');
-          const pct  = parseFloat(item.f3);
-          const pr   = parseFloat(item.f2);
-          const key  = codeMap[code];
-          if(!key) return;
-          if(!live[key]) live[key] = {};
-          // 东方财富用 -268435456 表示无数据
-          if(!isNaN(pct) && pct !== -268435456){ live[key].today = pct; hit = true; }
-          if(!isNaN(pr)  && pr  !== -268435456){ live[key].price = pr; }
-        });
-        resolve(hit);
-      } catch(e){ resolve(false); }
-    };
-
-    const ids = secids.join(',');
-    const url = `https://push2.eastmoney.com/api/qt/ulist.np/get?secids=${encodeURIComponent(ids)}&fields=f2,f3,f12&fltt=2&invt=2&cb=${cb}&_=${Date.now()}`;
-    const s = document.createElement('script');
-    s.src = url;
-    s.onerror = () => { clearTimeout(t); try{delete window[cb]}catch(e){} resolve(false); };
-    document.head.appendChild(s);
-    setTimeout(() => { try{ s.parentNode && s.parentNode.removeChild(s); }catch(e){} }, 12000);
-  });
-}
-
-// ═══ 新浪财经备用（A股/港股，CORS 兜底）═══
-const SINA_KEYS = {
-  sh513390:'cn_513390',sz159652:'cn_159652',sh588200:'cn_588200',
-  sh515880:'cn_515880',sh518880:'cn_518880',
-  hk03455:'hk_03455',hk03132:'hk_03132',hk03147:'hk_03147',
-  hk03110:'hk_03110',hk02840:'hk_02840',
+const TMAP = {
+  us_QQQ:'usQQQ',us_SPY:'usSPY',us_RING:'usRING',us_COPX:'usCOPX',us_BITB:'usBITB',
+  hk_03455:'hk03455',hk_03132:'hk03132',hk_03147:'hk03147',hk_03110:'hk03110',hk_02840:'hk02840',
+  cn_513390:'sh513390',cn_159652:'sz159652',cn_588200:'sh588200',cn_515880:'sh515880',cn_518880:'sh518880'
 };
-function fetchSina(){
-  return new Promise(resolve => {
-    fetch('https://hq.sinajs.cn/list=' + Object.keys(SINA_KEYS).join(','), {mode:'cors'})
-      .then(r => r.text())
-      .then(text => {
-        const re = /var hq_str_([a-zA-Z0-9]+)="([^"]+)"/g;
-        let m, hit = false;
-        while((m = re.exec(text)) !== null){
-          const key = SINA_KEYS[m[1]];
-          if(!key) continue;
-          const parts = m[2].split(',');
-          const close = parseFloat(parts[2]);
-          const yest  = parseFloat(parts[3]);
-          if(!isNaN(close) && !isNaN(yest) && yest > 0){
-            if(!live[key]) live[key] = {};
-            live[key].today = (close - yest) / yest * 100;
-            live[key].price = close;
-            hit = true;
-          }
-        }
-        resolve(hit);
-      })
-      .catch(() => resolve(false));
-  });
+
+const PROXY = 'https://lieflat-proxy.jiawen96110.workers.dev';
+const live = {};
+let apiOK = false;
+
+// 涨红跌绿统一函数
+function pill(v) {
+  if (v===null||v===undefined||isNaN(v)) return '<span class="p z">--</span>';
+  const cls = v>0 ? 'up' : 'dn';
+  const s = v>0 ? '+' : '';
+  return `<span class="p ${cls}">${s}${v.toFixed(2)}%</span>`;
+}
+function inl(v, fs='13px') {
+  if (v===null||v===undefined||isNaN(v)) return `<span style="color:var(--t4);font-family:var(--mono);font-size:${fs};font-weight:700">--</span>`;
+  const cls = v>0 ? 'up' : 'dn';
+  const s = v>0 ? '+' : '';
+  return `<span class="pi ${cls}" style="font-size:${fs}">${s}${v.toFixed(2)}%</span>`;
 }
 
-// ═══ 主拉取 ═══
-async function fetchAll(){
-  const codeMap = {};
-  const secids  = [];
-
-  [...ETF.us.h, ...ETF.hk.h, ...ETF.cn.h].forEach(h => {
-    codeMap[h.em.split('.')[1]] = h.c;
-    secids.push(h.em);
-  });
-  WATCH.forEach((w, i) => {
-    codeMap[w.em.split('.')[1]] = `w${i}`;
-    secids.push(w.em);
-  });
-
-  let ok = false;
-  try { ok = await fetchEM(secids, codeMap); } catch(e) { ok = false; }
-
-  // A股/港股备用
-  if(!ok){
-    try { ok = await fetchSina(); } catch(e) { ok = false; }
-  }
-
-  if(ok){ dataOK = true; lastUpdate = new Date(); }
-  setStatus(ok);
-  renderAll();
-}
-
-function setStatus(ok){
-  const bar  = document.getElementById('status-bar');
-  const src  = document.getElementById('status-src');
-  const time = document.getElementById('status-time');
-  bar.className = 'status-bar ' + (ok ? 'status-ok' : 'status-fail');
-  src.textContent = ok ? '● 实时数据' : '● 暂无实时';
-  time.textContent = lastUpdate ? '更新 ' + lastUpdate.toTimeString().slice(0,8) : '等待数据';
-}
-
-// ═══ 渲染 ETF ═══
-function renderETF(key){
+// 渲染ETF
+function renderETF(key) {
   const g = ETF[key];
   const tbody = document.getElementById(`${key}-body`);
-  let tw = 0, yw = 0, tValid = false, rows = '';
-
-  for(const h of g.h){
-    const d     = live[h.c] || {};
-    const today = (d.today !== undefined && !isNaN(d.today)) ? d.today : null;
-    const ytd   = YTD[h.c] ?? null;
-    const w     = parseFloat(h.w) / 100;
-    if(today !== null){ tw += w * today; tValid = true; }
-    if(ytd !== null)  { yw += w * ytd; }
+  let tw = 0, yw = 0, rows = '';
+  for (const h of g.h) {
+    const today = apiOK ? (live[h.c]?.today ?? null) : null;
+    const ytd = YTD[h.c] ?? null;
+    const w = parseFloat(h.w)/100;
+    if (today !== null && !isNaN(today)) tw += w * today;
+    if (ytd !== null) yw += w * ytd;
     rows += `<tr>
       <td class="wt">${h.w}</td>
       <td><span class="tk">${h.t}</span><span class="nm">${h.n}</span></td>
@@ -466,43 +392,34 @@ function renderETF(key){
     </tr>`;
   }
   tbody.innerHTML = rows;
-
-  const td = tValid ? tw : null;
+  const td = apiOK ? tw : null;
   document.getElementById(`${key}-t`).innerHTML = inl(td, '13px');
   document.getElementById(`${key}-y`).innerHTML = inl(yw, '13px');
-  document.getElementById(`s-${key}-t`).innerHTML = inl(td, '19px');
-
-  const ytdEl = document.getElementById(`s-${key}-y`);
-  ytdEl.className = `sum-ytd-val pi ${cls(yw)}`;
-  ytdEl.textContent = sign(yw) + yw.toFixed(2) + '%';
+  document.getElementById(`s-${key}-t`).innerHTML = inl(td, '20px');
+  document.getElementById(`s-${key}-y`).innerHTML = inl(yw, '12px');
 }
 
-// ═══ 渲染自选 ═══
-function renderWatch(){
+// 渲染自选（已新增迈威尔）
+function renderWatch() {
   const container = document.getElementById('watch-list');
-  if(!WATCH.length){
-    container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--t4)">暂无标的</div>';
+  if (!WATCH.length) {
+    container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--t4);font-size:14px">暂无分享标的</div>';
     return;
   }
   let html = '';
-  WATCH.forEach((w, i) => {
+  for (let i = 0; i < WATCH.length; i++) {
+    const w = WATCH[i];
     const d = live[`w${i}`] || {};
-    const todayStr = pill(d.today);
-    const isCN = !w.ticker.match(/^[A-Z]{1,5}$/) || w.ticker.match(/^\d/);
-    const currency = isCN ? '¥' : '$';
-
-    let sinceHtml;
-    if(w.price && d.price > 0){
+    let sinceHtml = `<span class="since-pct" style="color:var(--t4)">--%</span><span class="since-date">自 ${w.date}</span>`;
+    if (w.price && d.price > 0) {
       const pct = (d.price - w.price) / w.price * 100;
-      sinceHtml = `<span class="since-pct pi ${cls(pct)}">${sign(pct)}${pct.toFixed(2)}%</span>
-        <span class="since-date">自 ${w.date}<br>${currency}${w.price.toFixed(2)} → ${currency}${d.price.toFixed(2)}</span>`;
-    } else {
-      sinceHtml = `<span class="since-pct" style="color:var(--t4);font-size:20px">--%</span>
-        <span class="since-date">自 ${w.date}</span>`;
+      const cls = pct > 0 ? 'up' : pct < 0 ? 'dn' : 'z';
+      const s = pct > 0 ? '+' : '';
+      sinceHtml = `<span class="since-pct pi ${cls}">${s}${pct.toFixed(2)}%</span>
+        <span class="since-date">自 ${w.date}<br>¥${w.price.toFixed(2)} → ¥${d.price.toFixed(2)}</span>`;
     }
-
     html += `<div class="watch-item">
-      <div>
+      <div class="watch-left">
         <div class="watch-header">
           <span class="watch-ticker">${w.ticker}</span>
           <span class="watch-name">${w.name}</span>
@@ -510,17 +427,15 @@ function renderWatch(){
           ${w.logic ? `<span class="logic-tag">${w.logic}</span>` : ''}
         </div>
         <div class="watch-note">${w.note}</div>
-        <div class="watch-meta">今日涨跌 ${todayStr}</div>
+        <div class="watch-meta">今日 ${pill(d.today)}</div>
       </div>
       <div class="watch-right">${sinceHtml}</div>
     </div>`;
-  });
+  }
   container.innerHTML = html;
 }
 
-function renderAll(){ renderETF('us'); renderETF('hk'); renderETF('cn'); renderWatch(); }
-
-// ═══ Tab 切换 ═══
+// Tab切换
 document.querySelectorAll('.seg').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.seg').forEach(b => b.classList.remove('on'));
@@ -533,20 +448,54 @@ document.querySelectorAll('.seg').forEach(btn => {
   });
 });
 
-// ═══ 时钟 ═══
-function updateClock(){
-  const now = new Date(), p = n => String(n).padStart(2,'0');
-  document.getElementById('clock-date').textContent = `${now.getFullYear()}-${p(now.getMonth()+1)}-${p(now.getDate())}`;
-  document.getElementById('clock-time').textContent = `${p(now.getHours())}:${p(now.getMinutes())}:${p(now.getSeconds())}`;
-}
-updateClock();
-setInterval(updateClock, 1000);
+// 时钟
+setInterval(() => {
+  document.getElementById('clock').textContent = new Date().toTimeString().slice(0, 8);
+}, 1000);
+document.getElementById('clock').textContent = new Date().toTimeString().slice(0, 8);
 
-// ═══ 启动 ═══
+// 手动刷新
+function manualRefresh() {
+  const btn = document.getElementById('refreshBtn');
+  btn.classList.add('spinning');
+  fetchAll().finally(() => setTimeout(() => btn.classList.remove('spinning'), 700));
+}
+
+// 数据拉取
+async function fetchAll() {
+  const symMap = {};
+  for (const [k, s] of Object.entries(TMAP)) symMap[s] = k;
+  WATCH.forEach((w, i) => { symMap[w.sym] = `w${i}`; });
+  const ql = Object.keys(symMap).join(',');
+  try {
+    const raw = await (await fetch(`${PROXY}?q=${ql}`)).text();
+    const re = /v_([a-zA-Z0-9]+)="([^"]+)"/g;
+    let m;
+    while ((m = re.exec(raw)) !== null) {
+      const sym = m[1], f = m[2].split('~'), key = symMap[sym];
+      if (!key) continue;
+      if (!live[key]) live[key] = {};
+      const pct = parseFloat(f[32]);
+      const pr = parseFloat(f[3]);
+      if (!isNaN(pct)) live[key].today = pct;
+      if (!isNaN(pr)) live[key].price = pr;
+      apiOK = true;
+    }
+  } catch (e) {}
+  renderAll();
+}
+
+function renderAll() {
+  renderETF('us');
+  renderETF('hk');
+  renderETF('cn');
+  renderWatch();
+}
+
+// 启动
 renderAll();
 fetchAll();
 setInterval(fetchAll, 30000);
 </script>
-
 </body>
 </html>
