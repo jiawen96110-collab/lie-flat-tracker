@@ -2,275 +2,271 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>躺平组合 Pro</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>躺平组合 · 优化版</title>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#f8f9fa;
+  --card:#fff;
+  --t1:#1d1d1f;
+  --t3:#666;
+  --t4:#999;
+  --red:#ff3b30;
+  --green:#00b050;
+}
+
 body{
   font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;
-  background:#f5f6f7;
-  color:#111;
+  background:var(--bg);
 }
 
 /* ===== 顶部 ===== */
-.header{
-  padding:16px;
+.nav{
+  position:sticky;top:0;
   background:#fff;
-  position:sticky;
-  top:0;
-  z-index:10;
+  padding:16px;
   border-bottom:1px solid #eee;
 }
-
-.title{
-  font-size:20px;
-  font-weight:700;
-}
-
-.sub{
-  font-size:12px;
-  color:#888;
-  margin-top:2px;
-}
+.nav h1{font-size:20px}
+.sub{font-size:12px;color:#888}
 
 /* ===== 概览 ===== */
-.summary{
+.sum-row{
   display:flex;
   gap:10px;
   padding:12px;
 }
-
-.card{
+.sum-card{
   flex:1;
   background:#fff;
   border-radius:12px;
   padding:12px;
 }
-
-.card-title{
-  font-size:12px;
-  color:#666;
-}
-
-.big{
-  font-size:20px;
+.sum-today{
+  font-size:18px;
   font-weight:700;
-  margin-top:4px;
 }
 
-/* ===== 区块 ===== */
-.section{
-  margin-top:10px;
-}
-
-.section-title{
-  font-size:15px;
-  font-weight:600;
-  padding:12px;
-  color:#333;
-}
-
-/* ===== 行卡片 ===== */
-.row{
+/* ===== 卡片 ===== */
+.sc{
   background:#fff;
-  margin:8px 12px;
-  border-radius:12px;
+  margin:10px;
+  border-radius:14px;
+  overflow:hidden;
+}
+
+.sc-hd{
   padding:12px;
+  font-weight:600;
+  border-bottom:1px solid #eee;
+}
+
+/* ===== 表格 ===== */
+table{
+  width:100%;
+  border-collapse:collapse;
+  table-layout:fixed; /* ⭐关键 */
+}
+
+thead th{
+  font-size:12px;
+  color:#999;
+  padding:10px;
+  text-align:right;
+}
+thead th:first-child,
+thead th:nth-child(2){
+  text-align:left;
+}
+
+/* ⭐固定列宽 */
+thead th:nth-child(1),
+tbody td:nth-child(1){width:60px;}
+
+thead th:nth-child(2),
+tbody td:nth-child(2){width:42%;}
+
+thead th:nth-child(3),
+tbody td:nth-child(3){width:80px;}
+
+thead th:nth-child(4),
+tbody td:nth-child(4){width:100px;}
+
+td{
+  padding:12px 10px;
+  font-size:14px;
+  vertical-align:middle; /* ⭐关键 */
+  text-align:right;
+}
+td:first-child,
+td:nth-child(2){text-align:left;}
+
+tbody tr{
+  border-bottom:1px solid #f0f0f0;
+}
+
+/* ===== 标的列 ===== */
+.asset{
   display:flex;
   align-items:center;
-  justify-content:space-between;
 }
-
-/* 左边 */
-.left{
+.asset-box{
   display:flex;
   flex-direction:column;
+  gap:2px;
 }
 
-.code{
+.tk{
   font-weight:700;
-  font-size:15px;
+  font-size:14px;
+  line-height:1.2;
 }
-
-.name{
+.nm{
   font-size:12px;
-  color:#777;
-  margin-top:2px;
+  color:var(--t3);
+  line-height:1.2;
 }
 
-/* 中间 */
-.middle{
-  text-align:right;
-}
-
-.label{
-  font-size:11px;
-  color:#999;
-}
-
-/* 右边 */
-.right{
-  text-align:right;
-}
-
-.pct{
+/* ===== 涨跌 ===== */
+.p{
+  font-size:13px;
   font-weight:700;
-  font-size:15px;
+  min-width:64px;
+  display:inline-block;
+  text-align:center;
+  padding:4px 6px;
+  border-radius:6px;
 }
+.g{color:var(--red);background:rgba(255,59,48,.1)}
+.r{color:var(--green);background:rgba(0,176,80,.1)}
+.z{color:#999;background:#f2f2f2}
 
-/* ===== 涨跌颜色 ===== */
-.up{color:#ff3b30;}
-.down{color:#00b050;}
-.flat{color:#999;}
-
-/* ===== 动画 ===== */
-.flash{
-  animation:flash 0.6s;
+/* ===== 自选 ===== */
+.sector-tag{
+  font-size:11px;
+  background:#fff3e0;
+  padding:2px 6px;
+  border-radius:4px;
+  margin-bottom:4px;
+  display:inline-block;
 }
-@keyframes flash{
-  0%{opacity:0.3}
-  100%{opacity:1}
-}
-
-/* ===== 自选说明 ===== */
-.banner{
-  margin:10px 12px;
-  background:#fff7e6;
-  padding:10px;
-  border-radius:10px;
+.note-wrap{
+  display:block;
   font-size:12px;
   color:#666;
+  line-height:1.4;
 }
 
-/* ===== 小屏优化 ===== */
+.since-big{
+  font-weight:700;
+  line-height:1.2;
+}
+.since-sub{
+  font-size:11px;
+  color:#999;
+  line-height:1.3;
+}
+
+/* ===== 移动端优化 ===== */
 @media(max-width:430px){
-  .big{font-size:18px}
-  .pct{font-size:14px}
+
+  td{padding:10px 8px;}
+
+  .tk{font-size:13px;}
+  .nm{font-size:11px;}
+
+  .p{
+    min-width:56px;
+    font-size:12px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<div class="header">
-  <div class="title">躺平组合</div>
-  <div class="sub">Z先生无偿分享 · 实时跟踪</div>
+<div class="nav">
+  <h1>躺平组合</h1>
+  <div class="sub">Z先生无偿分享</div>
 </div>
 
 <!-- 概览 -->
-<div class="summary">
-  <div class="card">
-    <div class="card-title">美股</div>
-    <div class="big" id="usTotal">--</div>
-  </div>
-  <div class="card">
-    <div class="card-title">港股</div>
-    <div class="big" id="hkTotal">--</div>
-  </div>
-  <div class="card">
-    <div class="card-title">A股</div>
-    <div class="big" id="cnTotal">--</div>
-  </div>
+<div class="sum-row">
+  <div class="sum-card"><div>美股</div><div class="sum-today">+0.98%</div></div>
+  <div class="sum-card"><div>港股</div><div class="sum-today">+1.85%</div></div>
+  <div class="sum-card"><div>A股</div><div class="sum-today">+0.88%</div></div>
 </div>
 
 <!-- 美股 -->
-<div class="section">
-  <div class="section-title">🇺🇸 美股组合</div>
-  <div id="usList"></div>
-</div>
+<div class="sc">
+  <div class="sc-hd">美股组合</div>
+  <table>
+    <thead>
+      <tr><th>仓位</th><th>标的</th><th>今日</th><th>今年</th></tr>
+    </thead>
+    <tbody>
 
-<!-- 港股 -->
-<div class="section">
-  <div class="section-title">🇭🇰 港股组合</div>
-  <div id="hkList"></div>
-</div>
+<tr>
+<td>25%</td>
+<td class="asset">
+  <div class="asset-box">
+    <span class="tk">QQQ</span>
+    <span class="nm">纳斯达克100</span>
+  </div>
+</td>
+<td><span class="p g">+0.14%</span></td>
+<td><span class="p r">-0.55%</span></td>
+</tr>
 
-<!-- A股 -->
-<div class="section">
-  <div class="section-title">🇨🇳 A股组合</div>
-  <div id="cnList"></div>
+<tr>
+<td>25%</td>
+<td class="asset">
+  <div class="asset-box">
+    <span class="tk">SPY</span>
+    <span class="nm">标普500</span>
+  </div>
+</td>
+<td><span class="p r">-0.07%</span></td>
+<td><span class="p r">-0.02%</span></td>
+</tr>
+
+    </tbody>
+  </table>
 </div>
 
 <!-- 自选 -->
-<div class="section">
-  <div class="section-title">⭐ 自选追踪</div>
-  <div class="banner">从推荐价开始计算收益</div>
-  <div id="watchList"></div>
+<div class="sc">
+  <div class="sc-hd">自选追踪</div>
+  <table>
+    <thead>
+      <tr><th>标的</th><th>逻辑</th><th>今日</th><th>以来</th></tr>
+    </thead>
+    <tbody>
+
+<tr>
+<td>
+  <span class="tk">300782</span>
+  <span class="nm">卓胜微</span>
+</td>
+
+<td>
+  <span class="sector-tag">射频芯片</span>
+  <span class="note-wrap">国产替代核心标的</span>
+</td>
+
+<td><span class="p g">+2.42%</span></td>
+
+<td>
+  <span class="since-big g">+14.82%</span>
+  <span class="since-sub">87 → 99.8</span>
+</td>
+</tr>
+
+    </tbody>
+  </table>
 </div>
-
-<script>
-const DATA = {
-  us:[
-    {t:'QQQ',n:'纳指100',w:25,p:0.14},
-    {t:'SPY',n:'标普500',w:25,p:-0.07},
-    {t:'RING',n:'黄金矿',w:20,p:1.58},
-    {t:'COPX',n:'铜矿',w:20,p:2.4},
-    {t:'BITB',n:'比特币',w:10,p:1.63}
-  ],
-  hk:[
-    {t:'03455',n:'纳指',p:0.5},
-    {t:'03132',n:'半导体',p:1.2}
-  ],
-  cn:[
-    {t:'513390',n:'纳指',p:-0.3},
-    {t:'159652',n:'有色',p:0.9}
-  ],
-  watch:[
-    {t:'300782',n:'卓胜微',p:2.42,s:14.82}
-  ]
-};
-
-function cls(v){
-  if(v>0)return 'up';
-  if(v<0)return 'down';
-  return 'flat';
-}
-
-function row(item){
-  return `
-  <div class="row flash">
-    <div class="left">
-      <div class="code">${item.t}</div>
-      <div class="name">${item.n}</div>
-    </div>
-
-    <div class="right">
-      <div class="pct ${cls(item.p)}">
-        ${item.p>0?'+':''}${item.p}%
-      </div>
-    </div>
-  </div>
-  `;
-}
-
-function render(){
-  document.getElementById('usList').innerHTML =
-    DATA.us.map(row).join('');
-
-  document.getElementById('hkList').innerHTML =
-    DATA.hk.map(row).join('');
-
-  document.getElementById('cnList').innerHTML =
-    DATA.cn.map(row).join('');
-
-  document.getElementById('watchList').innerHTML =
-    DATA.watch.map(i=>`
-      <div class="row">
-        <div class="left">
-          <div class="code">${i.t}</div>
-          <div class="name">${i.n}</div>
-        </div>
-        <div class="right">
-          <div class="pct ${cls(i.p)}">${i.p}%</div>
-          <div class="pct ${cls(i.s)}">${i.s}%</div>
-        </div>
-      </div>
-    `).join('');
-}
-
-render();
-</script>
 
 </body>
 </html>
