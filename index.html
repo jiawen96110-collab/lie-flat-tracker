@@ -16,8 +16,8 @@
 }
 body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100vh;padding-bottom:60px;-webkit-font-smoothing:antialiased}
 
-/* NAV & 其他样式保持不变（为节省篇幅未重复粘贴全部CSS，如需可告诉我我再补充） */
-.nav{position:sticky;top:0;z-index:100;background:rgba(248,249,250,.95);backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--border)}
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;background:rgba(248,249,250,.95);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--border)}
 .nav-inner{max-width:760px;margin:0 auto;padding:16px 20px 12px;display:flex;align-items:center;justify-content:space-between;gap:12px}
 .nav-brand h1{font-size:20px;font-weight:700;letter-spacing:-.6px}
 .nav-brand .sub{font-size:13px;color:var(--t3);margin-top:3px}
@@ -31,26 +31,41 @@ body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100
 .refresh-btn.spinning{animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
+/* ── SEGMENT ── */
 .seg-wrap{max-width:760px;margin:0 auto;padding:10px 20px}
 .segment{display:flex;background:var(--fill);border-radius:12px;padding:3px;gap:2px}
-.seg{flex:1;padding:9px 4px;border:none;background:transparent;border-radius:9px;font-size:13.5px;font-weight:600;color:var(--t3);cursor:pointer;transition:all .22s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;display:flex;align-items:center;justify-content:center;gap:3px}
+.seg{flex:1;padding:9px 4px;border:none;background:transparent;border-radius:9px;font-size:13.5px;font-weight:600;font-family:var(--font);color:var(--t3);cursor:pointer;transition:all .22s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;display:flex;align-items:center;justify-content:center;gap:3px}
 .seg.on{background:var(--card);color:var(--t1);box-shadow:0 2px 8px rgba(0,0,0,.08),0 0 0 1px rgba(0,0,0,.05)}
 
+/* ── WRAP ── */
 .wrap{max-width:760px;margin:0 auto;padding:0 20px;display:flex;flex-direction:column;gap:16px}
 
+/* ── SUMMARY ROW ── */
 .sum-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.sum-card{background:var(--card);border-radius:18px;padding:16px 14px 14px;box-shadow:0 4px 12px rgba(0,0,0,.06),0 1px 3px rgba(0,0,0,.04);position:relative;overflow:hidden;display:flex;flex-direction:column}
+.sum-card{
+background:var(--card);border-radius:18px;
+padding:16px 14px 14px;
+box-shadow:0 4px 12px rgba(0,0,0,.06),0 1px 3px rgba(0,0,0,.04);
+position:relative;overflow:hidden;
+display:flex;flex-direction:column;
+}
 .sum-card::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;border-radius:18px 18px 0 0}
 .sum-card.us::before{background:linear-gradient(90deg,#0071e3,#5ac8fa)}
 .sum-card.hk::before{background:linear-gradient(90deg,#34c759,#30d158)}
 .sum-card.cn::before{background:linear-gradient(90deg,#ff3b30,#ff6961)}
 .sum-mkt{font-size:12px;color:var(--t3);font-weight:500;margin-bottom:8px;margin-top:2px;display:flex;align-items:center;gap:4px;white-space:nowrap}
-.sum-today{font-family:var(--mono);font-size:20px;font-weight:700;letter-spacing:-.8px;line-height:1;height:24px;display:flex;align-items:center}
+.sum-today{
+font-family:var(--mono);font-size:20px;font-weight:700;
+letter-spacing:-.8px;line-height:1;
+height:24px;
+display:flex;align-items:center;
+}
 .sum-divider{height:.5px;background:var(--sep);margin:10px 0}
 .sum-ytd-row{display:flex;align-items:center;gap:6px}
 .sum-ytd-lbl{font-size:11.5px;color:var(--t4);flex-shrink:0}
 .sum-ytd-val{font-family:var(--mono);font-size:12px;font-weight:600}
 
+/* ── SECTION CARD ── */
 .sc{background:var(--card);border-radius:20px;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,.07),0 1px 3px rgba(0,0,0,.05)}
 .sc.hide{display:none}
 .sc-hd{padding:16px 20px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--sep)}
@@ -70,6 +85,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100
 .hd-row{font-size:13px;color:var(--t3);display:flex;align-items:center;gap:8px;justify-content:flex-end;margin-top:4px}
 .hd-lbl{font-size:12px;color:var(--t4);font-weight:500}
 
+/* ── TABLE ── */
 table{width:100%;border-collapse:collapse}
 thead th{font-size:12px;font-weight:500;color:var(--t4);padding:10px 20px 8px;text-align:right;letter-spacing:.3px}
 thead th:first-child,thead th:nth-child(2){text-align:left}
@@ -82,6 +98,7 @@ td:first-child,td:nth-child(2){text-align:left}
 .tk{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--blue);display:block;line-height:1.1}
 .nm{font-size:13.5px;color:var(--t2);display:block;margin-top:3px}
 
+/* ── PCT PILL（涨红跌绿）── */
 .p{font-family:var(--mono);font-size:14px;font-weight:700;padding:6px 10px;border-radius:8px;display:inline-block;min-width:76px;text-align:center;letter-spacing:-.3px}
 .p.up{color:var(--red);background:rgba(255,45,85,.10)}
 .p.dn{color:var(--green);background:rgba(0,176,80,.10)}
@@ -89,14 +106,26 @@ td:first-child,td:nth-child(2){text-align:left}
 .pi{font-family:var(--mono);font-weight:700}
 .pi.up{color:var(--red)}.pi.dn{color:var(--green)}.pi.z{color:var(--t3)}
 
-.watch-banner{background:linear-gradient(135deg,rgba(255,149,0,.08),rgba(175,82,222,.06));border-bottom:1px solid var(--sep);padding:12px 20px;display:flex;align-items:center;gap:10px}
+/* ── 自选卡片 ── */
+.watch-banner{
+background:linear-gradient(135deg,rgba(255,149,0,.08),rgba(175,82,222,.06));
+border-bottom:1px solid var(--sep);padding:12px 20px;
+display:flex;align-items:center;gap:10px;
+}
 .wb-text{font-size:13px;color:var(--t2);line-height:1.5}
 .wb-text strong{color:var(--t1);font-weight:600}
 
-.watch-item{padding:16px 20px;border-bottom:1px solid var(--sep);display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}
+.watch-item{
+padding:16px 20px;
+border-bottom:1px solid var(--sep);
+display:grid;
+grid-template-columns:1fr auto;
+gap:12px;
+align-items:center;
+}
 .watch-item:last-child{border-bottom:none}
+.watch-left{}
 .watch-header{display:flex;align-items:center;gap:6px;margin-bottom:6px;flex-wrap:wrap}
-.watch-flag{font-size:18px;margin-right:4px;vertical-align:middle}
 .watch-ticker{font-family:var(--mono);font-size:16px;font-weight:700;color:var(--blue)}
 .watch-name{font-size:14px;color:var(--t2);font-weight:500}
 .sector-tag{font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:5px;background:rgba(255,149,0,.13);color:#c47a00}
@@ -106,6 +135,9 @@ td:first-child,td:nth-child(2){text-align:left}
 .watch-right{text-align:right;flex-shrink:0;min-width:110px}
 .since-pct{font-family:var(--mono);font-size:22px;font-weight:700;letter-spacing:-.5px;display:block;line-height:1.1}
 .since-date{font-size:11px;color:var(--t4);font-family:var(--mono);margin-top:4px;display:block}
+
+/* ── FOOTER ── */
+.footer{text-align:center;font-size:12.5px;color:var(--t4);line-height:1.7;padding:24px 20px 40px;max-width:760px;margin:0 auto}
 
 /* 手机适配 */
 @media(max-width:430px){
@@ -150,6 +182,7 @@ td{padding:12px 14px}
 
 <div class="wrap">
 
+  <!-- 概览 -->
   <div class="sum-row" id="sum-row">
     <div class="sum-card us">
       <div class="sum-mkt">🇺🇸 美股</div>
@@ -180,6 +213,7 @@ td{padding:12px 14px}
     </div>
   </div>
 
+  <!-- US -->
   <div class="sc" data-sec="us">
     <div class="sc-hd us-hd">
       <div class="sc-hd-l">
@@ -198,6 +232,7 @@ td{padding:12px 14px}
     </table>
   </div>
 
+  <!-- HK -->
   <div class="sc" data-sec="hk">
     <div class="sc-hd hk-hd">
       <div class="sc-hd-l">
@@ -216,6 +251,7 @@ td{padding:12px 14px}
     </table>
   </div>
 
+  <!-- CN -->
   <div class="sc" data-sec="cn">
     <div class="sc-hd cn-hd">
       <div class="sc-hd-l">
@@ -234,6 +270,7 @@ td{padding:12px 14px}
     </table>
   </div>
 
+  <!-- 自选 -->
   <div class="sc" data-sec="watch">
     <div class="sc-hd watch-hd">
       <div class="sc-hd-l">
@@ -254,40 +291,89 @@ td{padding:12px 14px}
 </div>
 
 <script>
-// ETF 组合
+// ═══════════════════════════════════════════
+// ETF 组合（精简版）
 const ETF = {
-  us: {h: [{w:'25%',c:'us_QQQ',t:'QQQ',n:'纳斯达克100 ETF'},{w:'25%',c:'us_SPY',t:'SPY',n:'标普500 ETF'},{w:'20%',c:'us_RING',t:'RING',n:'黄金矿业 ETF'},{w:'20%',c:'us_COPX',t:'COPX',n:'全球铜矿 ETF'},{w:'10%',c:'us_BITB',t:'BITB',n:'比特币 ETF'}]},
-  hk: {h: [{w:'25%',c:'hk_03455',t:'03455',n:'纳斯达克100 ETF'},{w:'20%',c:'hk_03132',t:'03132',n:'全球半导体 ETF'},{w:'20%',c:'hk_03147',t:'03147',n:'中国创业板 ETF'},{w:'20%',c:'hk_03110',t:'03110',n:'恒生高股息 ETF'},{w:'15%',c:'hk_02840',t:'02840',n:'黄金 ETF'}]},
-  cn: {h: [{w:'25%',c:'cn_513390',t:'513390',n:'纳斯达克100 ETF'},{w:'25%',c:'cn_159652',t:'159652',n:'有色金属50 ETF'},{w:'25%',c:'cn_588200',t:'588200',n:'科创芯片 ETF'},{w:'15%',c:'cn_515880',t:'515880',n:'通信设备 ETF'},{w:'10%',c:'cn_518880',t:'518880',n:'黄金 ETF'}]}
+  us: {h: [
+    {w:'25%',c:'us_QQQ',t:'QQQ',n:'纳斯达克100 ETF'},
+    {w:'25%',c:'us_SPY',t:'SPY',n:'标普500 ETF'},
+    {w:'20%',c:'us_RING',t:'RING',n:'黄金矿业 ETF'},
+    {w:'20%',c:'us_COPX',t:'COPX',n:'全球铜矿 ETF'},
+    {w:'10%',c:'us_BITB',t:'BITB',n:'比特币 ETF'}
+  ]},
+  hk: {h: [
+    {w:'25%',c:'hk_03455',t:'03455',n:'纳斯达克100 ETF'},
+    {w:'20%',c:'hk_03132',t:'03132',n:'全球半导体 ETF'},
+    {w:'20%',c:'hk_03147',t:'03147',n:'中国创业板 ETF'},
+    {w:'20%',c:'hk_03110',t:'03110',n:'恒生高股息 ETF'},
+    {w:'15%',c:'hk_02840',t:'02840',n:'黄金 ETF'}
+  ]},
+  cn: {h: [
+    {w:'25%',c:'cn_513390',t:'513390',n:'纳斯达克100 ETF'},
+    {w:'25%',c:'cn_159652',t:'159652',n:'有色金属50 ETF'},
+    {w:'25%',c:'cn_588200',t:'588200',n:'科创芯片 ETF'},
+    {w:'15%',c:'cn_515880',t:'515880',n:'通信设备 ETF'},
+    {w:'10%',c:'cn_518880',t:'518880',n:'黄金 ETF'}
+  ]}
 };
 
-// 自选（已加防护）
+// ═══════════════════════════════════════════
+// Z先生分享自选（已新增3.18光模块最贴切标的）
 const WATCH = [
-  {ticker:'300782',name:'卓胜微',sym:'sz300782',date:'2026-03-26',price:87.00,flag:'🇨🇳',currency:'¥',sector:'射频芯片',logic:'AI手机射频升级 + 国产替代',note:'国内射频前端龙头，垄断安卓高端机射频模组。12英寸SiGe产线当前产能7000片/月，良率稳定92%以上，成本较6英寸低50%，兼容SOI工艺，平台直接对标以色列Tower半导体。地缘政治+产能稀缺下，是国内极少数能承接转单的厂商。未来计划扩产，满足光通信与射频前端需求。'},
-  {ticker:'MRVL',name:'迈威尔',sym:'usMRVL',date:'2026-03-18',price:87.58,flag:'🇺🇸',currency:'$',sector:'AI光互连芯片',logic:'1.6T光学DSP平台',note:'Z先生3.18分享的光模块机会中最具代表性的美股核心标的。专注PAM4和coherent光学DSP芯片，主导800G向1.6T升级。作为XPO MSA成员之一，直接受益AI集群对高速互连的爆发式需求，是光模块产业链中长期最受益的芯片平台之一。'}
+  {
+    ticker:  '300782',
+    name:    '卓胜微',
+    sym:     'sz300782',
+    date:    '2026-03-26',
+    price:   87.00,
+    sector:  '射频芯片',
+    logic:   'AI手机射频升级 + 国产替代',
+    note:    '国内射频前端龙头，垄断安卓高端机射频模组。12英寸SiGe产线当前产能7000片/月，良率稳定92%以上，成本较6英寸低50%，兼容SOI工艺，平台直接对标以色列Tower半导体（全球70%高端SiGe产能由Tower垄断）。地缘政治+产能稀缺性下，卓胜微是国内极少数能承接转单的厂商，已实现12英寸SiGe规模化量产。未来计划扩产至1万→1.5万片/月，满足光通信电芯片（Driver/TIA）和射频前端长期需求。Tower美股已暴涨，行业普遍缺货下市场预期差巨大。'
+  },
+  {
+    ticker:  'MRVL',
+    name:    '迈威尔',
+    sym:     'usMRVL',
+    date:    '2025-03-18',
+    price:   68.28,
+    sector:  'AI光互连',
+    logic:   '高速互连芯片平台',
+    note:    '3.18 Z先生分享光模块机会中最贴切的美股标的（XPO MSA Module Partners之一）。Marvell不只是“光模块概念”，而是更上游、更核心的AI网络与高速互连芯片平台。AI集群越大，对交换、DSP、互连的需求越强，Marvell的位置很硬。与Accelink、Ciena、Lumentum、Coherent等光模块巨头同台，是AI光互连长期受益的核心标的。'
+  }
 ];
 
-const YTD = {us_QQQ:-0.55,us_SPY:-0.02,us_RING:14.83,us_COPX:13.62,us_BITB:-17.41,hk_03455:-0.53,hk_03132:25.08,hk_03147:11.40,hk_03110:9.10,hk_02840:10.25,cn_513390:-5.03,cn_159652:8.54,cn_588200:10.16,cn_515880:19.77,cn_518880:7.48};
+// YTD 静态兜底（今日实时覆盖）
+const YTD = {
+  us_QQQ:-0.55,us_SPY:-0.02,us_RING:14.83,us_COPX:13.62,us_BITB:-17.41,
+  hk_03455:-0.53,hk_03132:25.08,hk_03147:11.40,hk_03110:9.10,hk_02840:10.25,
+  cn_513390:-5.03,cn_159652:8.54,cn_588200:10.16,cn_515880:19.77,cn_518880:7.48
+};
 
-const TMAP = {us_QQQ:'usQQQ',us_SPY:'usSPY',us_RING:'usRING',us_COPX:'usCOPX',us_BITB:'usBITB',hk_03455:'hk03455',hk_03132:'hk03132',hk_03147:'hk03147',hk_03110:'hk03110',hk_02840:'hk02840',cn_513390:'sh513390',cn_159652:'sz159652',cn_588200:'sh588200',cn_515880:'sh515880',cn_518880:'sh518880'};
+const TMAP = {
+  us_QQQ:'usQQQ',us_SPY:'usSPY',us_RING:'usRING',us_COPX:'usCOPX',us_BITB:'usBITB',
+  hk_03455:'hk03455',hk_03132:'hk03132',hk_03147:'hk03147',hk_03110:'hk03110',hk_02840:'hk02840',
+  cn_513390:'sh513390',cn_159652:'sz159652',cn_588200:'sh588200',cn_515880:'sh515880',cn_518880:'sh518880'
+};
 
 const PROXY = 'https://lieflat-proxy.jiawen96110.workers.dev';
 const live = {};
 let apiOK = false;
 
+// 涨红跌绿统一函数
 function pill(v) {
-  if (v==null||isNaN(v)) return '<span class="p z">--</span>';
+  if (v===null||v===undefined||isNaN(v)) return '<span class="p z">--</span>';
   const cls = v>0 ? 'up' : 'dn';
   const s = v>0 ? '+' : '';
   return `<span class="p ${cls}">${s}${v.toFixed(2)}%</span>`;
 }
 function inl(v, fs='13px') {
-  if (v==null||isNaN(v)) return `<span style="color:var(--t4);font-family:var(--mono);font-size:${fs};font-weight:700">--</span>`;
+  if (v===null||v===undefined||isNaN(v)) return `<span style="color:var(--t4);font-family:var(--mono);font-size:${fs};font-weight:700">--</span>`;
   const cls = v>0 ? 'up' : 'dn';
   const s = v>0 ? '+' : '';
   return `<span class="pi ${cls}" style="font-size:${fs}">${s}${v.toFixed(2)}%</span>`;
 }
 
+// 渲染ETF
 function renderETF(key) {
   const g = ETF[key];
   const tbody = document.getElementById(`${key}-body`);
@@ -296,11 +382,16 @@ function renderETF(key) {
     const today = apiOK ? (live[h.c]?.today ?? null) : null;
     const ytd = YTD[h.c] ?? null;
     const w = parseFloat(h.w)/100;
-    if (today != null && !isNaN(today)) tw += w * today;
-    if (ytd != null) yw += w * ytd;
-    rows += `<tr><td class="wt">${h.w}</td><td><span class="tk">${h.t}</span><span class="nm">${h.n}</span></td><td>${pill(today)}</td><td>${pill(ytd)}</td></tr>`;
+    if (today !== null && !isNaN(today)) tw += w * today;
+    if (ytd !== null) yw += w * ytd;
+    rows += `<tr>
+      <td class="wt">${h.w}</td>
+      <td><span class="tk">${h.t}</span><span class="nm">${h.n}</span></td>
+      <td>${pill(today)}</td>
+      <td>${pill(ytd)}</td>
+    </tr>`;
   }
-  tbody.innerHTML = rows || '<tr><td colspan="4" style="text-align:center;color:var(--t4);padding:20px">加载中...</td></tr>';
+  tbody.innerHTML = rows;
   const td = apiOK ? tw : null;
   document.getElementById(`${key}-t`).innerHTML = inl(td, '13px');
   document.getElementById(`${key}-y`).innerHTML = inl(yw, '13px');
@@ -308,24 +399,28 @@ function renderETF(key) {
   document.getElementById(`s-${key}-y`).innerHTML = inl(yw, '12px');
 }
 
+// 渲染自选（已新增迈威尔）
 function renderWatch() {
   const container = document.getElementById('watch-list');
+  if (!WATCH.length) {
+    container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--t4);font-size:14px">暂无分享标的</div>';
+    return;
+  }
   let html = '';
   for (let i = 0; i < WATCH.length; i++) {
     const w = WATCH[i];
     const d = live[`w${i}`] || {};
     let sinceHtml = `<span class="since-pct" style="color:var(--t4)">--%</span><span class="since-date">自 ${w.date}</span>`;
-    if (w.price && d.price && !isNaN(d.price) && d.price > 0) {
-      const pct = ((d.price - w.price) / w.price) * 100;
-      const cls = pct > 0 ? 'up' : (pct < 0 ? 'dn' : 'z');
+    if (w.price && d.price > 0) {
+      const pct = (d.price - w.price) / w.price * 100;
+      const cls = pct > 0 ? 'up' : pct < 0 ? 'dn' : 'z';
       const s = pct > 0 ? '+' : '';
-      const curr = w.currency || '¥';
-      sinceHtml = `<span class="since-pct pi ${cls}">${s}${pct.toFixed(2)}%</span><span class="since-date">自 ${w.date}<br>${curr}${w.price.toFixed(2)} → ${curr}${d.price.toFixed(2)}</span>`;
+      sinceHtml = `<span class="since-pct pi ${cls}">${s}${pct.toFixed(2)}%</span>
+        <span class="since-date">自 ${w.date}<br>¥${w.price.toFixed(2)} → ¥${d.price.toFixed(2)}</span>`;
     }
     html += `<div class="watch-item">
       <div class="watch-left">
         <div class="watch-header">
-          <span class="watch-flag">${w.flag}</span>
           <span class="watch-ticker">${w.ticker}</span>
           <span class="watch-name">${w.name}</span>
           <span class="sector-tag">${w.sector}</span>
@@ -337,32 +432,40 @@ function renderWatch() {
       <div class="watch-right">${sinceHtml}</div>
     </div>`;
   }
-  container.innerHTML = html || '<div style="text-align:center;padding:40px;color:var(--t4);font-size:14px">暂无分享标的或数据加载中...</div>';
+  container.innerHTML = html;
 }
 
+// Tab切换
 document.querySelectorAll('.seg').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.seg').forEach(b => b.classList.remove('on'));
     btn.classList.add('on');
     const t = btn.dataset.tab;
     document.getElementById('sum-row').style.display = t === 'all' ? '' : 'none';
-    document.querySelectorAll('.sc').forEach(c => c.classList.toggle('hide', t !== 'all' && c.dataset.sec !== t));
+    document.querySelectorAll('.sc').forEach(c => {
+      c.classList.toggle('hide', t !== 'all' && c.dataset.sec !== t);
+    });
   });
 });
 
-setInterval(() => document.getElementById('clock').textContent = new Date().toTimeString().slice(0,8), 1000);
-document.getElementById('clock').textContent = new Date().toTimeString().slice(0,8);
+// 时钟
+setInterval(() => {
+  document.getElementById('clock').textContent = new Date().toTimeString().slice(0, 8);
+}, 1000);
+document.getElementById('clock').textContent = new Date().toTimeString().slice(0, 8);
 
+// 手动刷新
 function manualRefresh() {
   const btn = document.getElementById('refreshBtn');
   btn.classList.add('spinning');
   fetchAll().finally(() => setTimeout(() => btn.classList.remove('spinning'), 700));
 }
 
+// 数据拉取
 async function fetchAll() {
   const symMap = {};
   for (const [k, s] of Object.entries(TMAP)) symMap[s] = k;
-  WATCH.forEach((w, i) => symMap[w.sym] = `w${i}`);
+  WATCH.forEach((w, i) => { symMap[w.sym] = `w${i}`; });
   const ql = Object.keys(symMap).join(',');
   try {
     const raw = await (await fetch(`${PROXY}?q=${ql}`)).text();
@@ -378,7 +481,7 @@ async function fetchAll() {
       if (!isNaN(pr)) live[key].price = pr;
       apiOK = true;
     }
-  } catch (e) { console.error('Fetch error:', e); }
+  } catch (e) {}
   renderAll();
 }
 
@@ -389,6 +492,7 @@ function renderAll() {
   renderWatch();
 }
 
+// 启动
 renderAll();
 fetchAll();
 setInterval(fetchAll, 30000);
