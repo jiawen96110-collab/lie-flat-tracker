@@ -7,87 +7,60 @@
 <title>躺平投资组合追踪器</title>
 <style>
   :root {
-  --bg-deep: #05070f;
-  --bg-mid: #0b1020;
+  --bg: #0c0f17;
+  --card: #151922;
+  --card-hover: #1b2030;
 
-  --card: rgba(18, 22, 36, 0.6);
-  --card-hover: rgba(28, 34, 58, 0.7);
+  --border: #232838;
 
-  --border: rgba(255,255,255,0.08);
+  --text: #e5eaf3;
+  --text-dim: #8a93a6;
 
-  --text: #e6edf3;
-  --text-dim: #7c8599;
-
-  --up: #ef4444;
+  /* 红涨绿跌 */
+  --up: #ff4d4f;
   --down: #22c55e;
 
-  --up-bg: rgba(239,68,68,0.12);
-  --down-bg: rgba(34,197,94,0.12);
+  --up-bg: rgba(255,77,79,0.08);
+  --down-bg: rgba(34,197,94,0.08);
 }
 
-/* 🌌 NASA级背景 */
+/* 背景（克制版） */
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "PingFang SC", sans-serif;
+  background: #0c0f17;
   color: var(--text);
-  padding: 20px;
-
-  background:
-    radial-gradient(circle at 20% 30%, rgba(124,140,255,0.15), transparent 40%),
-    radial-gradient(circle at 80% 20%, rgba(255,184,77,0.12), transparent 40%),
-    radial-gradient(circle at 50% 80%, rgba(255,107,107,0.12), transparent 40%),
-    linear-gradient(180deg, var(--bg-deep), var(--bg-mid));
-
-  background-attachment: fixed;
-}
-
-/* 星空颗粒 */
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background-image: radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px);
-  background-size: 3px 3px;
-  opacity: 0.12;
-  pointer-events: none;
+  padding: 16px;
 }
 
 /* 标题 */
 .header h1 {
-  font-size: 2.2rem;
-  letter-spacing: 1px;
-  background: linear-gradient(135deg,#7c8cff,#ffb84d,#ff6b6b);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
 }
 
-/* 卡片（核心升级） */
+.subtitle {
+  color: var(--text-dim);
+}
+
+/* 卡片（关键） */
 .portfolio,
 .watch-card {
   background: var(--card);
-  backdrop-filter: blur(18px);
-
   border: 1px solid var(--border);
-  border-radius: 18px;
-
-  box-shadow:
-    0 10px 30px rgba(0,0,0,0.7),
-    inset 0 0 20px rgba(255,255,255,0.03);
+  border-radius: 14px;
 }
 
 .portfolio:hover,
 .watch-card:hover {
-  transform: translateY(-6px);
-
-  box-shadow:
-    0 30px 80px rgba(0,0,0,0.9),
-    0 0 60px rgba(124,140,255,0.15);
+  background: var(--card-hover);
 }
 
 /* 分割线 */
 .portfolio-header,
 .portfolio-summary,
 .watch-card-header {
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid var(--border);
 }
 
 /* 数字（金融终端感） */
@@ -95,66 +68,66 @@ body::after {
 .change,
 .since-pct {
   font-variant-numeric: tabular-nums;
-  letter-spacing: 0.5px;
 }
 
-/* 🔴红涨 🟢绿跌 */
+/* 红涨绿跌 */
 .positive-text { color: var(--up); }
 .negative-text { color: var(--down); }
 
-.summary-item.positive { background: var(--up-bg); }
-.summary-item.positive .summary-value { color: var(--up); }
-
-.summary-item.negative { background: var(--down-bg); }
-.summary-item.negative .summary-value { color: var(--down); }
-
-/* 行 hover */
-.holding:hover,
-.watch-item:hover {
-  background: rgba(255,255,255,0.04);
+.summary-item.positive {
+  background: var(--up-bg);
+}
+.summary-item.positive .summary-value {
+  color: var(--up);
 }
 
-/* 自选涨跌更突出 */
-.since-pct {
-  font-size: 1.6rem;
-  font-weight: 700;
+.summary-item.negative {
+  background: var(--down-bg);
+}
+.summary-item.negative .summary-value {
+  color: var(--down);
+}
+
+/* 行 hover（非常轻） */
+.holding:hover,
+.watch-item:hover {
+  background: rgba(255,255,255,0.03);
+}
+
+/* 表头 */
+.change-header {
+  color: var(--text-dim);
+  font-size: 0.7rem;
 }
 
 /* 标签 */
 .market-tag,
 .watch-market-tag {
-  border: 1px solid rgba(255,255,255,0.1);
-  backdrop-filter: blur(6px);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
 }
 
-/* 按钮 */
+/* 自选数字 */
+.since-pct {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+/* 刷新按钮 */
 .btn-refresh {
-  background: rgba(124,140,255,0.15);
-  border: 1px solid rgba(124,140,255,0.4);
-  color: #9aa8ff;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
 }
+
 .btn-refresh:hover {
-  background: rgba(124,140,255,0.3);
+  border-color: #3b82f6;
+  color: #3b82f6;
 }
 
-/* 状态灯 */
+/* 状态点 */
 .dot {
-  box-shadow: 0 0 12px currentColor;
-}
-
-/* 表头 */
-.change-header {
-  color: rgba(255,255,255,0.45);
-}
-
-/* 标签优化 */
-.sector-tag {
-  background: rgba(255,184,77,0.15);
-  color: #ffb84d;
-}
-.logic-tag {
-  background: rgba(124,140,255,0.15);
-  color: #7c8cff;
+  background: #22c55e;
 }
 </style>
 
