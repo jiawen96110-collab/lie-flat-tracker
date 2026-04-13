@@ -8,11 +8,11 @@ import time
 # 美股 ticker（直接用 yfinance）
 US_TICKERS = ['QQQ', 'SPY', 'RING', 'COPX', 'BITB', 'MRVL', 'AAOI']
 
-# 自选股映射（和 HTML 里的 WATCH 对应）
+# 自选股映射（必须和 index.html 里的 WATCH 完全对应）
 WATCH_LIST = [
-    {'ticker': '300782', 'key': 'watch_300782', 'name': '卓胜微', 'market': 'cn'},
-    {'ticker': 'MRVL',   'key': 'watch_MRVL',   'name': '迈威尔科技', 'market': 'us'},
-    {'ticker': 'AAOI',   'key': 'watch_AAOI',   'name': '应用光电', 'market': 'us'}
+    {'ticker': '300782', 'key': 'watch_300782'},
+    {'ticker': 'MRVL',   'key': 'watch_MRVL'},
+    {'ticker': 'AAOI',   'key': 'watch_AAOI'}
 ]
 
 # ====================== 获取数据 ======================
@@ -30,14 +30,12 @@ for t in US_TICKERS:
             prev_close = float(hist['Close'].iloc[-2]) if len(hist) >= 2 else current_price
             today_change = ((current_price - prev_close) / prev_close * 100) if prev_close != 0 else 0.0
             
-            # 生成 key
+            # 生成正确的 key
             if t in ['QQQ', 'SPY', 'RING', 'COPX', 'BITB']:
                 key = f"us_{t}"
-            elif t in ['MRVL', 'AAOI']:
-                key = f"watch_{t}"
             else:
-                key = t
-                
+                key = f"watch_{t}"   # MRVL → watch_MRVL，AAOI → watch_AAOI
+            
             data[key] = {
                 "today": round(today_change, 2),
                 "price": round(current_price, 2)
@@ -46,12 +44,12 @@ for t in US_TICKERS:
         else:
             print(f"✗ {t} 没有获取到历史数据")
             
-        time.sleep(0.6)  # 避免请求太频繁
+        time.sleep(0.6)
         
     except Exception as e:
         print(f"✗ {t} 获取失败: {e}")
 
-# 获取 A股/港股（腾讯财经）
+# 获取 A股 / 港股（腾讯财经）
 print("\n正在获取 A股/港股数据...")
 CN_TICKERS = {
     '513390': 'sh513390', '159652': 'sz159652', '588200': 'sh588200',
@@ -80,7 +78,7 @@ for code, tkey in CN_TICKERS.items():
                 print(f"✓ {tkey}: {price} ({today:+.2f}%)")
         time.sleep(0.3)
     except Exception as e:
-        print(f"✗ {tkey} 获取失败: {e}")
+        print(f"✗ {tkey} 获取失败")
 
 # 保存 data.json
 output = {
@@ -93,4 +91,4 @@ with open('data.json', 'w', encoding='utf-8') as f:
 
 print("\n✅ data.json 更新完成！")
 print(f"总共获取到 {len(data)} 条数据")
-print("包含：MRVL 和 AAOI 的实时数据")
+print("已包含 watch_MRVL 和 watch_AAOI")
