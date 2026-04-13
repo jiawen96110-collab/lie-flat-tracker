@@ -21,6 +21,22 @@
     --red-bg: rgba(239,68,68,0.1);
     --green-bg: rgba(34,197,94,0.1);
   }
+
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #f8f9fa;
+      --card: #ffffff;
+      --card-hover: #f1f3f5;
+      --border: #e9ecef;
+      --text: #212529;
+      --text-dim: #6c757d;
+      --red: #dc3545;
+      --green: #28a745;
+      --red-bg: rgba(220,53,69,0.08);
+      --green-bg: rgba(40,167,69,0.08);
+    }
+  }
+
   * { margin:0; padding:0; box-sizing:border-box; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
@@ -66,8 +82,7 @@
   .status-bar .dot.loading { background: var(--accent-us); }
   .status-bar .dot.error { background: var(--red); animation: none; }
   @keyframes pulse {
-    0%,100% { opacity:1; }
-    50% { opacity:0.4; }
+    0%,100% { opacity:1; } 50% { opacity:0.4; }
   }
   .btn-refresh {
     background: rgba(99,102,241,0.15);
@@ -86,7 +101,7 @@
     max-width: 1400px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
     gap: 24px;
   }
   .portfolio {
@@ -135,7 +150,6 @@
   }
   .summary-item .summary-label { font-size: 0.75rem; color: var(--text-dim); margin-bottom: 4px; }
   .summary-item .summary-value { font-size: 1.4rem; font-weight: 700; font-variant-numeric: tabular-nums; }
-
   .summary-item.positive { background: var(--red-bg); color: var(--red); }
   .summary-item.negative { background: var(--green-bg); color: var(--green); }
   .summary-item.neutral { background: rgba(136,146,168,0.1); color: var(--text-dim); }
@@ -160,7 +174,12 @@
     color: var(--text-dim);
     font-weight: 500;
   }
-  .holding .info .ticker { font-weight: 600; font-size: 0.9rem; }
+  .holding .info .ticker {
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    color: var(--accent-us);
+  }
   .holding .info .name-cn { font-size: 0.75rem; color: var(--text-dim); margin-top: 1px; }
   .holding .change {
     text-align: right;
@@ -168,6 +187,7 @@
     font-weight: 600;
     font-variant-numeric: tabular-nums;
   }
+
   .positive-text { color: var(--red); }
   .negative-text { color: var(--green); }
   .neutral-text { color: var(--text-dim); }
@@ -252,6 +272,7 @@
     font-weight: 700;
     font-size: 1rem;
     color: #818cf8;
+    cursor: pointer;
   }
   .watch-name { font-size: 0.9rem; color: var(--text); font-weight: 500; }
   .sector-tag {
@@ -435,7 +456,6 @@ function formatFullDate() {
   return `${y}年${m}月${d}日 ${w} ${h}:${mi}:${s}`;
 }
 
-// 统一：涨红 跌绿
 function getColorClass(val) {
   if (val == null || isNaN(val)) return 'neutral-text';
   return val > 0.001 ? 'positive-text' : val < -0.001 ? 'negative-text' : 'neutral-text';
@@ -449,274 +469,196 @@ function getPillClass(val) {
   return val > 0.001 ? 'up' : val < -0.001 ? 'down' : 'flat';
 }
 
+function getMarketFlag(sym) {
+  if (sym.startsWith('us')) return '🇺🇸';
+  if (sym.startsWith('hk')) return '🇭🇰';
+  if (sym.startsWith('sh') || sym.startsWith('sz')) return '🇨🇳';
+  return '';
+}
+
+function getQQLink(sym) {
+  if (sym.startsWith('us')) {
+    const code = sym.replace('us','').toUpperCase();
+    return `https://stockapp.finance.qq.com/market/us/${code}`;
+  }
+  if (sym.startsWith('hk')) {
+    const code = sym.replace('hk','');
+    return `https://stockapp.finance.qq.com/market/hk/${code}`;
+  }
+  if (sym.startsWith('sh') || sym.startsWith('sz')) {
+    return `https://gu.qq.com/${sym}`;
+  }
+  return '#';
+}
+
 const PORTFOLIOS = {
   us: {
     name: '美股躺平组合',
     holdings: [
-      { code: 'usQQQ',  display: 'QQQ',  nameCn: '纳指100 ETF',     weight: 25 },
-      { code: 'usSPY',  display: 'SPY',  nameCn: '标普500 ETF',      weight: 25 },
-      { code: 'usRING', display: 'RING', nameCn: '全球黄金矿股 ETF', weight: 20 },
-      { code: 'usCOPX', display: 'COPX', nameCn: '全球铜矿股 ETF',  weight: 20 },
-      { code: 'usBITB', display: 'BITB', nameCn: '比特币 ETF',       weight: 10 },
+      { code: 'usQQQ',  display: 'QQQ',  nameCn: '纳指100 ETF', weight:25 },
+      { code: 'usSPY',  display: 'SPY',  nameCn: '标普500 ETF', weight:25 },
+      { code: 'usRING', display: 'RING', nameCn: '黄金矿股 ETF', weight:20 },
+      { code: 'usCOPX', display: 'COPX', nameCn: '铜矿股 ETF', weight:20 },
+      { code: 'usBITB', display: 'BITB', nameCn: '比特币 ETF', weight:10 },
     ]
   },
   hk: {
     name: '港股躺平组合',
     holdings: [
-      { code: 'hk03455', display: '03455', nameCn: '纳指100 ETF',    weight: 25 },
-      { code: 'hk03132', display: '03132', nameCn: '全球半导体 ETF', weight: 20 },
-      { code: 'hk03147', display: '03147', nameCn: '中国创业板 ETF', weight: 20 },
-      { code: 'hk03110', display: '03110', nameCn: '恒生高股息 ETF', weight: 20 },
-      { code: 'hk02840', display: '02840', nameCn: '黄金 ETF',        weight: 15 },
+      { code: 'hk03455', display: '03455', nameCn: '纳指100 ETF', weight:25 },
+      { code: 'hk03132', display: '03132', nameCn: '半导体 ETF', weight:20 },
+      { code: 'hk03147', display: '03147', nameCn: '创业板 ETF', weight:20 },
+      { code: 'hk03110', display: '03110', nameCn: '高股息 ETF', weight:20 },
+      { code: 'hk02840', display: '02840', nameCn: '黄金 ETF', weight:15 },
     ]
   },
   a: {
     name: 'A股躺平组合',
     holdings: [
-      { code: 'sh513390', display: '513390', nameCn: '纳指100 ETF',  weight: 25 },
-      { code: 'sz159652', display: '159652', nameCn: '有色50 ETF',   weight: 25 },
-      { code: 'sh588200', display: '588200', nameCn: '科创芯片 ETF', weight: 25 },
-      { code: 'sh515880', display: '515880', nameCn: '通信 ETF',     weight: 15 },
-      { code: 'sh518880', display: '518880', nameCn: '黄金 ETF',     weight: 10 },
+      { code: 'sh513390', display: '513390', nameCn: '纳指ETF', weight:25 },
+      { code: 'sz159652', display: '159652', nameCn: '有色50 ETF', weight:25 },
+      { code: 'sh588200', display: '588200', nameCn: '科创芯片 ETF', weight:25 },
+      { code: 'sh515880', display: '515880', nameCn: '通信 ETF', weight:15 },
+      { code: 'sh518880', display: '518880', nameCn: '黄金 ETF', weight:10 },
     ]
   }
 };
 
 const YTD_BASE = {
-  'usQQQ':    613.537, 'usSPY':    680.063, 'usRING':   73.64,
-  'usCOPX':   71.78,   'usBITB':   47.44,
-  'hk03455':  4809.267,'hk03132':  37.56,   'hk03147':  12.46,
-  'hk03110':  30.12,   'hk02840':  3112.00,
-  'sh513390': 2.107,   'sz159652': 1.674,   'sh588200': 2.342,
-  'sh515880': 1.027,   'sh518880': 9.301,
+  'usQQQ':613.537,'usSPY':680.063,'usRING':73.64,'usCOPX':71.78,'usBITB':47.44,
+  'hk03455':4809.267,'hk03132':37.56,'hk03147':12.46,'hk03110':30.12,'hk02840':3112.00,
+  'sh513390':2.107,'sz159652':1.674,'sh588200':2.342,'sh515880':1.027,'sh518880':9.301,
 };
 
 const WATCH = [
-  {
-    ticker:  '300782',
-    name:    '卓胜微',
-    sym:     'sz300782',
-    date:    '2026-03-26',
-    price:   87.00,
-    sector:  '射频芯片',
-    logic:   'AI手机射频升级 + 国产替代',
-    note:    '国内射频前端龙头，垄断安卓高端机射频模组，受益AI手机射频复杂度提升与美国制裁替代窗口'
-  },
-  {
-    ticker:  'MRVL',
-    name:    '迈威尔科技',
-    sym:     'usMRVL',
-    date:    '2026-03-18',
-    price:   87.58,
-    sector:  'AI芯片/光互连',
-    logic:   'AI数据中心定制芯片 + 英伟达战略投资加持',
-    note:    'AI数据中心核心标的，ASIC定制芯片+硅光互连双轮驱动，英伟达20亿战略入股，光模块需求爆发最大受益者之一'
-  },
-  {
-    ticker:  'AAOI',
-    name:    '应用光电',
-    sym:     'usAAOI',
-    date:    '2026-04-10',
-    price:   150.60,
-    sector:  '光模块/光通信',
-    logic:   'AI算力光互连爆发 + 1.6T超高速光模块放量',
-    note:    '美国光模块龙头，垂直整合自研激光器降本，已获云厂商2亿美元1.6T订单，2026年目标营收超10亿美元'
-  }
+  { ticker:'300782', name:'卓胜微', sym:'sz300782', date:'2026-03-26', price:87.00, sector:'射频芯片', logic:'AI手机射频升级', note:'国内射频前端龙头' },
+  { ticker:'MRVL', name:'迈威尔科技', sym:'usMRVL', date:'2026-03-18', price:87.58, sector:'AI芯片', logic:'英伟达战略投资', note:'AI数据中心核心标的' },
+  { ticker:'AAOI', name:'应用光电', sym:'usAAOI', date:'2026-04-10', price:150.60, sector:'光模块', logic:'1.6T高速模块放量', note:'美国光模块龙头' }
 ];
 
 let _jid = 0;
-function qqJsonp(codes, timeout = 8000) {
-  return new Promise((resolve, reject) => {
-    const s = document.createElement('script');
-    const timer = setTimeout(() => { s.remove(); reject(new Error('timeout')); }, timeout);
-    s.onload = () => {
-      clearTimeout(timer); s.remove();
-      const results = {};
-      codes.forEach(c => { const val = window['v_' + c]; if (val) results[c] = val; });
-      resolve(results);
-    };
-    s.onerror = () => { clearTimeout(timer); s.remove(); reject(new Error('script error')); };
-    s.src = `https://qt.gtimg.cn/q=${codes.join(',')}`;
+function qqJsonp(codes, timeout=8000) {
+  return new Promise((resolve,reject)=>{
+    const s=document.createElement('script');
+    const t=setTimeout(()=>{s.remove();reject(new Error('timeout'));},timeout);
+    s.onload=()=>{clearTimeout(t);s.remove();const r={};codes.forEach(c=>{const v=window['v_'+c];if(v)r[c]=v;});resolve(r);};
+    s.onerror=()=>{clearTimeout(t);s.remove();reject(new Error('script error'));};
+    s.src=`https://qt.gtimg.cn/q=${codes.join(',')}`;
     document.head.appendChild(s);
   });
 }
 
-function parseQuote(code, raw) {
-  if (!raw) return null;
-  const parts = raw.split('~');
-  const price = parseFloat(parts[3]);
-  if (!price || price <= 0) return null;
-  let dailyPct = parseFloat(parts[32]);
-  if (isNaN(dailyPct)) {
-    const prev = parseFloat(code.startsWith('hk') ? parts[5] : parts[4]);
-    if (prev > 0) dailyPct = ((price - prev) / prev) * 100;
-  }
-  return { code, price, dailyPct: isNaN(dailyPct) ? null : dailyPct };
+function parseQuote(code,raw) {
+  if(!raw)return null;const p=raw.split('~');const price=parseFloat(p[3]);if(!price||price<=0)return null;
+  let d=parseFloat(p[32]);if(isNaN(d)){const pr=parseFloat(code.startsWith('hk')?p[5]:p[4]);if(pr>0)d=((price-pr)/pr)*100;}
+  return {code,price,dailyPct:isNaN(d)?null:d};
 }
 
-const CACHE = {
-  us:  { rt: {}, ytd: {}, loaded: false },
-  hk:  { rt: {}, ytd: {}, loaded: false },
-  a:   { rt: {}, ytd: {}, loaded: false },
-};
-const WATCH_CACHE = {};
+const CACHE={us:{rt:{},ytd:{},loaded:false},hk:{rt:{},ytd:{},loaded:false},a:{rt:{},ytd:{},loaded:false}};
+const WATCH_CACHE={};
 
-function fmt(v) {
-  if (v == null || isNaN(v)) return '—';
-  return (v > 0 ? '+' : '') + v.toFixed(2) + '%';
-}
+function fmt(v){return v==null||isNaN(v)?'—':(v>0?'+':'')+v.toFixed(2)+'%';}
 
-function renderHoldings(key, rt, ytd) {
-  const port = PORTFOLIOS[key];
-  document.getElementById(`holdings-${key}`).innerHTML = port.holdings.map(h => {
-    const q = rt[h.code] || {};
-    const d = q.dailyPct, y = ytd[h.code];
-    const dc = getColorClass(d);
-    const yc = getColorClass(y);
+function renderHoldings(key,rt,ytd){
+  const p=PORTFOLIOS[key];
+  document.getElementById(`holdings-${key}`).innerHTML=p.holdings.map(h=>{
+    const q=rt[h.code]||{};const d=q.dailyPct,y=ytd[h.code];
+    const dc=getColorClass(d),yc=getColorClass(y);
+    const link=getQQLink(h.code);
     return `<div class="holding">
       <div class="weight">${h.weight}%</div>
-      <div class="info"><div class="ticker">${h.display}</div><div class="name-cn">${h.nameCn}</div></div>
+      <div class="info">
+        <div class="ticker" onclick="window.open('${link}','_blank')">${h.display}</div>
+        <div class="name-cn">${h.nameCn}</div>
+      </div>
       <div class="change ${dc}">${fmt(d)}</div>
       <div class="change ${yc}">${fmt(y)}</div>
     </div>`;
   }).join('');
 }
 
-function renderSummary(key, rt, ytd) {
-  const port = PORTFOLIOS[key];
-  let dW=0, yW=0, dOk=false, yOk=false;
-  port.holdings.forEach(h => {
-    const w = h.weight/100, q = rt[h.code]||{}, y = ytd[h.code];
-    if (q.dailyPct != null) { dW += q.dailyPct*w; dOk=true; }
-    if (y != null) { yW += y*w; yOk=true; }
-  });
-  const dv = dOk?dW:null, yv = yOk?yW:null;
-  const dsc = getSummaryClass(dv);
-  const ysc = getSummaryClass(yv);
-  document.getElementById(`summary-${key}`).innerHTML = `
+function renderSummary(key,rt,ytd){
+  const p=PORTFOLIOS[key];let dw=0,yw=0,doff=false,yoff=false;
+  p.holdings.forEach(h=>{const w=h.weight/100,q=rt[h.code]||{},y=ytd[h.code];
+  if(q.dailyPct!=null){dw+=q.dailyPct*w;doff=true;}if(y!=null){yw+=y*w;yoff=true;}});
+  const dv=doff?dw:null,yv=yoff?yw:null;
+  const dsc=getSummaryClass(dv),ysc=getSummaryClass(yv);
+  document.getElementById(`summary-${key}`).innerHTML=`
     <div class="summary-item ${dsc}"><div class="summary-label">当日涨跌</div><div class="summary-value">${fmt(dv)}</div></div>
     <div class="summary-item ${ysc}"><div class="summary-label">年初至今</div><div class="summary-value">${fmt(yv)}</div></div>`;
 }
 
-function renderLoadingHoldings(key) {
-  const port = PORTFOLIOS[key];
-  document.getElementById(`holdings-${key}`).innerHTML = port.holdings.map(h =>
+function renderLoadingHoldings(key){
+  const p=PORTFOLIOS[key];
+  document.getElementById(`holdings-${key}`).innerHTML=p.holdings.map(h=>
     `<div class="holding">
       <div class="weight">${h.weight}%</div>
       <div class="info"><div class="ticker">${h.display}</div><div class="name-cn">${h.nameCn}</div></div>
       <div class="change"><div class="loading-skeleton" style="width:50px;height:16px;margin-left:auto"></div></div>
       <div class="change"><div class="loading-skeleton" style="width:50px;height:16px;margin-left:auto"></div></div>
-    </div>`
-  ).join('');
+    </div>`).join('');
 }
 
-function renderWatch() {
-  const container = document.getElementById('watch-list');
-  if (!WATCH.length) {
-    container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-dim);font-size:14px">暂无分享标的</div>';
-    return;
-  }
-  container.innerHTML = WATCH.map((w, i) => {
-    const d = WATCH_CACHE[w.sym] || {};
-    let sinceHtml, sinceClass = 'neutral-text';
-    if (w.price && d.price > 0) {
-      const pct = (d.price - w.price) / w.price * 100;
-      sinceClass = getColorClass(pct);
-      sinceHtml = `
-        <span class="since-pct ${sinceClass}">${fmt(pct)}</span>
-        <span class="since-date">自 ${w.date}<br>${w.price.toFixed(2)} → ${d.price.toFixed(2)}</span>`;
-    } else {
-      sinceHtml = `
-        <span class="since-pct neutral-text" style="font-size:1.2rem"><div class="loading-skeleton" style="width:70px;height:22px;margin-left:auto"></div></span>
-        <span class="since-date">自 ${w.date}</span>`;
-    }
+function renderWatch(){
+  const c=document.getElementById('watch-list');
+  if(!WATCH.length){c.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-dim)">暂无分享标的</div>';return;}
+  c.innerHTML=WATCH.map((w,i)=>{
+    const flag=getMarketFlag(w.sym);const d=WATCH_CACHE[w.sym]||{};
+    const link=getQQLink(w.sym);
+    let sh,sc='neutral-text';
+    if(w.price&&d.price>0){const p=(d.price-w.price)/w.price*100;sc=getColorClass(p);sh=`<span class="since-pct ${sc}">${fmt(p)}</span><span class="since-date">自 ${w.date}<br>${w.price.toFixed(2)}→${d.price.toFixed(2)}</span>`;}
+    else{sh=`<span class="since-pct neutral-text" style="font-size:1.2rem"><div class="loading-skeleton" style="width:70px;height:22px"></div></span><span class="since-date">自 ${w.date}</span>`;}
     return `<div class="watch-item">
       <div class="watch-left">
         <div class="watch-header">
-          <span class="watch-ticker">${w.ticker}</span>
+          <span class="watch-ticker" onclick="window.open('${link}','_blank')">${flag} ${w.ticker}</span>
           <span class="watch-name">${w.name}</span>
           <span class="sector-tag">${w.sector}</span>
-          ${w.logic ? `<span class="logic-tag">${w.logic}</span>` : ''}
+          ${w.logic?`<span class="logic-tag">${w.logic}</span>`:''}
         </div>
         <div class="watch-note">${w.note}</div>
         <div class="watch-meta"><span class="today-pill ${getPillClass(d.dailyPct)}">今日 ${fmt(d.dailyPct)}</span></div>
       </div>
-      <div class="watch-right">${sinceHtml}</div>
+      <div class="watch-right">${sh}</div>
     </div>`;
   }).join('');
 }
 
-async function loadPortfolio(key) {
-  const port = PORTFOLIOS[key];
-  const c = CACHE[key];
-  if (!c.loaded) renderLoadingHoldings(key);
-  try {
-    const codes = port.holdings.map(h => h.code);
-    const rawMap = await qqJsonp(codes);
-    port.holdings.forEach(h => {
-      const raw = rawMap[h.code];
-      if (raw) {
-        const q = parseQuote(h.code, raw);
-        if (q) {
-          c.rt[h.code] = q;
-          const base = YTD_BASE[h.code];
-          if (base > 0 && q.price > 0) c.ytd[h.code] = ((q.price - base) / base) * 100;
-        }
-      }
-    });
-  } catch(e) { dbg(`${key} 失败: ${e.message}`); }
-  renderHoldings(key, c.rt, c.ytd);
-  renderSummary(key, c.rt, c.ytd);
-  c.loaded = true;
+async function loadPortfolio(key){
+  const p=PORTFOLIOS[key],c=CACHE[key];
+  if(!c.loaded)renderLoadingHoldings(key);
+  try{const codes=p.holdings.map(h=>h.code);const m=await qqJsonp(codes);
+  p.holdings.forEach(h=>{const r=m[h.code];if(r){const q=parseQuote(h.code,r);if(q){c.rt[h.code]=q;const b=YTD_BASE[h.code];if(b>0&&q.price>0)c.ytd[h.code]=((q.price-b)/b)*100;}}});}
+  catch(e){dbg(`${key}失败:${e.message}`);}
+  renderHoldings(key,c.rt,c.ytd);renderSummary(key,c.rt,c.ytd);c.loaded=true;
 }
 
-async function loadWatch() {
-  try {
-    const codes = WATCH.map(w => w.sym);
-    const rawMap = await qqJsonp(codes);
-    WATCH.forEach(w => {
-      const raw = rawMap[w.sym];
-      if (raw) {
-        const q = parseQuote(w.sym, raw);
-        if (q) WATCH_CACHE[w.sym] = q;
-      }
-    });
-  } catch(e) { dbg(`自选失败: ${e.message}`); }
+async function loadWatch(){
+  try{const codes=WATCH.map(w=>w.sym);const m=await qqJsonp(codes);
+  WATCH.forEach(w=>{const r=m[w.sym];if(r){const q=parseQuote(w.sym,r);if(q)WATCH_CACHE[w.sym]=q;}});}
+  catch(e){dbg(`自选失败:${e.message}`);}
   renderWatch();
 }
 
-function setStatus(s, m) {
-  document.getElementById('statusDot').className = 'dot ' + (s==='ok'?'':s==='loading'?'loading':'error');
-  document.getElementById('statusText').textContent = m;
+function setStatus(s,m){
+  document.getElementById('statusDot').className='dot '+(s==='ok'?'':s==='loading'?'loading':'error');
+  document.getElementById('statusText').textContent=m;
 }
 
-let _timer = null, _first = true;
-async function refreshAll() {
-  const btn = document.getElementById('btnRefresh');
-  btn.disabled = true;
-  const t0 = performance.now();
-  setStatus('loading', _first ? '正在获取数据...' : '刷新中...');
-  try {
-    await Promise.allSettled([
-      ...['us','hk','a'].map(k => loadPortfolio(k)),
-      loadWatch()
-    ]);
-    _first = false;
-    const ms = ((performance.now()-t0)/1000).toFixed(1);
-    const fullDate = formatFullDate();
-    setStatus('ok', ` ${fullDate} (${ms}s)`);
-  } catch(e) {
-    setStatus('error', '加载失败');
-  }
-  btn.disabled = false;
-  clearTimeout(_timer);
-  _timer = setTimeout(refreshAll, 30000);
+let _timer=null,_first=true;
+async function refreshAll(){
+  const btn=document.getElementById('btnRefresh');btn.disabled=true;
+  const t0=performance.now();setStatus('loading',_first?'正在获取数据...':'刷新中...');
+  try{await Promise.allSettled([...['us','hk','a'].map(k=>loadPortfolio(k)),loadWatch()]);
+  _first=false;const ms=((performance.now()-t0)/1000).toFixed(1);
+  setStatus('ok',`${formatFullDate()} (${ms}s)`);}
+  catch(e){setStatus('error','加载失败');}
+  btn.disabled=false;clearTimeout(_timer);_timer=setTimeout(refreshAll,30000);
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  ['us','hk','a'].forEach(k => renderLoadingHoldings(k));
-  renderWatch();
-  refreshAll();
+document.addEventListener('DOMContentLoaded',()=>{
+  ['us','hk','a'].forEach(k=>renderLoadingHoldings(k));
+  renderWatch();refreshAll();
 });
 </script>
 </body>
