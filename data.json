@@ -61,9 +61,17 @@
       "today": -0.59,
       "price": 9.913
     },
-    "watch_300782": {
+        "watch_300782": {
       "today": 3.15,
       "price": 103.04
+    },
+    "watch_MRVL": {
+      "today": 0.00,
+      "price": 128.49
+    },
+    "watch_AAOI": {
+      "today": 0.00,
+      "price": 150.60
     }
   }
 }
