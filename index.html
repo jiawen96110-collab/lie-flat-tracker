@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -17,10 +16,10 @@
     --accent-hk: #f59e0b;
     --accent-a: #ef4444;
     --accent-watch: #f97316;
-    --green: #22c55e;
     --red: #ef4444;
-    --green-bg: rgba(34,197,94,0.1);
+    --green: #22c55e;
     --red-bg: rgba(239,68,68,0.1);
+    --green-bg: rgba(34,197,94,0.1);
   }
   * { margin:0; padding:0; box-sizing:border-box; }
   body {
@@ -83,259 +82,254 @@
   .btn-refresh:hover { background: rgba(99,102,241,0.25); }
   .btn-refresh:disabled { opacity: 0.5; cursor: not-allowed; }
 
-/* ── PORTFOLIOS GRID ── */
-.portfolios {
-max-width: 1400px;
-margin: 0 auto;
-display: grid;
-grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
-gap: 24px;
-}
-.portfolio {
-background: var(–card);
-border: 1px solid var(–border);
-border-radius: 16px;
-overflow: hidden;
-transition: transform 0.2s;
-}
-.portfolio:hover { transform: translateY(-2px); }
-.portfolio-header {
-padding: 20px 24px;
-display: flex;
-justify-content: space-between;
-align-items: center;
-border-bottom: 1px solid var(–border);
-}
-.portfolio-header .label {
-display: flex;
-align-items: center;
-gap: 10px;
-}
-.portfolio-header .flag { font-size: 1.5rem; }
-.portfolio-header .name { font-size: 1.1rem; font-weight: 600; }
-.portfolio-header .market-tag {
-font-size: 0.7rem;
-padding: 3px 8px;
-border-radius: 6px;
-font-weight: 500;
-}
-.us .market-tag { background: rgba(99,102,241,0.15); color: var(–accent-us); }
-.hk .market-tag { background: rgba(245,158,11,0.15); color: var(–accent-hk); }
-.a  .market-tag { background: rgba(239,68,68,0.15);  color: var(–accent-a); }
+  .portfolios {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+    gap: 24px;
+  }
+  .portfolio {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.2s;
+  }
+  .portfolio:hover { transform: translateY(-2px); }
+  .portfolio-header {
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .portfolio-header .label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .portfolio-header .flag { font-size: 1.5rem; }
+  .portfolio-header .name { font-size: 1.1rem; font-weight: 600; }
+  .portfolio-header .market-tag {
+    font-size: 0.7rem;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-weight: 500;
+  }
+  .us .market-tag { background: rgba(99,102,241,0.15); color: var(--accent-us); }
+  .hk .market-tag { background: rgba(245,158,11,0.15); color: var(--accent-hk); }
+  .a  .market-tag { background: rgba(239,68,68,0.15);  color: var(--accent-a); }
 
-.portfolio-summary {
-padding: 16px 24px;
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 12px;
-border-bottom: 1px solid var(–border);
-}
-.summary-item {
-padding: 12px;
-border-radius: 10px;
-text-align: center;
-}
-.summary-item .summary-label { font-size: 0.75rem; color: var(–text-dim); margin-bottom: 4px; }
-.summary-item .summary-value { font-size: 1.4rem; font-weight: 700; font-variant-numeric: tabular-nums; }
-.summary-item.positive { background: var(–green-bg); }
-.summary-item.positive .summary-value { color: var(–green); }
-.summary-item.negative { background: var(–red-bg); }
-.summary-item.negative .summary-value { color: var(–red); }
-.summary-item.neutral  { background: rgba(136,146,168,0.1); }
-.summary-item.neutral  .summary-value { color: var(–text-dim); }
+  .portfolio-summary {
+    padding: 16px 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .summary-item {
+    padding: 12px;
+    border-radius: 10px;
+    text-align: center;
+  }
+  .summary-item .summary-label { font-size: 0.75rem; color: var(--text-dim); margin-bottom: 4px; }
+  .summary-item .summary-value { font-size: 1.4rem; font-weight: 700; font-variant-numeric: tabular-nums; }
 
-.holdings { padding: 8px 12px 16px; }
-.holding {
-display: grid;
-grid-template-columns: 44px 1fr 80px 80px;
-align-items: center;
-gap: 8px;
-padding: 10px 12px;
-border-radius: 10px;
-transition: background 0.15s;
-}
-.holding:hover { background: var(–card-hover); }
-.holding .weight {
-background: rgba(255,255,255,0.06);
-border-radius: 6px;
-padding: 4px 0;
-text-align: center;
-font-size: 0.75rem;
-color: var(–text-dim);
-font-weight: 500;
-}
-.holding .info .ticker { font-weight: 600; font-size: 0.9rem; }
-.holding .info .name-cn { font-size: 0.75rem; color: var(–text-dim); margin-top: 1px; }
-.holding .change {
-text-align: right;
-font-size: 0.85rem;
-font-weight: 600;
-font-variant-numeric: tabular-nums;
-}
-.positive-text { color: var(–green); }
-.negative-text { color: var(–red); }
-.neutral-text  { color: var(–text-dim); }
-.change-header {
-display: grid;
-grid-template-columns: 44px 1fr 80px 80px;
-gap: 8px;
-padding: 6px 12px;
-font-size: 0.7rem;
-color: var(–text-dim);
-text-transform: uppercase;
-letter-spacing: 0.5px;
-}
-.change-header span:nth-child(3),
-.change-header span:nth-child(4) { text-align: right; }
+  .summary-item.positive { background: var(--red-bg); color: var(--red); }
+  .summary-item.negative { background: var(--green-bg); color: var(--green); }
+  .summary-item.neutral { background: rgba(136,146,168,0.1); color: var(--text-dim); }
 
-/* ── WATCHLIST SECTION ── */
-.watch-section {
-max-width: 1400px;
-margin: 24px auto 0;
-}
-.watch-card {
-background: var(–card);
-border: 1px solid var(–border);
-border-radius: 16px;
-overflow: hidden;
-transition: transform 0.2s;
-}
-.watch-card:hover { transform: translateY(-2px); }
-.watch-card-header {
-padding: 20px 24px;
-display: flex;
-justify-content: space-between;
-align-items: center;
-border-bottom: 1px solid var(–border);
-background: rgba(249,115,22,0.04);
-}
-.watch-card-header .label {
-display: flex;
-align-items: center;
-gap: 10px;
-}
-.watch-card-header .flag { font-size: 1.5rem; }
-.watch-card-header .name { font-size: 1.1rem; font-weight: 600; }
-.watch-market-tag {
-font-size: 0.7rem;
-padding: 3px 8px;
-border-radius: 6px;
-font-weight: 500;
-background: rgba(249,115,22,0.15);
-color: var(–accent-watch);
-}
-.watch-banner {
-padding: 10px 24px;
-border-bottom: 1px solid var(–border);
-font-size: 0.8rem;
-color: var(–text-dim);
-background: rgba(249,115,22,0.03);
-}
-.watch-items { padding: 8px 12px 16px; }
-.watch-item {
-display: grid;
-grid-template-columns: 1fr auto;
-gap: 16px;
-align-items: center;
-padding: 14px 12px;
-border-radius: 12px;
-transition: background 0.15s;
-border-bottom: 1px solid var(–border);
-}
-.watch-item:last-child { border-bottom: none; }
-.watch-item:hover { background: var(–card-hover); }
-.watch-left {}
-.watch-header {
-display: flex;
-align-items: center;
-gap: 8px;
-flex-wrap: wrap;
-margin-bottom: 6px;
-}
-.watch-ticker {
-font-weight: 700;
-font-size: 1rem;
-color: #818cf8;
-}
-.watch-name { font-size: 0.9rem; color: var(–text); font-weight: 500; }
-.sector-tag {
-font-size: 0.68rem;
-font-weight: 600;
-padding: 2px 8px;
-border-radius: 5px;
-background: rgba(249,115,22,0.15);
-color: var(–accent-watch);
-}
-.logic-tag {
-font-size: 0.68rem;
-font-weight: 600;
-padding: 2px 8px;
-border-radius: 5px;
-background: rgba(99,102,241,0.15);
-color: var(–accent-us);
-}
-.watch-note { font-size: 0.78rem; color: var(–text-dim); line-height: 1.6; margin-bottom: 6px; }
-.watch-meta { font-size: 0.75rem; color: var(–text-dim); display: flex; align-items: center; gap: 8px; }
-.watch-right { text-align: right; flex-shrink: 0; min-width: 120px; }
-.since-pct {
-font-size: 1.5rem;
-font-weight: 700;
-font-variant-numeric: tabular-nums;
-display: block;
-line-height: 1.1;
-}
-.since-date { font-size: 0.72rem; color: var(–text-dim); margin-top: 4px; display: block; }
-.today-pill {
-display: inline-block;
-padding: 3px 8px;
-border-radius: 6px;
-font-size: 0.78rem;
-font-weight: 600;
-font-variant-numeric: tabular-nums;
-}
-.today-pill.up   { color: var(–green); background: var(–green-bg); }
-.today-pill.down { color: var(–red);   background: var(–red-bg); }
-.today-pill.flat { color: var(–text-dim); background: rgba(136,146,168,0.1); }
+  .holdings { padding: 8px 12px 16px; }
+  .holding {
+    display: grid;
+    grid-template-columns: 44px 1fr 80px 80px;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    transition: background 0.15s;
+  }
+  .holding:hover { background: var(--card-hover); }
+  .holding .weight {
+    background: rgba(255,255,255,0.06);
+    border-radius: 6px;
+    padding: 4px 0;
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    font-weight: 500;
+  }
+  .holding .info .ticker { font-weight: 600; font-size: 0.9rem; }
+  .holding .info .name-cn { font-size: 0.75rem; color: var(--text-dim); margin-top: 1px; }
+  .holding .change {
+    text-align: right;
+    font-size: 0.85rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .positive-text { color: var(--red); }
+  .negative-text { color: var(--green); }
+  .neutral-text { color: var(--text-dim); }
 
-/* ── SKELETONS ── */
-.loading-skeleton {
-height: 20px;
-background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 75%);
-background-size: 200% 100%;
-animation: shimmer 1.5s infinite;
-border-radius: 4px;
-}
-@keyframes shimmer {
-0%   { background-position: -200% 0; }
-100% { background-position:  200% 0; }
-}
+  .change-header {
+    display: grid;
+    grid-template-columns: 44px 1fr 80px 80px;
+    gap: 8px;
+    padding: 6px 12px;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .change-header span:nth-child(3),
+  .change-header span:nth-child(4) { text-align: right; }
 
-.footer {
-text-align: center;
-padding: 32px 0 16px;
-color: var(–text-dim);
-font-size: 0.75rem;
-max-width: 1400px;
-margin: 0 auto;
-}
+  .watch-section {
+    max-width: 1400px;
+    margin: 24px auto 0;
+  }
+  .watch-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.2s;
+  }
+  .watch-card:hover { transform: translateY(-2px); }
+  .watch-card-header {
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    background: rgba(249,115,22,0.04);
+  }
+  .watch-card-header .label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .watch-card-header .flag { font-size: 1.5rem; }
+  .watch-card-header .name { font-size: 1.1rem; font-weight: 600; }
+  .watch-market-tag {
+    font-size: 0.7rem;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-weight: 500;
+    background: rgba(249,115,22,0.15);
+    color: var(--accent-watch);
+  }
+  .watch-banner {
+    padding: 10px 24px;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    background: rgba(249,115,22,0.03);
+  }
+  .watch-items { padding: 8px 12px 16px; }
+  .watch-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: center;
+    padding: 14px 12px;
+    border-radius: 12px;
+    transition: background 0.15s;
+    border-bottom: 1px solid var(--border);
+  }
+  .watch-item:last-child { border-bottom: none; }
+  .watch-item:hover { background: var(--card-hover); }
+  .watch-left {}
+  .watch-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+  .watch-ticker {
+    font-weight: 700;
+    font-size: 1rem;
+    color: #818cf8;
+  }
+  .watch-name { font-size: 0.9rem; color: var(--text); font-weight: 500; }
+  .sector-tag {
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 5px;
+    background: rgba(249,115,22,0.15);
+    color: var(--accent-watch);
+  }
+  .logic-tag {
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 5px;
+    background: rgba(99,102,241,0.15);
+    color: var(--accent-us);
+  }
+  .watch-note { font-size: 0.78rem; color: var(--text-dim); line-height: 1.6; margin-bottom: 6px; }
+  .watch-meta { font-size: 0.75rem; color: var(--text-dim); display: flex; align-items: center; gap: 8px; }
+  .watch-right { text-align: right; flex-shrink: 0; min-width: 120px; }
+  .since-pct {
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    display: block;
+    line-height: 1.1;
+  }
+  .since-date { font-size: 0.72rem; color: var(--text-dim); margin-top: 4px; display: block; }
+  .today-pill {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .today-pill.up   { color: var(--red); background: var(--red-bg); }
+  .today-pill.down { color: var(--green); background: var(--green-bg); }
+  .today-pill.flat { color: var(--text-dim); background: rgba(136,146,168,0.1); }
 
-@media (max-width: 500px) {
-.portfolios { grid-template-columns: 1fr; }
-.header h1 { font-size: 1.5rem; }
-.holding {
-grid-template-columns: 36px 1fr 64px 64px;
-gap: 4px;
-padding: 8px;
-}
-.change-header {
-grid-template-columns: 36px 1fr 64px 64px;
-gap: 4px;
-}
-.watch-item { grid-template-columns: 1fr; gap: 10px; }
-.watch-right { text-align: left; }
-}
+  .loading-skeleton {
+    height: 20px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+  }
+  @keyframes shimmer {
+    0%   { background-position: -200% 0; }
+    100% { background-position:  200% 0; }
+  }
+
+  .footer {
+    text-align: center;
+    padding: 32px 0 16px;
+    color: var(--text-dim);
+    font-size: 0.75rem;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 500px) {
+    .portfolios { grid-template-columns: 1fr; }
+    .header h1 { font-size: 1.5rem; }
+    .holding {
+      grid-template-columns: 36px 1fr 64px 64px;
+      gap: 4px;
+      padding: 8px;
+    }
+    .change-header {
+      grid-template-columns: 36px 1fr 64px 64px;
+      gap: 4px;
+    }
+    .watch-item { grid-template-columns: 1fr; gap: 10px; }
+    .watch-right { text-align: left; }
+  }
 </style>
-
 </head>
 <body>
 
@@ -350,10 +344,7 @@ gap: 4px;
   <button class="btn-refresh" id="btnRefresh" onclick="refreshAll()">刷新</button>
 </div>
 
-<!-- ── ETF PORTFOLIOS ── -->
-
 <div class="portfolios" id="portfolios">
-  <!-- US -->
   <div class="portfolio us" id="port-us">
     <div class="portfolio-header">
       <div class="label"><span class="flag">🇺🇸</span><span class="name">美股躺平组合</span></div>
@@ -368,7 +359,7 @@ gap: 4px;
       <div id="holdings-us"></div>
     </div>
   </div>
-  <!-- HK -->
+
   <div class="portfolio hk" id="port-hk">
     <div class="portfolio-header">
       <div class="label"><span class="flag">🇭🇰</span><span class="name">港股躺平组合</span></div>
@@ -383,7 +374,7 @@ gap: 4px;
       <div id="holdings-hk"></div>
     </div>
   </div>
-  <!-- A -->
+
   <div class="portfolio a" id="port-a">
     <div class="portfolio-header">
       <div class="label"><span class="flag">🇨🇳</span><span class="name">A股躺平组合</span></div>
@@ -399,8 +390,6 @@ gap: 4px;
     </div>
   </div>
 </div>
-
-<!-- ── WATCHLIST ── -->
 
 <div class="watch-section">
   <div class="watch-card">
@@ -423,18 +412,43 @@ gap: 4px;
 </div>
 
 <details style="max-width:1400px;margin:8px auto;padding:0 0">
-  <summary style="color:#444;font-size:12px;cursor:pointer;padding:0 4px">调试日志</summary>
+  <summary style="color:#8892a8;font-size:12px;cursor:pointer;padding:0 4px">调试日志</summary>
   <pre id="dbg" style="background:#0a0a0f;color:#6a6;font-size:11px;padding:10px;border-radius:8px;max-height:300px;overflow:auto;white-space:pre-wrap"></pre>
 </details>
 
 <script>
-// ============ 调试日志 ============
 function dbg(msg) {
   const el = document.getElementById('dbg');
   if (el) { el.textContent += new Date().toLocaleTimeString() + ' ' + msg + '\n'; el.scrollTop = el.scrollHeight; }
 }
 
-// ============ 组合定义 ============
+function formatFullDate() {
+  const weekArr = ['周日','周一','周二','周三','周四','周五','周六'];
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = (now.getMonth()+1).toString().padStart(2,'0');
+  const d = now.getDate().toString().padStart(2,'0');
+  const w = weekArr[now.getDay()];
+  const h = now.getHours().toString().padStart(2,'0');
+  const mi = now.getMinutes().toString().padStart(2,'0');
+  const s = now.getSeconds().toString().padStart(2,'0');
+  return `${y}年${m}月${d}日 ${w} ${h}:${mi}:${s}`;
+}
+
+// 统一：涨红 跌绿
+function getColorClass(val) {
+  if (val == null || isNaN(val)) return 'neutral-text';
+  return val > 0.001 ? 'positive-text' : val < -0.001 ? 'negative-text' : 'neutral-text';
+}
+function getSummaryClass(val) {
+  if (val == null || isNaN(val)) return 'neutral';
+  return val > 0.001 ? 'positive' : val < -0.001 ? 'negative' : 'neutral';
+}
+function getPillClass(val) {
+  if (val == null || isNaN(val)) return 'flat';
+  return val > 0.001 ? 'up' : val < -0.001 ? 'down' : 'flat';
+}
+
 const PORTFOLIOS = {
   us: {
     name: '美股躺平组合',
@@ -468,7 +482,6 @@ const PORTFOLIOS = {
   }
 };
 
-// ============ YTD 基准价 ============
 const YTD_BASE = {
   'usQQQ':    613.537, 'usSPY':    680.063, 'usRING':   73.64,
   'usCOPX':   71.78,   'usBITB':   47.44,
@@ -478,7 +491,6 @@ const YTD_BASE = {
   'sh515880': 1.027,   'sh518880': 9.301,
 };
 
-// ============ 自选追踪 ============
 const WATCH = [
   {
     ticker:  '300782',
@@ -512,7 +524,6 @@ const WATCH = [
   }
 ];
 
-// ============ JSONP ============
 let _jid = 0;
 function qqJsonp(codes, timeout = 8000) {
   return new Promise((resolve, reject) => {
@@ -530,11 +541,9 @@ function qqJsonp(codes, timeout = 8000) {
   });
 }
 
-// ============ 解析行情 ============
 function parseQuote(code, raw) {
   if (!raw) return null;
   const parts = raw.split('~');
-  dbg(`  ${code} [0]=${parts[0]} [3]=${parts[3]} [32]=${parts[32]}`);
   const price = parseFloat(parts[3]);
   if (!price || price <= 0) return null;
   let dailyPct = parseFloat(parts[32]);
@@ -545,39 +554,30 @@ function parseQuote(code, raw) {
   return { code, price, dailyPct: isNaN(dailyPct) ? null : dailyPct };
 }
 
-// ============ 缓存 ============
 const CACHE = {
   us:  { rt: {}, ytd: {}, loaded: false },
   hk:  { rt: {}, ytd: {}, loaded: false },
   a:   { rt: {}, ytd: {}, loaded: false },
 };
-const WATCH_CACHE = {}; // sym -> { price, dailyPct }
+const WATCH_CACHE = {};
 
-// ============ 格式化 ============
 function fmt(v) {
   if (v == null || isNaN(v)) return '—';
   return (v > 0 ? '+' : '') + v.toFixed(2) + '%';
 }
-function pc(v) {
-  if (v == null || isNaN(v)) return 'neutral-text';
-  return v > 0.001 ? 'positive-text' : v < -0.001 ? 'negative-text' : 'neutral-text';
-}
-function sc(v) {
-  if (v == null || isNaN(v)) return 'neutral';
-  return v > 0.001 ? 'positive' : v < -0.001 ? 'negative' : 'neutral';
-}
 
-// ============ ETF 渲染 ============
 function renderHoldings(key, rt, ytd) {
   const port = PORTFOLIOS[key];
   document.getElementById(`holdings-${key}`).innerHTML = port.holdings.map(h => {
     const q = rt[h.code] || {};
     const d = q.dailyPct, y = ytd[h.code];
+    const dc = getColorClass(d);
+    const yc = getColorClass(y);
     return `<div class="holding">
       <div class="weight">${h.weight}%</div>
       <div class="info"><div class="ticker">${h.display}</div><div class="name-cn">${h.nameCn}</div></div>
-      <div class="change ${pc(d)}">${fmt(d)}</div>
-      <div class="change ${pc(y)}">${fmt(y)}</div>
+      <div class="change ${dc}">${fmt(d)}</div>
+      <div class="change ${yc}">${fmt(y)}</div>
     </div>`;
   }).join('');
 }
@@ -591,9 +591,11 @@ function renderSummary(key, rt, ytd) {
     if (y != null) { yW += y*w; yOk=true; }
   });
   const dv = dOk?dW:null, yv = yOk?yW:null;
+  const dsc = getSummaryClass(dv);
+  const ysc = getSummaryClass(yv);
   document.getElementById(`summary-${key}`).innerHTML = `
-    <div class="summary-item ${sc(dv)}"><div class="summary-label">当日涨跌</div><div class="summary-value">${fmt(dv)}</div></div>
-    <div class="summary-item ${sc(yv)}"><div class="summary-label">年初至今</div><div class="summary-value">${fmt(yv)}</div></div>`;
+    <div class="summary-item ${dsc}"><div class="summary-label">当日涨跌</div><div class="summary-value">${fmt(dv)}</div></div>
+    <div class="summary-item ${ysc}"><div class="summary-label">年初至今</div><div class="summary-value">${fmt(yv)}</div></div>`;
 }
 
 function renderLoadingHoldings(key) {
@@ -608,13 +610,6 @@ function renderLoadingHoldings(key) {
   ).join('');
 }
 
-// ============ 自选渲染 ============
-function todayPill(v) {
-  if (v == null || isNaN(v)) return '<span class="today-pill flat">今日 —</span>';
-  const cls = v > 0.001 ? 'up' : v < -0.001 ? 'down' : 'flat';
-  return `<span class="today-pill ${cls}">今日 ${fmt(v)}</span>`;
-}
-
 function renderWatch() {
   const container = document.getElementById('watch-list');
   if (!WATCH.length) {
@@ -626,10 +621,10 @@ function renderWatch() {
     let sinceHtml, sinceClass = 'neutral-text';
     if (w.price && d.price > 0) {
       const pct = (d.price - w.price) / w.price * 100;
-      sinceClass = pct > 0.001 ? 'positive-text' : pct < -0.001 ? 'negative-text' : 'neutral-text';
+      sinceClass = getColorClass(pct);
       sinceHtml = `
         <span class="since-pct ${sinceClass}">${fmt(pct)}</span>
-        <span class="since-date">自 ${w.date}<br>¥${w.price.toFixed(2)} → ¥${d.price.toFixed(2)}</span>`;
+        <span class="since-date">自 ${w.date}<br>${w.price.toFixed(2)} → ${d.price.toFixed(2)}</span>`;
     } else {
       sinceHtml = `
         <span class="since-pct neutral-text" style="font-size:1.2rem"><div class="loading-skeleton" style="width:70px;height:22px;margin-left:auto"></div></span>
@@ -644,21 +639,19 @@ function renderWatch() {
           ${w.logic ? `<span class="logic-tag">${w.logic}</span>` : ''}
         </div>
         <div class="watch-note">${w.note}</div>
-        <div class="watch-meta">${todayPill(d.dailyPct)}</div>
+        <div class="watch-meta"><span class="today-pill ${getPillClass(d.dailyPct)}">今日 ${fmt(d.dailyPct)}</span></div>
       </div>
       <div class="watch-right">${sinceHtml}</div>
     </div>`;
   }).join('');
 }
 
-// ============ 加载 ============
 async function loadPortfolio(key) {
   const port = PORTFOLIOS[key];
   const c = CACHE[key];
   if (!c.loaded) renderLoadingHoldings(key);
   try {
     const codes = port.holdings.map(h => h.code);
-    dbg(`加载 ${key}: ${codes.join(',')}`);
     const rawMap = await qqJsonp(codes);
     port.holdings.forEach(h => {
       const raw = rawMap[h.code];
@@ -680,7 +673,6 @@ async function loadPortfolio(key) {
 async function loadWatch() {
   try {
     const codes = WATCH.map(w => w.sym);
-    dbg(`加载自选: ${codes.join(',')}`);
     const rawMap = await qqJsonp(codes);
     WATCH.forEach(w => {
       const raw = rawMap[w.sym];
@@ -693,7 +685,6 @@ async function loadWatch() {
   renderWatch();
 }
 
-// ============ 状态 & 刷新 ============
 function setStatus(s, m) {
   document.getElementById('statusDot').className = 'dot ' + (s==='ok'?'':s==='loading'?'loading':'error');
   document.getElementById('statusText').textContent = m;
@@ -712,8 +703,8 @@ async function refreshAll() {
     ]);
     _first = false;
     const ms = ((performance.now()-t0)/1000).toFixed(1);
-    const now = new Date().toLocaleString('zh-CN',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
-    setStatus('ok', `最后更新: ${now} (${ms}s)`);
+    const fullDate = formatFullDate();
+    setStatus('ok', `最后更新: ${fullDate} (${ms}s)`);
   } catch(e) {
     setStatus('error', '加载失败');
   }
@@ -722,14 +713,11 @@ async function refreshAll() {
   _timer = setTimeout(refreshAll, 30000);
 }
 
-// ============ 启动 ============
 document.addEventListener('DOMContentLoaded', () => {
   ['us','hk','a'].forEach(k => renderLoadingHoldings(k));
   renderWatch();
-  dbg('启动, 协议: ' + location.protocol);
   refreshAll();
 });
 </script>
-
 </body>
 </html>
