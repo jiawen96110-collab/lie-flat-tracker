@@ -2,8 +2,8 @@ name: Fetch Stock Data
 
 on:
   schedule:
-    - cron: '*/30 * * * *'   # 每30分钟自动运行
-  workflow_dispatch:           # 允许手动触发
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
 
 jobs:
   fetch:
@@ -27,7 +27,7 @@ jobs:
               'usQQQ','usSPY','usRING','usCOPX','usBITB',
               'hk03455','hk03132','hk03147','hk03110','hk02840',
               'sh513390','sz159652','sh588200','sh515880','sh518880',
-              'sz300782',
+              'sz300782','usMRVL','usAAOI',
           ]
 
           SYM_MAP = {
@@ -38,6 +38,8 @@ jobs:
               'sh513390':'cn_513390','sz159652':'cn_159652','sh588200':'cn_588200',
               'sh515880':'cn_515880','sh518880':'cn_518880',
               'sz300782':'watch_300782',
+              'usMRVL':'watch_MRVL',
+              'usAAOI':'watch_AAOI',
           }
 
           url = "https://qt.gtimg.cn/q=" + ",".join(SYMBOLS)
@@ -46,7 +48,10 @@ jobs:
               'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
           }
 
-          result = {"updated": datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"), "data": {}}
+          result = {
+              "updated": datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+              "data": {}
+          }
 
           try:
               req = urllib.request.Request(url, headers=headers)
@@ -61,7 +66,10 @@ jobs:
                       try:
                           today = float(fields[32])
                           price = float(fields[3])
-                          result["data"][key] = {"today": round(today, 4), "price": round(price, 4)}
+                          result["data"][key] = {
+                              "today": round(today, 4),
+                              "price": round(price, 4)
+                          }
                       except Exception:
                           pass
 
@@ -69,7 +77,6 @@ jobs:
 
           except Exception as e:
               print(f"Fetch error: {e}")
-              # 保留上次数据，不覆盖
               import os, sys
               if os.path.exists("data.json"):
                   print("Keeping existing data.json")
@@ -78,7 +85,7 @@ jobs:
           with open("data.json", "w", encoding="utf-8") as f:
               json.dump(result, f, ensure_ascii=False, indent=2)
 
-          print("data.json written successfully")
+          print("data.json written OK")
           PYEOF
 
       - name: Commit and Push
@@ -88,3 +95,8 @@ jobs:
           git add data.json
           git diff --staged --quiet || git commit -m "chore: update stock data $(date -u +'%Y-%m-%d %H:%M UTC')"
           git push
+
+      - name: Trigger Cloudflare Pages Deploy
+        run: |
+          curl -s -X POST "${{ secrets.CLOUDFLARE_DEPLOY_HOOK }}"
+          echo "Cloudflare Pages deploy triggered"
