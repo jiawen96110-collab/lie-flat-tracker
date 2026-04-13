@@ -25,7 +25,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100
 .clock-wrap{display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--border);padding:6px 14px;border-radius:9999px;font-size:13px;font-weight:500;color:var(--t2);box-shadow:0 2px 8px rgba(0,0,0,.04)}
 .live-dot{width:7px;height:7px;border-radius:50%;background:#34c759;flex-shrink:0;animation:blink 2s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-.clock{font-family:var(--mono);font-weight:600;color:var(--t1);min-width:58px;letter-spacing:.5px}
+.clock{font-family:var(--mono);font-weight:600;color:var(--t1);min-width:140px;letter-spacing:.5px}
 .refresh-btn{width:36px;height:36px;border-radius:50%;border:none;background:var(--fill);color:var(--t2);cursor:pointer;font-size:17px;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
 .refresh-btn:hover{background:#e5e5ea;color:var(--blue)}
 .refresh-btn.spinning{animation:spin .7s linear infinite}
@@ -47,18 +47,17 @@ body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100
   padding:16px 14px 14px;
   box-shadow:0 4px 12px rgba(0,0,0,.06),0 1px 3px rgba(0,0,0,.04);
   position:relative;overflow:hidden;
-  display:flex;flex-direction:column;  /* flex列排布确保内容对齐 */
+  display:flex;flex-direction:column;
 }
 .sum-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:18px 18px 0 0}
 .sum-card.us::before{background:linear-gradient(90deg,#0071e3,#5ac8fa)}
 .sum-card.hk::before{background:linear-gradient(90deg,#34c759,#30d158)}
 .sum-card.cn::before{background:linear-gradient(90deg,#ff3b30,#ff6961)}
 .sum-mkt{font-size:12px;color:var(--t3);font-weight:500;margin-bottom:8px;margin-top:2px;display:flex;align-items:center;gap:4px;white-space:nowrap}
-/* 今日涨跌幅：固定高度，统一字号，让三张卡完全对齐 */
 .sum-today{
   font-family:var(--mono);font-size:20px;font-weight:700;
   letter-spacing:-.8px;line-height:1;
-  height:24px;          /* 固定高度 */
+  height:24px;
   display:flex;align-items:center;
 }
 .sum-divider{height:.5px;background:var(--sep);margin:10px 0}
@@ -166,10 +165,10 @@ td:first-child,td:nth-child(2){text-align:left}
       <div class="sub">跟踪 · 京城Z先生无偿分享</div>
     </div>
     <div class="nav-right">
-      <button class="refresh-btn" id="refreshBtn" onclick="manualRefresh()" title="刷新">↻</button>
+      <button class="refresh-btn" id="refreshBtn" onclick="manualRefresh()" title="刷新数据">↻</button>
       <div class="clock-wrap">
         <div class="live-dot"></div>
-        <span class="clock" id="clock">--:--:--</span>
+        <span class="clock" id="clock">--</span>
       </div>
     </div>
   </div>
@@ -327,7 +326,6 @@ const ETF = {
 
 // ═══════════════════════════════════════════
 // ⭐ Z先生分享自选追踪
-// 新增：告诉我 代码 + 分享日期，查收盘价后加一行
 // ═══════════════════════════════════════════
 const WATCH = [
   {
@@ -340,27 +338,39 @@ const WATCH = [
     logic:   'AI手机射频升级 + 国产替代',
     note:    '国内射频前端龙头，垄断安卓高端机射频模组，受益AI手机射频复杂度提升与美国制裁替代窗口'
   },
-  // 新增格式：{ ticker, name, sym, date, price, sector, note }
+  {
+    ticker:  'MRVL',
+    name:    '迈威尔科技',
+    sym:     'usMRVL',
+    date:    '2026-03-18',
+    price:   87.58,
+    sector:  'AI芯片/光互连',
+    logic:   'AI数据中心定制芯片 + 英伟达战略投资加持',
+    note:    'AI数据中心核心标的，ASIC定制芯片+硅光互连双轮驱动，英伟达20亿战略入股，光模块需求爆发最大受益者之一'
+  },
+  {
+    ticker:  'AAOI',
+    name:    '应用光电',
+    sym:     'usAAOI',
+    date:    '2026-04-10',
+    price:   150.60,
+    sector:  '光模块/光通信',
+    logic:   'AI算力光互连爆发 + 1.6T超高速光模块放量',
+    note:    '美国光模块龙头，垂直整合自研激光器降本，已获云厂商2亿美元1.6T订单，2026年目标营收超10亿美元'
+  }
 ];
 
-// ═══════════════════════════════════════════
-// YTD 静态兜底（今日从API实时取）
-// ═══════════════════════════════════════════
+// YTD 静态兜底
 const YTD = {
   us_QQQ:-0.55,us_SPY:-0.02,us_RING:+14.83,us_COPX:+13.62,us_BITB:-17.41,
   hk_03455:-0.53,hk_03132:+25.08,hk_03147:+11.40,hk_03110:+9.10,hk_02840:+10.25,
   cn_513390:-5.03,cn_159652:+8.54,cn_588200:+10.16,cn_515880:+19.77,cn_518880:+7.48,
 };
-const TMAP = {
-  us_QQQ:'usQQQ',us_SPY:'usSPY',us_RING:'usRING',us_COPX:'usCOPX',us_BITB:'usBITB',
-  hk_03455:'hk03455',hk_03132:'hk03132',hk_03147:'hk03147',hk_03110:'hk03110',hk_02840:'hk02840',
-  cn_513390:'sh513390',cn_159652:'sz159652',cn_588200:'sh588200',cn_515880:'sh515880',cn_518880:'sh518880',
-};
 
 const live = {};
 let apiOK = false;
 
-// ─── 渲染工具（涨红跌绿）──────────────────
+// 渲染工具
 function pill(v) {
   if (v===null||v===undefined||isNaN(v)) return '<span class="p z">--</span>';
   const cls=v>0?'up':'dn', s=v>0?'+':'';
@@ -373,7 +383,7 @@ function inl(v, fs='13px') {
   return `<span class="pi ${cls}" style="font-size:${fs}">${s}${v.toFixed(2)}%</span>`;
 }
 
-// ─── 渲染 ETF 组合 ────────────────────────
+// 渲染 ETF
 function renderETF(key) {
   const g=ETF[key], tbody=document.getElementById(`${key}-body`);
   let tw=0,yw=0,rows='';
@@ -394,14 +404,13 @@ function renderETF(key) {
   const td=apiOK?tw:null;
   document.getElementById(`${key}-t`).innerHTML=inl(td,'13px');
   document.getElementById(`${key}-y`).innerHTML=inl(yw,'13px');
-  // 概览卡片
   const st=document.getElementById(`s-${key}-t`);
   const sy=document.getElementById(`s-${key}-y`);
   if(st) st.innerHTML=inl(td,'20px');
   if(sy) sy.innerHTML=inl(yw,'12px');
 }
 
-// ─── 渲染自选（精简卡片式）────────────────
+// 渲染自选
 function renderWatch() {
   const container=document.getElementById('watch-list');
   if (!WATCH.length) {
@@ -411,7 +420,6 @@ function renderWatch() {
   let html='';
   for (let i=0;i<WATCH.length;i++) {
     const w=WATCH[i], d=live[`w${i}`]||{};
-    // 分享以来涨跌
     let sinceHtml, sinceClass='';
     if (w.price && d.price>0) {
       const pct=(d.price-w.price)/w.price*100;
@@ -442,7 +450,7 @@ function renderWatch() {
   container.innerHTML=html;
 }
 
-// ─── Tab 切换 ─────────────────────────────
+// Tab 切换
 document.querySelectorAll('.seg').forEach(btn=>{
   btn.addEventListener('click',()=>{
     document.querySelectorAll('.seg').forEach(b=>b.classList.remove('on'));
@@ -455,40 +463,59 @@ document.querySelectorAll('.seg').forEach(btn=>{
   });
 });
 
-// ─── 时钟 ─────────────────────────────────
-setInterval(()=>{
-  document.getElementById('clock').textContent=new Date().toTimeString().slice(0,8);
-},1000);
-document.getElementById('clock').textContent=new Date().toTimeString().slice(0,8);
+// === 修改1：时钟显示年月日 + 时间（北京时间）===
+function updateClock() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  const seconds = String(now.getSeconds()).padStart(2, '0');
+  document.getElementById('clock').textContent = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+setInterval(updateClock, 1000);
+updateClock();   // 立即显示一次
 
-// ─── 手动刷新 ─────────────────────────────
-function manualRefresh(){
-  const btn=document.getElementById('refreshBtn');
+// === 修改2：真正可用的手动刷新 ===
+async function manualRefresh() {
+  const btn = document.getElementById('refreshBtn');
   btn.classList.add('spinning');
-  fetchAll().finally(()=>setTimeout(()=>btn.classList.remove('spinning'),700));
+  btn.disabled = true;
+
+  try {
+    await fetchAll();
+    console.log('手动刷新完成');
+  } catch (e) {
+    console.error('刷新失败:', e);
+  } finally {
+    setTimeout(() => {
+      btn.classList.remove('spinning');
+      btn.disabled = false;
+    }, 600);
+  }
 }
 
-// ─── 读取 data.json（由 GitHub Actions 每30分钟更新）────
-async function fetchAll(){
-  try{
-    // 加时间戳避免浏览器缓存
+// 读取 data.json
+async function fetchAll() {
+  try {
     const res = await fetch(`data.json?t=${Date.now()}`);
-    if(!res.ok) throw new Error('data.json not found');
+    if (!res.ok) throw new Error('data.json not found');
     const json = await res.json();
     const d = json.data || {};
 
     // ETF 数据
-    for(const[k,v] of Object.entries(d)){
-      if(!live[k]) live[k]={};
-      if(v.today!==undefined) live[k].today = v.today;
-      if(v.price!==undefined) live[k].price = v.price;
+    for (const [k, v] of Object.entries(d)) {
+      if (!live[k]) live[k] = {};
+      if (v.today !== undefined) live[k].today = v.today;
+      if (v.price !== undefined) live[k].price = v.price;
     }
 
-    // 自选数据（watch_300782 → w0 等）
-    WATCH.forEach((w,i)=>{
+    // 自选数据
+    WATCH.forEach((w, i) => {
       const watchKey = `watch_${w.ticker}`;
-      if(d[watchKey]){
-        if(!live[`w${i}`]) live[`w${i}`]={};
+      if (d[watchKey]) {
+        if (!live[`w${i}`]) live[`w${i}`] = {};
         live[`w${i}`].today = d[watchKey].today;
         live[`w${i}`].price = d[watchKey].price;
       }
@@ -497,27 +524,29 @@ async function fetchAll(){
     apiOK = Object.keys(d).length > 0;
 
     // 显示最后更新时间
-    if(json.updated){
+    if (json.updated) {
       const t = new Date(json.updated);
-      // 转北京时间
-      const bj = new Date(t.getTime() + 8*3600*1000);
-      const hms = bj.toISOString().slice(11,19);
-      document.getElementById('data-updated').textContent = `数据 ${hms}`;
+      const bj = new Date(t.getTime() + 8 * 3600 * 1000);
+      const hms = bj.toISOString().slice(11, 19);
+      document.getElementById('data-updated').textContent = `数据 ${bj.toISOString().slice(0,10)} ${hms}`;
     }
 
-  }catch(e){
+  } catch (e) {
     console.warn('data.json fetch failed:', e);
   }
   renderAll();
 }
 
-function renderAll(){
-  renderETF('us');renderETF('hk');renderETF('cn');renderWatch();
+function renderAll() {
+  renderETF('us');
+  renderETF('hk');
+  renderETF('cn');
+  renderWatch();
 }
 
 renderAll();
 fetchAll();
-setInterval(fetchAll, 60000); // 每60秒检查data.json是否更新
+setInterval(fetchAll, 60000); // 每60秒自动检查更新
 </script>
 </body>
 </html>
