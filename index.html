@@ -704,7 +704,7 @@ async function refreshAll() {
     _first = false;
     const ms = ((performance.now()-t0)/1000).toFixed(1);
     const fullDate = formatFullDate();
-    setStatus('ok', `最后更新: ${fullDate} (${ms}s)`);
+    setStatus('ok', `: ${fullDate} (${ms}s)`);
   } catch(e) {
     setStatus('error', '加载失败');
   }
