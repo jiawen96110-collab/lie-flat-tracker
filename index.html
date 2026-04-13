@@ -19,7 +19,7 @@
     --red: #ef4444;
     --green: #22c55e;
     --red-bg: rgba(239,68,68,0.1);
-    --green-bg: rgba(34,197,94,0.1);
+    --green-bg: rgba(34,197,90,0.1);
   }
 
   @media (prefers-color-scheme: light) {
@@ -177,7 +177,6 @@
   .holding .info .ticker {
     font-weight: 600;
     font-size: 0.9rem;
-    cursor: pointer;
     color: var(--accent-us);
   }
   .holding .info .name-cn { font-size: 0.75rem; color: var(--text-dim); margin-top: 1px; }
@@ -272,7 +271,6 @@
     font-weight: 700;
     font-size: 1rem;
     color: #818cf8;
-    cursor: pointer;
   }
   .watch-name { font-size: 0.9rem; color: var(--text); font-weight: 500; }
   .sector-tag {
@@ -476,30 +474,6 @@ function getMarketFlag(sym) {
   return '';
 }
 
-// 核心修复：腾讯微证券官方H5跳转，微信内直接打开，无报错
-function openStockDetail(sym) {
-  let url = '';
-  // A股（sh/sz前缀）：腾讯微证券A股详情页
-  if (sym.startsWith('sh') || sym.startsWith('sz')) {
-    const code = sym.replace('sh','').replace('sz','');
-    const market = sym.startsWith('sh') ? 'SH' : 'SZ';
-    url = `https://stock.qq.com/h5/detail?code=${code}&market=${market}`;
-  }
-  // 港股（hk前缀）：腾讯微证券港股详情页
-  else if (sym.startsWith('hk')) {
-    const code = sym.replace('hk','');
-    url = `https://stock.qq.com/h5/detail?code=${code}&market=HK`;
-  }
-  // 美股（us前缀）：腾讯微证券美股详情页
-  else if (sym.startsWith('us')) {
-    const code = sym.replace('us','').toUpperCase();
-    url = `https://stock.qq.com/h5/detail?code=${code}&market=US`;
-  }
-
-  // 统一打开：微信内直接打开微证券H5，外部浏览器打开网页
-  window.open(url, '_blank');
-}
-
 const PORTFOLIOS = {
   us: {
     name: '美股躺平组合',
@@ -576,8 +550,8 @@ function renderHoldings(key,rt,ytd){
     return `<div class="holding">
       <div class="weight">${h.weight}%</div>
       <div class="info">
-        <div class="ticker" onclick="openStockDetail('${h.code}')">${h.display}</div>
-        <div class="name-cn" onclick="openStockDetail('${h.code}')">${h.nameCn}</div>
+        <div class="ticker">${h.display}</div>
+        <div class="name-cn">${h.nameCn}</div>
       </div>
       <div class="change ${dc}">${fmt(d)}</div>
       <div class="change ${yc}">${fmt(y)}</div>
@@ -618,8 +592,8 @@ function renderWatch(){
     return `<div class="watch-item">
       <div class="watch-left">
         <div class="watch-header">
-          <span class="watch-ticker" onclick="openStockDetail('${w.sym}')">${flag} ${w.ticker}</span>
-          <span class="watch-name" onclick="openStockDetail('${w.sym}')">${w.name}</span>
+          <span class="watch-ticker">${flag} ${w.ticker}</span>
+          <span class="watch-name">${w.name}</span>
           <span class="sector-tag">${w.sector}</span>
           ${w.logic?`<span class="logic-tag">${w.logic}</span>`:''}
         </div>
