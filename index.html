@@ -476,6 +476,41 @@ function getMarketFlag(sym) {
   return '';
 }
 
+// 核心：腾讯微证券小程序跳转 + 网页 fallback
+function openStockDetail(sym) {
+  // 提取纯代码（去掉前缀）
+  let pureCode = sym;
+  let marketType = '';
+  if (sym.startsWith('us')) {
+    pureCode = sym.replace('us','').toUpperCase();
+    marketType = 'us';
+  } else if (sym.startsWith('hk')) {
+    pureCode = sym.replace('hk','');
+    marketType = 'hk';
+  } else if (sym.startsWith('sh') || sym.startsWith('sz')) {
+    pureCode = sym;
+    marketType = sym.startsWith('sh') ? 'sh' : 'sz';
+  }
+
+  // 腾讯微证券小程序 scheme 链接（微信内直接唤起）
+  const wxMiniScheme = `weixin://dl/business/?t=xxxxxx&url=https%3A%2F%2Fstock.qq.com%2Fh5%2Fdetail%2F%3Fcode%3D${encodeURIComponent(pureCode)}%26market%3D${marketType}`;
+  // 网页版 fallback（外部浏览器/无法唤起小程序时打开）
+  const webUrl = getQQLink(sym);
+
+  // 微信环境判断：优先唤起小程序，否则打开网页
+  const isWeChat = /MicroMessenger/i.test(navigator.userAgent);
+  if (isWeChat) {
+    // 微信内：尝试唤起腾讯微证券小程序
+    window.location.href = wxMiniScheme;
+    // 兜底：300ms后打开网页（防止小程序未唤起）
+    setTimeout(() => { window.location.href = webUrl; }, 300);
+  } else {
+    // 外部浏览器：直接打开腾讯财经网页
+    window.open(webUrl, '_blank');
+  }
+}
+
+// 腾讯财经网页链接（兜底用）
 function getQQLink(sym) {
   if (sym.startsWith('us')) {
     const code = sym.replace('us','').toUpperCase();
@@ -564,12 +599,11 @@ function renderHoldings(key,rt,ytd){
   document.getElementById(`holdings-${key}`).innerHTML=p.holdings.map(h=>{
     const q=rt[h.code]||{};const d=q.dailyPct,y=ytd[h.code];
     const dc=getColorClass(d),yc=getColorClass(y);
-    const link=getQQLink(h.code);
     return `<div class="holding">
       <div class="weight">${h.weight}%</div>
       <div class="info">
-        <div class="ticker" onclick="window.open('${link}','_blank')">${h.display}</div>
-        <div class="name-cn">${h.nameCn}</div>
+        <div class="ticker" onclick="openStockDetail('${h.code}')">${h.display}</div>
+        <div class="name-cn" onclick="openStockDetail('${h.code}')">${h.nameCn}</div>
       </div>
       <div class="change ${dc}">${fmt(d)}</div>
       <div class="change ${yc}">${fmt(y)}</div>
@@ -604,15 +638,14 @@ function renderWatch(){
   if(!WATCH.length){c.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-dim)">暂无分享标的</div>';return;}
   c.innerHTML=WATCH.map((w,i)=>{
     const flag=getMarketFlag(w.sym);const d=WATCH_CACHE[w.sym]||{};
-    const link=getQQLink(w.sym);
     let sh,sc='neutral-text';
     if(w.price&&d.price>0){const p=(d.price-w.price)/w.price*100;sc=getColorClass(p);sh=`<span class="since-pct ${sc}">${fmt(p)}</span><span class="since-date">自 ${w.date}<br>${w.price.toFixed(2)}→${d.price.toFixed(2)}</span>`;}
     else{sh=`<span class="since-pct neutral-text" style="font-size:1.2rem"><div class="loading-skeleton" style="width:70px;height:22px"></div></span><span class="since-date">自 ${w.date}</span>`;}
     return `<div class="watch-item">
       <div class="watch-left">
         <div class="watch-header">
-          <span class="watch-ticker" onclick="window.open('${link}','_blank')">${flag} ${w.ticker}</span>
-          <span class="watch-name">${w.name}</span>
+          <span class="watch-ticker" onclick="openStockDetail('${w.sym}')">${flag} ${w.ticker}</span>
+          <span class="watch-name" onclick="openStockDetail('${w.sym}')">${w.name}</span>
           <span class="sector-tag">${w.sector}</span>
           ${w.logic?`<span class="logic-tag">${w.logic}</span>`:''}
         </div>
