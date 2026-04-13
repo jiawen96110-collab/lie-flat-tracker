@@ -476,54 +476,28 @@ function getMarketFlag(sym) {
   return '';
 }
 
-// 核心：腾讯微证券小程序跳转 + 网页 fallback
+// 核心修复：腾讯微证券官方H5跳转，微信内直接打开，无报错
 function openStockDetail(sym) {
-  // 提取纯代码（去掉前缀）
-  let pureCode = sym;
-  let marketType = '';
-  if (sym.startsWith('us')) {
-    pureCode = sym.replace('us','').toUpperCase();
-    marketType = 'us';
-  } else if (sym.startsWith('hk')) {
-    pureCode = sym.replace('hk','');
-    marketType = 'hk';
-  } else if (sym.startsWith('sh') || sym.startsWith('sz')) {
-    pureCode = sym;
-    marketType = sym.startsWith('sh') ? 'sh' : 'sz';
-  }
-
-  // 腾讯微证券小程序 scheme 链接（微信内直接唤起）
-  const wxMiniScheme = `weixin://dl/business/?t=xxxxxx&url=https%3A%2F%2Fstock.qq.com%2Fh5%2Fdetail%2F%3Fcode%3D${encodeURIComponent(pureCode)}%26market%3D${marketType}`;
-  // 网页版 fallback（外部浏览器/无法唤起小程序时打开）
-  const webUrl = getQQLink(sym);
-
-  // 微信环境判断：优先唤起小程序，否则打开网页
-  const isWeChat = /MicroMessenger/i.test(navigator.userAgent);
-  if (isWeChat) {
-    // 微信内：尝试唤起腾讯微证券小程序
-    window.location.href = wxMiniScheme;
-    // 兜底：300ms后打开网页（防止小程序未唤起）
-    setTimeout(() => { window.location.href = webUrl; }, 300);
-  } else {
-    // 外部浏览器：直接打开腾讯财经网页
-    window.open(webUrl, '_blank');
-  }
-}
-
-// 腾讯财经网页链接（兜底用）
-function getQQLink(sym) {
-  if (sym.startsWith('us')) {
-    const code = sym.replace('us','').toUpperCase();
-    return `https://stockapp.finance.qq.com/market/us/${code}`;
-  }
-  if (sym.startsWith('hk')) {
-    const code = sym.replace('hk','');
-    return `https://stockapp.finance.qq.com/market/hk/${code}`;
-  }
+  let url = '';
+  // A股（sh/sz前缀）：腾讯微证券A股详情页
   if (sym.startsWith('sh') || sym.startsWith('sz')) {
-    return `https://gu.qq.com/${sym}`;
+    const code = sym.replace('sh','').replace('sz','');
+    const market = sym.startsWith('sh') ? 'SH' : 'SZ';
+    url = `https://stock.qq.com/h5/detail?code=${code}&market=${market}`;
   }
-  return '#';
+  // 港股（hk前缀）：腾讯微证券港股详情页
+  else if (sym.startsWith('hk')) {
+    const code = sym.replace('hk','');
+    url = `https://stock.qq.com/h5/detail?code=${code}&market=HK`;
+  }
+  // 美股（us前缀）：腾讯微证券美股详情页
+  else if (sym.startsWith('us')) {
+    const code = sym.replace('us','').toUpperCase();
+    url = `https://stock.qq.com/h5/detail?code=${code}&market=US`;
+  }
+
+  // 统一打开：微信内直接打开微证券H5，外部浏览器打开网页
+  window.open(url, '_blank');
 }
 
 const PORTFOLIOS = {
