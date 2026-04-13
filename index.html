@@ -18,8 +18,13 @@
     --accent-watch: #f97316;
     --red: #ef4444;
     --green: #22c55e;
-    --red-bg: rgba(239,68,68,0.1);
-    --green-bg: rgba(34,197,90,0.1);
+    --red-bg: rgba(239,68,68,0.15);
+    --green-bg: rgba(34,197,90,0.15);
+    --tag-orange: #f97316;
+    --tag-blue: #6366f1;
+    --tag-orange-bg: rgba(249,115,22,0.15);
+    --tag-blue-bg: rgba(99,102,241,0.15);
+    --flag-bg: rgba(255,255,255,0.1);
   }
 
   @media (prefers-color-scheme: light) {
@@ -32,8 +37,13 @@
       --text-dim: #6c757d;
       --red: #dc3545;
       --green: #28a745;
-      --red-bg: rgba(220,53,69,0.08);
-      --green-bg: rgba(40,167,69,0.08);
+      --red-bg: rgba(220,53,69,0.15);
+      --green-bg: rgba(40,167,69,0.15);
+      --tag-orange: #f97316;
+      --tag-blue: #6366f1;
+      --tag-orange-bg: rgba(249,115,22,0.15);
+      --tag-blue-bg: rgba(99,102,241,0.15);
+      --flag-bg: rgba(0,0,0,0.05);
     }
   }
 
@@ -44,6 +54,7 @@
     color: var(--text);
     min-height: 100vh;
     padding: 20px;
+    transition: background 0.3s ease;
   }
   .header {
     text-align: center;
@@ -92,10 +103,10 @@
     border-radius: 8px;
     cursor: pointer;
     font-size: 0.85rem;
-    transition: all 0.2s;
+    transition: all 0.2s ease;
   }
-  .btn-refresh:hover { background: rgba(99,102,241,0.25); }
-  .btn-refresh:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-refresh:hover { background: rgba(99,102,241,0.25); transform: translateY(-1px); }
+  .btn-refresh:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
   .portfolios {
     max-width: 1400px;
@@ -109,9 +120,9 @@
     border: 1px solid var(--border);
     border-radius: 16px;
     overflow: hidden;
-    transition: transform 0.2s;
+    transition: all 0.2s ease;
   }
-  .portfolio:hover { transform: translateY(-2px); }
+  .portfolio:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
   .portfolio-header {
     padding: 20px 24px;
     display: flex;
@@ -124,7 +135,12 @@
     align-items: center;
     gap: 10px;
   }
-  .portfolio-header .flag { font-size: 1.5rem; }
+  .portfolio-header .flag { 
+    font-size: 1.2rem;
+    background: var(--flag-bg);
+    padding: 4px 8px;
+    border-radius: 8px;
+  }
   .portfolio-header .name { font-size: 1.1rem; font-weight: 600; }
   .portfolio-header .market-tag {
     font-size: 0.7rem;
@@ -147,9 +163,11 @@
     padding: 12px;
     border-radius: 10px;
     text-align: center;
+    transition: all 0.2s ease;
   }
+  .summary-item:hover { transform: translateY(-1px); }
   .summary-item .summary-label { font-size: 0.75rem; color: var(--text-dim); margin-bottom: 4px; }
-  .summary-item .summary-value { font-size: 1.4rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .summary-item .summary-value { font-size: 1.4rem; font-weight: 700; font-variant-numeric: tabular-nums; transition: all 0.3s ease; }
   .summary-item.positive { background: var(--red-bg); color: var(--red); }
   .summary-item.negative { background: var(--green-bg); color: var(--green); }
   .summary-item.neutral { background: rgba(136,146,168,0.1); color: var(--text-dim); }
@@ -162,9 +180,9 @@
     gap: 8px;
     padding: 10px 12px;
     border-radius: 10px;
-    transition: background 0.15s;
+    transition: all 0.15s ease;
   }
-  .holding:hover { background: var(--card-hover); }
+  .holding:hover { background: var(--card-hover); transform: translateX(2px); }
   .holding .weight {
     background: rgba(255,255,255,0.06);
     border-radius: 6px;
@@ -185,6 +203,7 @@
     font-size: 0.85rem;
     font-weight: 600;
     font-variant-numeric: tabular-nums;
+    transition: all 0.3s ease;
   }
 
   .positive-text { color: var(--red); }
@@ -213,9 +232,9 @@
     border: 1px solid var(--border);
     border-radius: 16px;
     overflow: hidden;
-    transition: transform 0.2s;
+    transition: all 0.2s ease;
   }
-  .watch-card:hover { transform: translateY(-2px); }
+  .watch-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
   .watch-card-header {
     padding: 20px 24px;
     display: flex;
@@ -229,7 +248,12 @@
     align-items: center;
     gap: 10px;
   }
-  .watch-card-header .flag { font-size: 1.5rem; }
+  .watch-card-header .flag { 
+    font-size: 1.2rem;
+    background: var(--flag-bg);
+    padding: 4px 8px;
+    border-radius: 8px;
+  }
   .watch-card-header .name { font-size: 1.1rem; font-weight: 600; }
   .watch-market-tag {
     font-size: 0.7rem;
@@ -251,66 +275,102 @@
     display: grid;
     grid-template-columns: 1fr auto;
     gap: 16px;
-    align-items: center;
-    padding: 14px 12px;
+    align-items: start;
+    padding: 20px 16px;
     border-radius: 12px;
-    transition: background 0.15s;
+    transition: all 0.15s ease;
     border-bottom: 1px solid var(--border);
   }
   .watch-item:last-child { border-bottom: none; }
-  .watch-item:hover { background: var(--card-hover); }
+  .watch-item:hover { background: var(--card-hover); transform: translateX(2px); }
   .watch-left {}
   .watch-header {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
     flex-wrap: wrap;
-    margin-bottom: 6px;
+    margin-bottom: 12px;
+  }
+  .watch-flag {
+    font-size: 1rem;
+    background: var(--flag-bg);
+    padding: 4px 8px;
+    border-radius: 8px;
   }
   .watch-ticker {
     font-weight: 700;
-    font-size: 1rem;
-    color: #818cf8;
-  }
-  .watch-name { font-size: 0.9rem; color: var(--text); font-weight: 500; }
-  .sector-tag {
-    font-size: 0.68rem;
-    font-weight: 600;
-    padding: 2px 8px;
-    border-radius: 5px;
-    background: rgba(249,115,22,0.15);
-    color: var(--accent-watch);
-  }
-  .logic-tag {
-    font-size: 0.68rem;
-    font-weight: 600;
-    padding: 2px 8px;
-    border-radius: 5px;
-    background: rgba(99,102,241,0.15);
+    font-size: 1.2rem;
     color: var(--accent-us);
+    line-height: 1.2;
   }
-  .watch-note { font-size: 0.78rem; color: var(--text-dim); line-height: 1.6; margin-bottom: 6px; }
-  .watch-meta { font-size: 0.75rem; color: var(--text-dim); display: flex; align-items: center; gap: 8px; }
-  .watch-right { text-align: right; flex-shrink: 0; min-width: 120px; }
-  .since-pct {
-    font-size: 1.5rem;
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
-    display: block;
-    line-height: 1.1;
+  .watch-name { 
+    font-size: 1.1rem; 
+    color: var(--text); 
+    font-weight: 500;
+    line-height: 1.2;
+    margin-left: 4px;
   }
-  .since-date { font-size: 0.72rem; color: var(--text-dim); margin-top: 4px; display: block; }
+  .tag {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 8px;
+    margin-left: 8px;
+    line-height: 1.4;
+  }
+  .tag-sector {
+    background: var(--tag-orange-bg);
+    color: var(--tag-orange);
+  }
+  .tag-logic {
+    background: var(--tag-blue-bg);
+    color: var(--tag-blue);
+  }
+  .watch-note { 
+    font-size: 0.95rem; 
+    color: var(--text); 
+    line-height: 1.7;
+    margin-bottom: 12px;
+  }
   .today-pill {
     display: inline-block;
-    padding: 3px 8px;
-    border-radius: 6px;
-    font-size: 0.78rem;
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-size: 0.9rem;
     font-weight: 600;
     font-variant-numeric: tabular-nums;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-bottom: 16px;
   }
   .today-pill.up   { color: var(--red); background: var(--red-bg); }
   .today-pill.down { color: var(--green); background: var(--green-bg); }
   .today-pill.flat { color: var(--text-dim); background: rgba(136,146,168,0.1); }
+  .watch-right { 
+    text-align: right; 
+    flex-shrink: 0; 
+    min-width: 140px;
+  }
+  .since-pct {
+    font-size: 2rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    display: block;
+    line-height: 1.2;
+    margin-bottom: 8px;
+    transition: all 0.3s ease;
+  }
+  .since-date { 
+    font-size: 0.85rem; 
+    color: var(--text-dim); 
+    margin-top: 4px; 
+    display: block;
+    line-height: 1.4;
+  }
+  .price-range {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    line-height: 1.4;
+  }
 
   .loading-skeleton {
     height: 20px;
@@ -345,8 +405,13 @@
       grid-template-columns: 36px 1fr 64px 64px;
       gap: 4px;
     }
-    .watch-item { grid-template-columns: 1fr; gap: 10px; }
-    .watch-right { text-align: left; }
+    .watch-item { 
+      grid-template-columns: 1fr; 
+      gap: 16px;
+      padding: 16px 12px;
+    }
+    .watch-right { text-align: left; margin-top: 12px; }
+    .since-pct { font-size: 1.8rem; }
   }
 </style>
 </head>
@@ -514,9 +579,36 @@ const YTD_BASE = {
 };
 
 const WATCH = [
-  { ticker:'300782', name:'卓胜微', sym:'sz300782', date:'2026-03-26', price:87.00, sector:'射频芯片', logic:'AI手机射频升级', note:'国内射频前端龙头' },
-  { ticker:'MRVL', name:'迈威尔科技', sym:'usMRVL', date:'2026-03-18', price:87.58, sector:'AI芯片', logic:'英伟达战略投资', note:'AI数据中心核心标的' },
-  { ticker:'AAOI', name:'应用光电', sym:'usAAOI', date:'2026-04-10', price:150.60, sector:'光模块', logic:'1.6T高速模块放量', note:'美国光模块龙头' }
+  {
+    ticker: '300782',
+    name: '卓胜微',
+    sym: 'sz300782',
+    date: '2026-03-26',
+    price: 87.00,
+    sector: '射频芯片',
+    logic: 'AI手机射频升级 + 国产替代',
+    note: '国内射频前端绝对龙头，垄断安卓高端机射频模组核心份额，深度受益AI手机射频复杂度升级带来的量价齐升。同时在美国制裁背景下，国产替代窗口打开，滤波器与高端模组国产化加速，成长空间广阔。'
+  },
+  {
+    ticker: 'MRVL',
+    name: '迈威尔科技',
+    sym: 'usMRVL',
+    date: '2026-03-18',
+    price: 87.58,
+    sector: 'AI芯片/光互连',
+    logic: 'AI数据中心定制芯片 + 英伟达战略投资加持',
+    note: 'AI数据中心核心受益标的，ASIC定制芯片+硅光互连双轮驱动，获英伟达20亿美金战略入股深度绑定生态。光模块需求爆发下，高速互连芯片成为核心瓶颈，公司作为行业龙头直接受益AI算力网络建设。'
+  },
+  {
+    ticker: 'AAOI',
+    name: '应用光电',
+    sym: 'usAAOI',
+    date: '2026-04-10',
+    price: 150.60,
+    sector: '光模块/光通信',
+    logic: 'AI算力光互连爆发 + 1.6T超高速光模块放量',
+    note: '美国头部高速光模块厂商，垂直整合自研激光器实现成本优势，已获全球云厂商2亿美金1.6T光模块订单。AI算力中心对超高速光模块需求爆发，公司产品迭代领先，2026年目标营收超10亿美金，业绩增长确定性强。'
+  }
 ];
 
 let _jid = 0;
@@ -568,6 +660,13 @@ function renderSummary(key,rt,ytd){
   document.getElementById(`summary-${key}`).innerHTML=`
     <div class="summary-item ${dsc}"><div class="summary-label">当日涨跌</div><div class="summary-value">${fmt(dv)}</div></div>
     <div class="summary-item ${ysc}"><div class="summary-label">年初至今</div><div class="summary-value">${fmt(yv)}</div></div>`;
+  
+  // 给涨幅加动画
+  const els = document.querySelectorAll(`#summary-${key} .summary-value`);
+  els.forEach(el=>{
+    el.style.transform = 'scale(1.05)';
+    setTimeout(()=>{el.style.transform = 'scale(1)';},300);
+  });
 }
 
 function renderLoadingHoldings(key){
@@ -586,23 +685,37 @@ function renderWatch(){
   if(!WATCH.length){c.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-dim)">暂无分享标的</div>';return;}
   c.innerHTML=WATCH.map((w,i)=>{
     const flag=getMarketFlag(w.sym);const d=WATCH_CACHE[w.sym]||{};
-    let sh,sc='neutral-text';
-    if(w.price&&d.price>0){const p=(d.price-w.price)/w.price*100;sc=getColorClass(p);sh=`<span class="since-pct ${sc}">${fmt(p)}</span><span class="since-date">自 ${w.date}<br>${w.price.toFixed(2)}→${d.price.toFixed(2)}</span>`;}
-    else{sh=`<span class="since-pct neutral-text" style="font-size:1.2rem"><div class="loading-skeleton" style="width:70px;height:22px"></div></span><span class="since-date">自 ${w.date}</span>`;}
+    const pct = w.price&&d.price>0 ? ((d.price-w.price)/w.price*100) : null;
+    const pc = getColorClass(pct);
+    const todayPc = d.dailyPct || 0;
+    const tpc = getPillClass(todayPc);
+    
     return `<div class="watch-item">
       <div class="watch-left">
         <div class="watch-header">
-          <span class="watch-ticker">${flag} ${w.ticker}</span>
+          <span class="watch-flag">${flag}</span>
+          <span class="watch-ticker">${w.ticker}</span>
           <span class="watch-name">${w.name}</span>
-          <span class="sector-tag">${w.sector}</span>
-          ${w.logic?`<span class="logic-tag">${w.logic}</span>`:''}
+          <span class="tag tag-sector">${w.sector}</span>
+          <span class="tag tag-logic">${w.logic}</span>
         </div>
         <div class="watch-note">${w.note}</div>
-        <div class="watch-meta"><span class="today-pill ${getPillClass(d.dailyPct)}">今日 ${fmt(d.dailyPct)}</span></div>
+        <span class="today-pill ${tpc}">今日 ${fmt(todayPc)}</span>
       </div>
-      <div class="watch-right">${sh}</div>
+      <div class="watch-right">
+        <span class="since-pct ${pc}">${fmt(pct)}</span>
+        <span class="since-date">自 ${w.date}</span>
+        <span class="price-range">${w.price.toFixed(2)} → ${d.price?d.price.toFixed(2):'—'}</span>
+      </div>
     </div>`;
   }).join('');
+  
+  // 给涨幅加动画
+  const els = document.querySelectorAll('.since-pct');
+  els.forEach(el=>{
+    el.style.transform = 'scale(1.05)';
+    setTimeout(()=>{el.style.transform = 'scale(1)';},300);
+  });
 }
 
 async function loadPortfolio(key){
