@@ -251,19 +251,20 @@
     background: rgba(249,115,22,0.03);
   }
   .watch-items { padding: 8px 12px 16px; }
+  /* 核心优化：三栏布局，当日左、累计右，左右对称 */
   .watch-item {
     display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 16px;
+    grid-template-columns: 1fr auto auto;
+    gap: 20px;
     align-items: center;
-    padding: 14px 12px;
+    padding: 16px 12px;
     border-radius: 12px;
     transition: background 0.15s;
     border-bottom: 1px solid var(--border);
   }
   .watch-item:last-child { border-bottom: none; }
   .watch-item:hover { background: var(--card-hover); }
-  .watch-left {}
+  .watch-left { flex: 1; }
   .watch-header {
     display: flex;
     align-items: center;
@@ -271,6 +272,7 @@
     flex-wrap: wrap;
     margin-bottom: 6px;
   }
+  .watch-flag { font-size: 1rem; }
   .watch-ticker {
     font-weight: 700;
     font-size: 1rem;
@@ -294,27 +296,40 @@
     color: var(--accent-us);
   }
   .watch-note { font-size: 0.78rem; color: var(--text-dim); line-height: 1.6; margin-bottom: 6px; }
-  .watch-meta { font-size: 0.75rem; color: var(--text-dim); display: flex; align-items: center; gap: 8px; }
-  .watch-right { text-align: right; flex-shrink: 0; min-width: 120px; }
-  .since-pct {
-    font-size: 1.5rem;
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
-    display: block;
-    line-height: 1.1;
+  /* 当日涨幅列（左） */
+  .today-col {
+    text-align: right;
+    flex-shrink: 0;
+    min-width: 100px;
   }
-  .since-date { font-size: 0.72rem; color: var(--text-dim); margin-top: 4px; display: block; }
   .today-pill {
     display: inline-block;
-    padding: 3px 8px;
+    padding: 4px 8px;
     border-radius: 6px;
-    font-size: 0.78rem;
+    font-size: 0.9rem;
     font-weight: 600;
     font-variant-numeric: tabular-nums;
   }
   .today-pill.up   { color: var(--red); background: var(--red-bg); }
   .today-pill.down { color: var(--green); background: var(--green-bg); }
   .today-pill.flat { color: var(--text-dim); background: rgba(136,146,168,0.1); }
+  /* 累计涨幅列（右） */
+  .since-col {
+    text-align: right;
+    flex-shrink: 0;
+    min-width: 120px;
+  }
+  .since-pct {
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.1;
+  }
+  .since-date {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
 
   .loading-skeleton {
     height: 20px;
@@ -337,6 +352,18 @@
     margin: 0 auto;
   }
 
+  /* 响应式：手机端自动切换为上下排列 */
+  @media (max-width: 768px) {
+    .watch-item {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    .today-col, .since-col {
+      text-align: left;
+      margin-top: 8px;
+    }
+  }
+
   @media (max-width: 500px) {
     .portfolios { grid-template-columns: 1fr; }
     .header h1 { font-size: 1.5rem; }
@@ -349,8 +376,6 @@
       grid-template-columns: 36px 1fr 64px 64px;
       gap: 4px;
     }
-    .watch-item { grid-template-columns: 1fr; gap: 10px; }
-    .watch-right { text-align: left; }
   }
 </style>
 </head>
@@ -533,7 +558,8 @@ const WATCH = [
     price:   87.00,
     sector:  '射频芯片',
     logic:   'AI手机射频升级 + 国产替代',
-    note:    '国内射频前端龙头，垄断安卓高端机射频模组，受益AI手机射频复杂度提升与美国制裁替代窗口'
+    note:    '国内射频前端龙头，垄断安卓高端机射频模组，受益AI手机射频复杂度提升与美国制裁替代窗口',
+    flag:    '🇨🇳'
   },
   {
     ticker:  'MRVL',
@@ -543,7 +569,8 @@ const WATCH = [
     price:   87.58,
     sector:  'AI芯片/光互连',
     logic:   'AI数据中心定制芯片 + 英伟达战略投资加持',
-    note:    'AI数据中心核心标的，ASIC定制芯片+硅光互连双轮驱动，英伟达20亿战略入股，光模块需求爆发最大受益者之一'
+    note:    'AI数据中心核心标的，ASIC定制芯片+硅光互连双轮驱动，英伟达20亿战略入股，光模块需求爆发最大受益者之一',
+    flag:    '🇺🇸'
   },
   {
     ticker:  'AAOI',
@@ -553,7 +580,8 @@ const WATCH = [
     price:   150.60,
     sector:  '光模块/光通信',
     logic:   'AI算力光互连爆发 + 1.6T超高速光模块放量',
-    note:    '美国光模块龙头，垂直整合自研激光器降本，已获云厂商2亿美元1.6T订单，2026年目标营收超10亿美元'
+    note:    '美国光模块龙头，垂直整合自研激光器降本，已获云厂商2亿美元1.6T订单，2026年目标营收超10亿美元',
+    flag:    '🇺🇸'
   }
 ];
 
@@ -657,24 +685,29 @@ function renderWatch() {
       sinceClass = getColorClass(pct);
       sinceHtml = `
         <span class="since-pct ${sinceClass}">${fmt(pct)}</span>
-        <span class="since-date">自 ${w.date}<br>${w.price.toFixed(2)} → ${d.price.toFixed(2)}</span>`;
+        <span class="since-date">${w.date} · ${w.price.toFixed(2)} → ${d.price.toFixed(2)}</span>`;
     } else {
       sinceHtml = `
-        <span class="since-pct neutral-text" style="font-size:1.2rem"><div class="loading-skeleton" style="width:70px;height:22px;margin-left:auto"></div></span>
-        <span class="since-date">自 ${w.date}</span>`;
+        <span class="since-pct neutral-text" style="font-size:1.2rem"><div class="loading-skeleton" style="width:70px;height:22px"></div></span>
+        <span class="since-date">${w.date}</span>`;
     }
     return `<div class="watch-item">
       <div class="watch-left">
         <div class="watch-header">
+          <span class="watch-flag">${w.flag || ''}</span>
           <span class="watch-ticker">${w.ticker}</span>
           <span class="watch-name">${w.name}</span>
           <span class="sector-tag">${w.sector}</span>
           ${w.logic ? `<span class="logic-tag">${w.logic}</span>` : ''}
         </div>
         <div class="watch-note">${w.note}</div>
-        <div class="watch-meta"><span class="today-pill ${getPillClass(d.dailyPct)}">今日 ${fmt(d.dailyPct)}</span></div>
       </div>
-      <div class="watch-right">${sinceHtml}</div>
+      <!-- 当日涨幅列（左） -->
+      <div class="today-col">
+        <span class="today-pill ${getPillClass(d.dailyPct)}">今日 ${fmt(d.dailyPct)}</span>
+      </div>
+      <!-- 累计涨幅列（右） -->
+      <div class="since-col">${sinceHtml}</div>
     </div>`;
   }).join('');
 }
