@@ -5,22 +5,44 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>躺平投资组合追踪器</title>
 <style>
-  :root {
-    --bg: #0f1117;
-    --card: #1a1d28;
-    --card-hover: #22263a;
-    --border: #2a2e3e;
-    --text: #e2e8f0;
-    --text-dim: #8892a8;
-    --accent-us: #6366f1;
-    --accent-hk: #f59e0b;
-    --accent-a: #ef4444;
-    --accent-watch: #f97316;
-    --red: #ef4444;
-    --green: #22c55e;
-    --red-bg: rgba(239,68,68,0.1);
-    --green-bg: rgba(34,197,94,0.1);
+  /* 自动日间/夜间模式 */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f1117;
+      --card: #1a1d28;
+      --card-hover: #22263a;
+      --border: #2a2e3e;
+      --text: #e2e8f0;
+      --text-dim: #8892a8;
+      --accent-us: #6366f1;
+      --accent-hk: #f59e0b;
+      --accent-a: #ef4444;
+      --accent-watch: #f97316;
+      --red: #ef4444;
+      --green: #22c55e;
+      --red-bg: rgba(239,68,68,0.1);
+      --green-bg: rgba(34,197,94,0.1);
+    }
   }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #ffffff;
+      --card: #f8f9fa;
+      --card-hover: #e9ecef;
+      --border: #dee2e6;
+      --text: #212529;
+      --text-dim: #6c757d;
+      --accent-us: #4f46e5;
+      --accent-hk: #d97706;
+      --accent-a: #dc2626;
+      --accent-watch: #ea580c;
+      --red: #dc2626;
+      --green: #16a34a;
+      --red-bg: rgba(220,38,38,0.08);
+      --green-bg: rgba(22,163,74,0.08);
+    }
+  }
+
   * { margin:0; padding:0; box-sizing:border-box; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
@@ -28,6 +50,7 @@
     color: var(--text);
     min-height: 100vh;
     padding: 20px;
+    transition: background 0.3s, color 0.3s;
   }
   .header {
     text-align: center;
@@ -94,7 +117,7 @@
     border: 1px solid var(--border);
     border-radius: 16px;
     overflow: hidden;
-    transition: transform 0.2s;
+    transition: transform 0.2s, background 0.3s, border-color 0.3s;
   }
   .portfolio:hover { transform: translateY(-2px); }
   .portfolio-header {
@@ -194,7 +217,7 @@
     border: 1px solid var(--border);
     border-radius: 16px;
     overflow: hidden;
-    transition: transform 0.2s;
+    transition: transform 0.2s, background 0.3s, border-color 0.3s;
   }
   .watch-card:hover { transform: translateY(-2px); }
   .watch-card-header {
@@ -417,6 +440,16 @@
 </details>
 
 <script>
+// 日间/夜间模式切换监听（自动）
+if (window.matchMedia) {
+  const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+  function updateMode() {
+    document.documentElement.setAttribute('data-theme', darkModeMediaQuery.matches ? 'dark' : 'light');
+  }
+  darkModeMediaQuery.addEventListener('change', updateMode);
+  updateMode();
+}
+
 function dbg(msg) {
   const el = document.getElementById('dbg');
   if (el) { el.textContent += new Date().toLocaleTimeString() + ' ' + msg + '\n'; el.scrollTop = el.scrollHeight; }
