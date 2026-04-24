@@ -5,183 +5,92 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>躺平投资组合追踪器</title>
 <style>
+  * { margin:0; padding:0; box-sizing:border-box; font-style:normal; }
+  body {
+    font-family: "Microsoft YaHei",sans-serif;
+    font-size: 13px;
+    min-height: 100vh;
+    padding: 16px;
+  }
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #0f1117; --card: #1a1d28; --card-hover: #22263a; --border: #2a2e3e;
-      --text: #e2e8f0; --text-dim: #8892a8; --accent-us: #6366f1; --accent-hk: #f59e0b;
-      --accent-a: #ef4444; --accent-watch: #f97316; --red: #ef4444; --green: #22c55e;
-      --red-bg: rgba(239,68,68,0.1); --green-bg: rgba(34,197,94,0.1);
+      --bg:#0f1117;--card:#1a1d28;--card-hover:#22263a;--border:#2a2e3e;
+      --text:#e2e8f0;--text-dim:#8892a8;
+      --red:#ef4444;--green:#22c55e;
     }
   }
   @media (prefers-color-scheme: light) {
     :root {
-      --bg: #ffffff; --card: #f8f9fa; --card-hover: #e9ecef; --border: #dee2e6;
-      --text: #212529; --text-dim: #6c757d; --accent-us: #4f46e5; --accent-hk: #d97706;
-      --accent-a: #dc2626; --accent-watch: #ea580c; --red: #dc2626; --green: #16a34a;
-      --red-bg: rgba(220,38,38,0.08); --green-bg: rgba(22,163,74,0.08);
+      --bg:#fff;--card:#f8f9fa;--card-hover:#e9ecef;--border:#dee2e6;
+      --text:#212529;--text-dim:#6c757d;
+      --red:#dc2626;--green:#16a34a;
     }
   }
+  body{background:var(--bg);color:var(--text);}
+  .header{text-align:center;margin-bottom:15px;}
+  .header h1{font-size:1.5rem;margin-bottom:4px;}
+  .subtitle{color:var(--text-dim);font-size:0.8rem;}
+  .status-bar{display:flex;justify-content:center;align-items:center;gap:10px;margin:8px 0 16px;}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--green);}
+  .time{color:var(--text-dim);font-size:0.8rem;}
+  .btn-refresh{border-radius:6px;padding:4px 10px;border:none;background:rgba(99,102,241,.15);color:#818cf8;cursor:pointer;}
 
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
-    background: var(--bg); color: var(--text);
-    min-height: 100vh; padding: 20px;
-  }
-  .header { text-align: center; padding: 20px 0; }
-  .header h1 { font-size: 1.8rem; margin-bottom: 6px; }
-  .subtitle { color: var(--text-dim); font-size: 0.9rem; }
+  .portfolios{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;}
+  .portfolio{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+  .portfolio-header{padding:12px;display:flex;justify-content:space-between;border-bottom:1px solid var(--border);}
+  .market-tag{font-size:0.7rem;padding:2px 5px;border-radius:3px;background:rgba(99,102,241,.15);color:#818cf8;}
+  .portfolio-summary{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px;border-bottom:1px solid var(--border);}
+  .summary-item{padding:8px;border-radius:6px;text-align:center;}
+  .summary-label{font-size:0.7rem;color:var(--text-dim);}
+  .summary-value{font-size:1rem;}
+  .neutral{background:rgba136,146,168,.1;color:var(--text-dim);}
 
-  .status-bar {
-    display: flex; justify-content: center; align-items: center;
-    gap: 12px; margin: 10px 0 20px;
-  }
-  .dot { width:8px; height:8px; border-radius:50%; background:var(--green); }
-  .time { color:var(--text-dim); font-size:0.85rem; }
-  .btn-refresh {
-    background: rgba(99,102,241,0.15);
-    border: 1px solid rgba(99,102,241,0.3);
-    color: var(--accent-us);
-    padding: 5px 12px; border-radius: 8px;
-    font-size: 0.8rem; cursor: pointer;
-  }
-
-  .portfolios {
-    max-width: 1000px; margin: 0 auto;
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 16px;
-  }
-  .portfolio {
-    background: var(--card); border:1px solid var(--border);
-    border-radius: 14px; overflow: hidden;
-  }
-  .portfolio-header {
-    padding: 14px; display: flex; justify-content: space-between;
-    border-bottom: 1px solid var(--border);
-  }
-  .market-tag { font-size:0.7rem; padding:2px 6px; border-radius:4px; }
-  .us .market-tag { background:rgba(99,102,241,0.15); color:var(--accent-us); }
-  .hk .market-tag { background:rgba(245,158,11,0.15); color:var(--accent-hk); }
-  .a .market-tag { background:rgba(239,68,68,0.15); color:var(--accent-a); }
-
-  .portfolio-summary {
-    padding:12px; display:grid; grid-template-columns:1fr 1fr; gap:10px;
-    border-bottom:1px solid var(--border);
-  }
-  .summary-item { padding:10px; border-radius:8px; text-align:center; }
-  .summary-label { font-size:0.7rem; color:var(--text-dim); }
-  .summary-value { font-size:1.2rem; font-weight:700; }
-  .positive { background:var(--red-bg); color:var(--red); }
-  .negative { background:var(--green-bg); color:var(--green); }
-  .neutral { background:rgba(136,146,168,0.1); color:var(--text-dim); }
-
-  .holdings { padding:8px; }
-  .holding {
-    display:grid; grid-template-columns:40px 1fr 70px 70px;
-    align-items:center; padding:8px; gap:6px;
-  }
-  .weight { font-size:0.7rem; color:var(--text-dim); text-align:center; }
-  .ticker { font-weight:600; font-size:0.9rem; }
-  .name-cn { font-size:0.75rem; color:var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .change { text-align:right; font-size:0.85rem; font-weight:600; }
-  .positive-text { color:var(--red); }
-  .negative-text { color:var(--green); }
-
-  .change-header {
-    display:grid; grid-template-columns:40px 1fr 70px 70px;
-    padding:6px 8px; font-size:0.7rem; color:var(--text-dim);
-  }
+  .holdings{padding:6px;}
+  .holding{display:grid;grid-template-columns:36px 1fr 65px 65px;align-items:center;padding:6px;gap:4px;}
+  .weight{font-size:0.7rem;color:var(--text-dim);text-align:center;}
+  .ticker{font-size:0.85rem;}
+  .name-cn{font-size:0.75rem;color:var(--text-dim);white-space:nowrap;}
+  .change{text-align:right;font-size:0.8rem;}
+  .positive-text{color:var(--red);}
+  .negative-text{color:var(--green);}
+  .change-header{display:grid;grid-template-columns:36px 1fr 65px 65px;padding:5px 6px;font-size:0.7rem;color:var(--text-dim);}
   .change-header span:nth-child(3),.change-header span:nth-child(4){text-align:right;}
 
-  .watch-section { max-width:1000px; margin:24px auto 0; }
-  .watch-card {
-    background:var(--card); border:1px solid var(--border); border-radius:14px;
-    overflow:hidden;
-  }
-  .watch-card-header {
-    padding:14px; display:flex; justify-content:space-between;
-    border-bottom:1px solid var(--border);
-    background:rgba(249,115,22,0.04);
-  }
-  .watch-market-tag {
-    font-size:0.7rem; padding:2px 6px; border-radius:4px;
-    background:rgba(249,115,22,0.15); color:var(--accent-watch);
-  }
-
-  .watch-items { padding: 0; }
-  .watch-item {
-    border-bottom: 1px solid var(--border);
-    cursor: pointer; user-select: none;
-  }
-  .watch-item:hover { background:var(--card-hover); }
-  .watch-item:last-child { border-bottom:none; }
-
-  .watch-header {
-    display: grid;
-    grid-template-columns: 1fr 80px 80px;
-    padding: 6px 16px;
-    font-size: 0.7rem;
-    color: var(--text-dim);
-  }
-  .watch-header span:nth-child(2),
-  .watch-header span:nth-child(3) { text-align: right; }
-
-  .watch-row {
-    display: grid;
-    grid-template-columns: 1fr 80px 80px;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-  }
-  .watch-left { display:flex; align-items:center; gap:8px; min-width:0; }
-  .watch-flag { font-size:1rem; flex-shrink:0; }
-  .watch-ticker { font-weight:600; font-size:0.95rem; flex-shrink:0; }
-  .watch-name { font-size:0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-  .watch-daily, .watch-since {
-    font-weight:600; font-size:0.9rem;
-    text-align: right;
-  }
-
-  .watch-detail {
-    margin-top:0; padding: 0 16px 12px;
-    border-top:1px dashed var(--border);
-    display:none;
-  }
-  .watch-detail.open { display:block; }
-  .tags { display:flex; gap:6px; margin-bottom:8px; flex-wrap:wrap; }
-  .tag {
-    font-size:0.7rem; padding:3px 6px; border-radius:4px;
-    background:rgba(99,102,241,0.15); color:#818cf8;
-  }
-  .watch-logic {
-    font-size:0.85rem; line-height:1.5;
-    margin-bottom:6px;
-  }
-  .watch-note {
-    font-size:0.8rem; color:var(--text-dim); line-height:1.5;
-  }
+  .watch-section{max-width:1000px;margin:20px auto 0;}
+  .watch-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+  .watch-card-header{padding:12px;display:flex;justify-content:space-between;border-bottom:1px solid var(--border);}
+  .watch-items{padding:0;}
+  .watch-item{border-bottom:1px solid var(--border);cursor:pointer;user-select:none;}
+  .watch-item:last-child{border-bottom:none;}
+  .watch-header{display:grid;grid-template-columns:1fr 70px 70px;padding:5px 14px;font-size:0.7rem;color:var(--text-dim);}
+  .watch-header span:nth-child(2),.watch-header span:nth-child(3){text-align:right;}
+  .watch-row{display:grid;grid-template-columns:1fr 70px 70px;align-items:center;gap:8px;padding:10px 14px;}
+  .watch-left{display:flex;align-items:center;gap:6px;}
+  .watch-flag{font-size:0.9rem;}
+  .watch-ticker{font-size:0.85rem;}
+  .watch-name{font-size:0.8rem;white-space:nowrap;overflow:visible;}
+  .watch-daily,.watch-since{font-size:0.8rem;text-align:right;}
+  .watch-detail{padding:0 14px 10px;border-top:1px dashed var(--border);display:none;}
+  .watch-detail.open{display:block;}
+  .tags{display:flex;gap:4px;margin:6px 0;}
+  .tag{font-size:0.7rem;padding:2px 5px;border-radius:3px;background:rgba99,102,241,.15;color:#818cf8;}
+  .watch-logic,.watch-note{font-size:0.78rem;line-height:1.4;margin:4px 0;}
 </style>
 </head>
 <body>
-
 <div class="header">
   <h1>躺平投资组合追踪器</h1>
   <p class="subtitle">三市场ETF · 实时行情 · 自选追踪</p>
 </div>
-
 <div class="status-bar">
-  <div class="dot" id="statusDot"></div>
+  <div class="dot"></div>
   <span class="time" id="statusText">加载中...</span>
   <button class="btn-refresh" onclick="refreshAll()">刷新</button>
 </div>
 
 <div class="portfolios">
   <div class="portfolio us">
-    <div class="portfolio-header">
-      <div><span>🇺🇸</span> 美股躺平组合</div>
-      <span class="market-tag">US</span>
-    </div>
+    <div class="portfolio-header"><div>🇺🇸 美股躺平组合</div><span class="market-tag">US</span></div>
     <div class="portfolio-summary">
       <div class="summary-item neutral"><div class="summary-label">当日</div><div class="summary-value">—</div></div>
       <div class="summary-item neutral"><div class="summary-label">YTD</div><div class="summary-value">—</div></div>
@@ -191,12 +100,8 @@
       <div id="holdings-us"></div>
     </div>
   </div>
-
   <div class="portfolio hk">
-    <div class="portfolio-header">
-      <div><span>🇭🇰</span> 港股躺平组合</div>
-      <span class="market-tag">HK</span>
-    </div>
+    <div class="portfolio-header"><div>🇭🇰 港股躺平组合</div><span class="market-tag">HK</span></div>
     <div class="portfolio-summary">
       <div class="summary-item neutral"><div class="summary-label">当日</div><div class="summary-value">—</div></div>
       <div class="summary-item neutral"><div class="summary-label">YTD</div><div class="summary-value">—</div></div>
@@ -206,12 +111,8 @@
       <div id="holdings-hk"></div>
     </div>
   </div>
-
   <div class="portfolio a">
-    <div class="portfolio-header">
-      <div><span>🇨🇳</span> A股躺平组合</div>
-      <span class="market-tag">A</span>
-    </div>
+    <div class="portfolio-header"><div>🇨🇳 A股躺平组合</div><span class="market-tag">A</span></div>
     <div class="portfolio-summary">
       <div class="summary-item neutral"><div class="summary-label">当日</div><div class="summary-value">—</div></div>
       <div class="summary-item neutral"><div class="summary-label">YTD</div><div class="summary-value">—</div></div>
@@ -225,15 +126,13 @@
 
 <div class="watch-section">
   <div class="watch-card">
-    <div class="watch-card-header">
-      <div>⭐ Z先生分享标的</div>
-      <span class="watch-market-tag">自选</span>
-    </div>
+    <div class="watch-card-header"><div>⭐ Z先生分享标的</div><span class="market-tag">自选</span></div>
     <div class="watch-items" id="watch-list"></div>
   </div>
 </div>
 
 <script>
+// 复原 完整躺平组合ETF列表
 const PORTFOLIOS = {
   us: { holdings: [
     { code: 'usQQQ', display: 'QQQ', nameCn: '纳指100', weight:25 },
@@ -259,62 +158,56 @@ const PORTFOLIOS = {
 };
 
 const WATCH = [
-  { ticker:'300782',name:'卓胜微',sym:'sz300782',date:'2026-03-26',price:87.00,sector:'射频芯片',logic:'AI手机射频升级 + 国产替代',note:'国内射频前端龙头，垄断安卓高端机射频模组，受益AI手机射频复杂度提升与国产替代加速',flag:'🇨🇳' },
-  { ticker:'002428',name:'云南锗业',sym:'sz002428',date:'2026-04-10',price:56.79,sector:'磷化铟/锗半导体材料',logic:'光模块上游核心晶圆材料',note:'国内稀缺量产磷化铟晶圆企业，主营磷化铟单晶、锗基半导体衬底，AI光模块激光器核心上游原材料，深度受益光通信产业链高景气',flag:'🇨🇳' },
-  { ticker:'300136',name:'信维通信',sym:'sz300136',date:'2026-04-22',price:79.52,sector:'射频连接器/商业航天',logic:'SpaceX星链终端核心供应商',note:'国内射频器件龙头，深度绑定星链供应链，供应高频高速连接器，适配卫星终端航天级要求，商业卫星组网高景气加持',flag:'🇨🇳' },
-  { ticker:'002149',name:'西部材料',sym:'sz002149',date:'2026-04-22',price:64.10,sector:'高温合金/特种航天材料',logic:'SpaceX火箭发动机耐热材料',note:'稀有金属高端材料龙头，供应火箭发动机高温特种合金，切入猎鹰、星舰供应链，航天军工+商业火箭双赛道共振',flag:'🇨🇳' },
-  { ticker:'603308',name:'应流股份',sym:'sh603308',date:'2026-04-22',price:75.45,sector:'高端精密铸造/航空航天',logic:'SpaceX动力系统精密铸件',note:'高温合金精密铸造龙头，通过航天体系认证，为火箭发动机提供核心铸件，受益商业火箭量产扩张',flag:'🇨🇳' },
-  { ticker:'603601',name:'再升科技',sym:'sh603601',date:'2026-04-22',price:15.82,sector:'玻纤隔热新材料/航天热控',logic:'SpaceX箭体卫星隔热材料',note:'高端绝热玻纤材料龙头，供货航天级耐高温隔热制品，应用于星链卫星与火箭箭体热控防护，赛道稀缺性突出',flag:'🇨🇳' },
-  { ticker:'605123',name:'派克新材',sym:'sh605123',date:'2026-04-22',price:104.29,sector:'高端合金锻件/航天结构件',logic:'SpaceX箭体及发动机锻件',note:'航空航天高端锻件核心厂商，产品覆盖火箭结构件、发动机关键锻件，切入海外商业航天供应链，业绩增量明确',flag:'🇨🇳' },
-  { ticker:'MRVL',name:'迈威尔科技',sym:'usMRVL',date:'2026-03-18',price:87.58,sector:'AI芯片/光互连',logic:'AI数据中心定制芯片 + 光互连芯片',note:'AI数据中心核心标的，ASIC定制芯片+硅光互连双轮驱动，深度受益全球算力基建扩张',flag:'🇺🇸' },
-  { ticker:'AAOI',name:'应用光电',sym:'usAAOI',date:'2026-04-10',price:150.60,sector:'光模块/光通信',logic:'AI算力光互连爆发 + 1.6T高速光模块',note:'高速光模块龙头，垂直整合激光器芯片，深度受益AI算力网络对1.6T及以上光模块需求爆发',flag:'🇺🇸' },
-  { ticker:'06869',name:'长飞光纤',sym:'hk06869',date:'2026-04-17',price:206.00,sector:'光纤光缆/光通信',logic:'AI算力光纤光缆刚需 + 海外出海',note:'全球光纤光缆龙头，受益AI算力网络建设、海外需求复苏，低估值高股息，具备强周期底部配置价值',flag:'🇭🇰' }
+  { ticker:'300782',name:'卓胜微',sym:'sz300782',date:'2026-03-26',price:87.00,sector:'射频芯片',logic:'AI手机射频升级+国产替代',note:'国内射频前端龙头，垄断安卓高端机射频模组，受益AI手机射频复杂度提升与国产替代加速',flag:'🇨🇳' },
+  { ticker:'002428',name:'云南锗业',sym:'sz002428',date:'2026-04-10',price:56.79,sector:'磷化铟/锗半导体材料',logic:'光模块上游核心晶圆材料',note:'国内稀缺量产磷化铟晶圆企业，主营磷化铟单晶、锗基半导体衬底，AI光模块激光器核心上游原材料',flag:'🇨🇳' },
+  { ticker:'300136',name:'信维通信',sym:'sz300136',date:'2026-04-22',price:79.52,sector:'射频连接器/商业航天',logic:'SpaceX星链终端核心供应商',note:'国内射频器件龙头，深度绑定星链供应链，供应高频高速连接器，适配卫星终端航天级要求',flag:'🇨🇳' },
+  { ticker:'002149',name:'西部材料',sym:'sz002149',date:'2026-04-22',price:64.10,sector:'高温合金/特种航天材料',logic:'SpaceX火箭发动机耐热材料',note:'稀有金属高端材料龙头，供应火箭发动机高温特种合金，切入猎鹰、星舰供应链',flag:'🇨🇳' },
+  { ticker:'603308',name:'应流股份',sym:'sh603308',date:'2026-04-22',price:75.45,sector:'高端精密铸造/航空航天',logic:'SpaceX动力系统精密铸件',note:'高温合金精密铸造龙头，通过航天体系认证，为火箭发动机提供核心铸件',flag:'🇨🇳' },
+  { ticker:'603601',name:'再升科技',sym:'sh603601',date:'2026-04-22',price:15.82,sector:'玻纤隔热新材料/航天热控',logic:'SpaceX箭体卫星隔热材料',note:'高端绝热玻纤材料龙头，供货航天级耐高温隔热制品，应用于星链卫星与火箭箭体热控防护',flag:'🇨🇳' },
+  { ticker:'605123',name:'派克新材',sym:'sh605123',date:'2026-04-22',price:104.29,sector:'高端合金锻件/航天结构件',logic:'SpaceX箭体及发动机锻件',note:'航空航天高端锻件核心厂商，产品覆盖火箭结构件、发动机关键锻件',flag:'🇨🇳' },
+  { ticker:'MRVL',name:'迈威尔科技',sym:'usMRVL',date:'2026-03-18',price:87.58,sector:'AI芯片/光互连',logic:'AI数据中心定制芯片+光互连芯片',note:'AI数据中心核心标的，ASIC定制芯片+硅光互连双轮驱动，深度受益全球算力基建扩张',flag:'🇺🇸' },
+  { ticker:'AAOI',name:'应用光电',sym:'usAAOI',date:'2026-04-10',price:150.60,sector:'光模块/光通信',logic:'AI算力光互连爆发+1.6T高速光模块',note:'高速光模块龙头，垂直整合激光器芯片，深度受益AI算力网络需求爆发',flag:'🇺🇸' },
+  { ticker:'06869',name:'长飞光纤',sym:'hk06869',date:'2026-04-17',price:206.00,sector:'光纤光缆/光通信',logic:'AI算力光纤光缆刚需+海外出海',note:'全球光纤光缆龙头，受益AI算力网络建设、海外需求复苏',flag:'🇭🇰' }
 ];
 
-// ==========================================
-// 【关键修复】直接内置模拟数据，100%显示涨幅
-// ==========================================
-const WATCH_CACHE = {
-  "sz300782":{ price:94.5, dailyPct:2.85 },
-  "sz002428":{ price:61.2, dailyPct:1.52 },
-  "sz300136":{ price:83.7, dailyPct:0.95 },
-  "sz002149":{ price:67.4, dailyPct:1.88 },
-  "sh603308":{ price:79.2, dailyPct:2.15 },
-  "sh603601":{ price:16.9, dailyPct:1.12 },
-  "sh605123":{ price:109.8, dailyPct:1.45 },
-  "usMRVL":{ price:92.3, dailyPct:3.15 },
-  "usAAOI":{ price:158.2, dailyPct:2.88 },
-  "hk06869":{ price:218.5, dailyPct:1.95 }
-};
+const WATCH_CACHE = {};
+function fmt(v){if(v==null||isNaN(v))return'—';return(v>0?'+':'')+v.toFixed(2)+'%'}
+function toggleDetail(i){document.getElementById('detail-'+i).classList.toggle('open')}
 
-function fmt(v) {
-  if(v==null||isNaN(v))return '—';
-  return (v>0?'+' : '')+v.toFixed(2)+'%';
+// 原版稳定行情接口，保证出数据
+function fetchStockData(){
+  const codes = WATCH.map(x=>x.sym).join(',');
+  window.stockCb = function(res){
+    const list = res.split(';');
+    WATCH.forEach((item,idx)=>{
+      const row = list[idx];
+      if(!row)return;
+      const arr = row.split('~');
+      const now = parseFloat(arr[3]);
+      const last = parseFloat(item.sym.includes('hk')?arr[5]:arr[4]);
+      if(now&&last){
+        WATCH_CACHE[item.sym] = {
+          price: now,
+          dailyPct: ((now-last)/last)*100
+        }
+      }
+    })
+    renderWatch();
+  }
+  const s = document.createElement('script');
+  s.src = `https://qt.gtimg.cn/q=${codes}&callback=stockCb`;
+  document.head.appendChild(s);
 }
 
-function toggleDetail(i) {
-  const el = document.getElementById('detail-'+i);
-  el.classList.toggle('open');
-}
-
-// 渲染自选列表（和ETF表头对齐）
-function renderWatch() {
-  const container = document.getElementById('watch-list');
-  container.innerHTML = `
-    <div class="watch-header">
-      <span>持仓</span>
-      <span>当日</span>
-      <span>分享以来</span>
-    </div>
-  `;
-
-  container.innerHTML += WATCH.map((w,i)=>{
-    const d = WATCH_CACHE[w.sym] || {price:w.price, dailyPct:0};
-    const since = ((d.price - w.price) / w.price * 100);
-    const dailyClass = d.dailyPct>0?'positive-text':'negative-text';
-    const sinceClass = since>0?'positive-text':'negative-text';
-
-    return `
+// 渲染自选 表头改为【当日 / 累计】
+function renderWatch(){
+  let html = `<div class="watch-header"><span>持仓</span><span>当日</span><span>累计</span></div>`;
+  WATCH.forEach((w,i)=>{
+    const d = WATCH_CACHE[w.sym]||{};
+    const since = d.price ? ((d.price-w.price)/w.price*100) : null;
+    let dCls = d.dailyPct>0?'positive-text':d.dailyPct<0?'negative-text':'';
+    let sCls = since>0?'positive-text':since<0?'negative-text':'';
+    html += `
     <div class="watch-item" onclick="toggleDetail(${i})">
       <div class="watch-row">
         <div class="watch-left">
@@ -322,48 +215,53 @@ function renderWatch() {
           <span class="watch-ticker">${w.ticker}</span>
           <span class="watch-name">${w.name}</span>
         </div>
-        <div class="watch-daily ${dailyClass}">${fmt(d.dailyPct)}</div>
-        <div class="watch-since ${sinceClass}">${fmt(since)}</div>
+        <div class="watch-daily ${dCls}">${fmt(d.dailyPct)}</div>
+        <div class="watch-since ${sCls}">${fmt(since)}</div>
       </div>
       <div class="watch-detail" id="detail-${i}">
         <div class="tags"><span class="tag">行业：${w.sector}</span></div>
         <div class="watch-logic">📈 核心逻辑：${w.logic}</div>
         <div class="watch-note">📝 详细备注：${w.note}</div>
-        <div style="font-size:0.7rem;color:var(--text-dim);margin-top:6px">
-          分享日收盘价：${w.price} 元 · 分享日期：${w.date}
-        </div>
+        <div style="font-size:0.7rem;color:var(--text-dim);margin-top:6px">分享日收盘价：${w.price} 元 · 分享日期：${w.date}</div>
       </div>
-    </div>`;
-  }).join('');
+    </div>`
+  })
+  document.getElementById('watch-list').innerHTML = html;
 }
 
-function renderPort() {
+// 渲染三大组合ETF
+function renderPort(){
   ['us','hk','a'].forEach(m=>{
-    const el=document.getElementById('holdings-'+m);
-    el.innerHTML=PORTFOLIOS[m].holdings.map(h=>`
+    const el = document.getElementById('holdings-'+m);
+    let html = '';
+    PORTFOLIOS[m].holdings.forEach(h=>{
+      html += `
       <div class="holding">
         <div class="weight">${h.weight}%</div>
         <div><div class="ticker">${h.display}</div><div class="name-cn">${h.nameCn}</div></div>
         <div class="change">—</div>
         <div class="change">—</div>
-      </div>`).join('');
-  });
+      </div>`;
+    });
+    el.innerHTML = html;
+  })
 }
 
-function refreshAll() {
-  document.getElementById('statusText').textContent='刷新中...';
-  renderPort();
-  renderWatch();
+function refreshAll(){
+  document.getElementById('statusText').innerText = '刷新中...';
+  fetchStockData();
   setTimeout(()=>{
-    document.getElementById('statusText').textContent='已更新 '+new Date().toLocaleTimeString();
-  },800);
+    document.getElementById('statusText').innerText = '已更新 '+new Date().toLocaleTimeString();
+  },600)
 }
 
-document.addEventListener('DOMContentLoaded',()=>{
+// 页面载入立刻执行，恢复所有数据
+window.onload = function(){
   renderPort();
   renderWatch();
+  fetchStockData();
   setInterval(refreshAll,30000);
-});
+}
 </script>
 </body>
 </html>
