@@ -22,7 +22,6 @@
       --red-bg: rgba(247, 108, 108, 0.12);
       --green-bg: rgba(76, 175, 125, 0.12);
       --shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-      --gradient-bg: linear-gradient(135deg, #0a0e1a 0%, #151c2e 100%);
     }
   }
   @media (prefers-color-scheme: light) {
@@ -42,7 +41,6 @@
       --red-bg: rgba(239, 68, 68, 0.08);
       --green-bg: rgba(16, 185, 129, 0.08);
       --shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-      --gradient-bg: linear-gradient(135deg, #f5f8ff 0%, #ffffff 100%);
     }
   }
 
@@ -52,13 +50,17 @@
     box-sizing: border-box; 
   }
   
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-    background: var(--gradient-bg);
-    color: var(--text);
+  html, body {
+    width: 100%;
     min-height: 100vh;
+    background-color: var(--bg) !important;
+    background-image: none !important;
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
     padding: 16px;
     line-height: 1.5;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
   }
   
   .main-container {
@@ -327,12 +329,16 @@
     justify-content: space-between;
     align-items: center; 
     border-bottom: 1px solid var(--border);
+    flex-wrap: nowrap;
+    gap: 12px;
   }
   
   .share-card-header .label { 
     display: flex; 
     align-items: center; 
     gap: 10px; 
+    white-space: nowrap;
+    flex-shrink: 0;
   }
   
   .share-card-header .flag { 
@@ -351,6 +357,8 @@
     font-weight: 600;
     background: #6b7280;
     color: white;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
   
   .share-table-header {
@@ -361,6 +369,7 @@
     color: var(--text-dim);
     border-bottom: 1px solid var(--border);
     text-align: right;
+    white-space: nowrap;
   }
   .share-table-header span:first-child { text-align:left; }
   
@@ -376,6 +385,7 @@
     padding: 12px;
     font-size: 12px;
     text-align:right;
+    white-space: nowrap;
   }
   .share-row .share-left { text-align:left; }
   
@@ -473,8 +483,8 @@
 
 <div class="main-container">
   <div class="header">
-    <h1>躺平投资组合追踪器</h1>
-    <p class="subtitle">追踪Z先生分享的ETF组合与公开机会</p>
+    <h1>🛏躺平投资组合追踪器</h1>
+    <p class="subtitle">三市场ETF组合 · Z先生分享整理</p>
   </div>
 
   <div class="status-bar">
@@ -492,7 +502,7 @@
           <span class="flag">🇺🇸</span>
           <span class="name">美股躺平组合</span>
         </div>
-        <span class="market-tag">US Market</span>
+        <span class="market-tag">全球科技+资源与另类资产</span>
       </div>
       <div class="portfolio-summary" id="summary-us">
         <div class="summary-item neutral"><div class="summary-label">当日</div><div class="summary-value"><div class="loading-skeleton" style="width:60px;margin:0 auto"></div></div></div>
@@ -510,7 +520,7 @@
           <span class="flag">🇭🇰</span>
           <span class="name">港股躺平组合</span>
         </div>
-        <span class="market-tag">HK Market</span>
+        <span class="market-tag">跨市场平衡配置，攻守兼备</span>
       </div>
       <div class="portfolio-summary" id="summary-hk">
         <div class="summary-item neutral"><div class="summary-label">当日</div><div class="summary-value"><div class="loading-skeleton" style="width:60px;margin:0 auto"></div></div></div>
@@ -528,7 +538,7 @@
           <span class="flag">🇨🇳</span>
           <span class="name">A股躺平组合</span>
         </div>
-        <span class="market-tag">CN Market</span>
+        <span class="market-tag">科技主线为主，周期资产辅助</span>
       </div>
       <div class="portfolio-summary" id="summary-a">
         <div class="summary-item neutral"><div class="summary-label">当日</div><div class="summary-value"><div class="loading-skeleton" style="width:60px;margin:0 auto"></div></div></div>
@@ -546,7 +556,7 @@
       <div class="share-card-header">
         <div class="label">
           <span class="flag">📈</span>
-          <span class="name">Z先生分享记录</span>
+          <span class="name">Z先生分享整理</span>
         </div>
         <span class="share-note">仅供记录，不构成投资建议</span>
       </div>
@@ -561,7 +571,7 @@
 
   <div class="footer">
     数据来源: 腾讯财经 · 自动刷新间隔 30s<br>
-    <span class="footer-note">本页面为Z先生公开分享的ETF组合与投资机会记录，不构成投资建议。市场有风险，投资需谨慎。</span>
+    <span class="footer-note">本内容为Z先生公开分享的ETF组合与投资机会，如要参与请自行研究决策。市场有风险，投资需谨慎。</span>
   </div>
 </div>
 
