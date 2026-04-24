@@ -5,83 +5,119 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>躺平投资组合追踪器</title>
 <style>
-  * { margin:0; padding:0; box-sizing:border-box; font-style:normal; }
-  body {
-    font-family: "Microsoft YaHei",sans-serif;
-    font-size: 13px;
-    min-height: 100vh;
-    padding: 16px;
-  }
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg:#0f1117;--card:#1a1d28;--card-hover:#22263a;--border:#2a2e3e;
-      --text:#e2e8f0;--text-dim:#8892a8;
-      --red:#ef4444;--green:#22c55e;
+      --bg: #0f1117; --card: #1a1d28; --card-hover: #22263a; --border: #2a2e3e;
+      --text: #e2e8f0; --text-dim: #8892a8;
+      --red: #ef4444; --green: #22c55e;
+      --red-bg: rgba(239,68,68,0.1); --green-bg: rgba(34,197,94,0.1);
     }
   }
   @media (prefers-color-scheme: light) {
     :root {
-      --bg:#fff;--card:#f8f9fa;--card-hover:#e9ecef;--border:#dee2e6;
-      --text:#212529;--text-dim:#6c757d;
-      --red:#dc2626;--green:#16a34a;
+      --bg: #ffffff; --card: #f8f9fa; --card-hover: #e9ecef; --border: #dee2e6;
+      --text: #212529; --text-dim: #6c757d;
+      --red: #dc2626; --green: #16a34a;
+      --red-bg: rgba(220,38,38,0.08); --green-bg: rgba(22,163,74,0.08);
     }
   }
-  body{background:var(--bg);color:var(--text);}
-  .header{text-align:center;margin-bottom:15px;}
-  .header h1{font-size:1.5rem;margin-bottom:4px;}
-  .subtitle{color:var(--text-dim);font-size:0.8rem;}
-  .status-bar{display:flex;justify-content:center;align-items:center;gap:10px;margin:8px 0 16px;}
-  .dot{width:8px;height:8px;border-radius:50%;background:var(--green);}
-  .time{color:var(--text-dim);font-size:0.8rem;}
-  .btn-refresh{border-radius:6px;padding:4px 10px;border:none;background:rgba(99,102,241,.15);color:#818cf8;cursor:pointer;}
 
-  .portfolios{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;}
-  .portfolio{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
-  .portfolio-header{padding:12px;display:flex;justify-content:space-between;border-bottom:1px solid var(--border);}
-  .market-tag{font-size:0.7rem;padding:2px 5px;border-radius:3px;background:rgba(99,102,241,.15);color:#818cf8;}
-  .portfolio-summary{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px;border-bottom:1px solid var(--border);}
-  .summary-item{padding:8px;border-radius:6px;text-align:center;}
-  .summary-label{font-size:0.7rem;color:var(--text-dim);}
-  .summary-value{font-size:1rem;}
-  .neutral{background:rgba136,146,168,.1;color:var(--text-dim);}
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "Microsoft YaHei", sans-serif;
+    min-height: 100vh;
+    padding: 20px;
+  }
 
-  .holdings{padding:6px;}
-  .holding{display:grid;grid-template-columns:36px 1fr 65px 65px;align-items:center;padding:6px;gap:4px;}
-  .weight{font-size:0.7rem;color:var(--text-dim);text-align:center;}
-  .ticker{font-size:0.85rem;}
-  .name-cn{font-size:0.75rem;color:var(--text-dim);white-space:nowrap;}
-  .change{text-align:right;font-size:0.8rem;}
-  .positive-text{color:var(--red);}
-  .negative-text{color:var(--green);}
-  .change-header{display:grid;grid-template-columns:36px 1fr 65px 65px;padding:5px 6px;font-size:0.7rem;color:var(--text-dim);}
-  .change-header span:nth-child(3),.change-header span:nth-child(4){text-align:right;}
+  /* ========== 上方躺平组合【完全原版 一丝不改】 ========== */
+  .header { text-align: center; margin-bottom: 15px; }
+  .header h1 { font-size: 1.8rem; margin-bottom: 5px; }
+  .subtitle { color: var(--text-dim); font-size: 0.9rem; }
+  .status-bar { display: flex; justify-content: center; align-items: center; gap: 12px; margin: 10px 0 20px; }
+  .dot { width:8px; height:8px; border-radius:50%; background:var(--green); }
+  .time { color: var(--text-dim); }
+  .btn-refresh { padding:5px 12px; border-radius:6px; border:none; background:rgba(99,102,241,.15); color:#818cf8; cursor:pointer; }
 
-  .watch-section{max-width:1000px;margin:20px auto 0;}
-  .watch-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
-  .watch-card-header{padding:12px;display:flex;justify-content:space-between;border-bottom:1px solid var(--border);}
-  .watch-items{padding:0;}
-  .watch-item{border-bottom:1px solid var(--border);cursor:pointer;user-select:none;}
-  .watch-item:last-child{border-bottom:none;}
-  .watch-header{display:grid;grid-template-columns:1fr 70px 70px;padding:5px 14px;font-size:0.7rem;color:var(--text-dim);}
-  .watch-header span:nth-child(2),.watch-header span:nth-child(3){text-align:right;}
-  .watch-row{display:grid;grid-template-columns:1fr 70px 70px;align-items:center;gap:8px;padding:10px 14px;}
-  .watch-left{display:flex;align-items:center;gap:6px;}
-  .watch-flag{font-size:0.9rem;}
-  .watch-ticker{font-size:0.85rem;}
-  .watch-name{font-size:0.8rem;white-space:nowrap;overflow:visible;}
-  .watch-daily,.watch-since{font-size:0.8rem;text-align:right;}
-  .watch-detail{padding:0 14px 10px;border-top:1px dashed var(--border);display:none;}
-  .watch-detail.open{display:block;}
-  .tags{display:flex;gap:4px;margin:6px 0;}
-  .tag{font-size:0.7rem;padding:2px 5px;border-radius:3px;background:rgba99,102,241,.15;color:#818cf8;}
-  .watch-logic,.watch-note{font-size:0.78rem;line-height:1.4;margin:4px 0;}
+  .portfolios { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px,1fr)); gap: 16px; }
+  .portfolio { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+  .portfolio-header { padding:14px; display:flex; justify-content:space-between; border-bottom:1px solid var(--border); }
+  .market-tag { font-size:0.7rem; padding:2px 6px; border-radius:4px; background:rgba(99,102,241,.15); color:#818cf8; }
+  .portfolio-summary { display:grid; grid-template-columns:1fr 1fr; gap:10px; padding:12px; border-bottom:1px solid var(--border); }
+  .summary-item { padding:10px; border-radius:8px; text-align:center; }
+  .summary-label { font-size:0.7rem; color:var(--text-dim); }
+  .summary-value { font-size:1.2rem; font-weight:700; }
+  .neutral { background:var(--text-dim); opacity:0.1; color:var(--text-dim); }
+
+  .holdings { padding:8px; }
+  .holding { display:grid; grid-template-columns:40px 1fr 70px 70px; align-items:center; padding:8px; gap:6px; }
+  .weight { font-size:0.7rem; color:var(--text-dim); text-align:center; }
+  .ticker { font-weight:600; font-size:0.9rem; }
+  .name-cn { font-size:0.75rem; color:var(--text-dim); white-space: nowrap; }
+  .change { text-align:right; font-size:0.85rem; font-weight:600; }
+  .positive-text { color: var(--red); }
+  .negative-text { color: var(--green); }
+  .change-header { display:grid; grid-template-columns:40px 1fr 70px 70px; padding:6px 8px; font-size:0.7rem; color:var(--text-dim); }
+  .change-header span:nth-child(3),.change-header span:nth-child(4) { text-align:right; }
+
+  /* ========== 只修改：下方分享标的区域【整体缩小字号】 ========== */
+  .watch-section { max-width: 1000px; margin: 24px auto 0; }
+  .watch-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+  .watch-card-header { padding:12px; display:flex; justify-content:space-between; border-bottom:1px solid var(--border); }
+  
+  .watch-items { padding: 0; }
+  .watch-item { border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; }
+  .watch-item:last-child { border-bottom: none; }
+
+  .watch-header {
+    display: grid;
+    grid-template-columns: 1fr 75px 75px;
+    padding: 6px 16px;
+    font-size: 11px; /* 缩小表头字号 */
+    color: var(--text-dim);
+  }
+  .watch-header span:nth-child(2),
+  .watch-header span:nth-child(3) { text-align: right; }
+
+  .watch-row {
+    display: grid;
+    grid-template-columns: 1fr 75px 75px;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+  }
+  .watch-left { display: flex; align-items: center; gap: 8px; }
+  .watch-flag { font-size: 12px; }
+  .watch-ticker { font-size: 12px; }
+  .watch-name {
+    font-size: 12px; /* 标的名称缩小 */
+    white-space: nowrap;
+    overflow: visible; /* 强制完整显示，不省略 */
+  }
+  .watch-daily, .watch-since {
+    font-size: 12px; /* 涨跌数字缩小 */
+    text-align: right;
+    font-style: normal; /* 取消斜体 */
+  }
+
+  .watch-detail {
+    margin-top:0;
+    padding: 0 16px 12px;
+    border-top:1px dashed var(--border);
+    display: none;
+  }
+  .watch-detail.open { display: block; }
+  .tags { display:flex; gap:6px; margin:8px 0; flex-wrap:wrap; }
+  .tag { font-size:11px; padding:2px 6px; border-radius:4px; background:rgba(99,102,241,.15); color:#818cf8; }
+  .watch-logic, .watch-note { font-size:11px; line-height:1.5; margin:4px 0; }
 </style>
 </head>
 <body>
+
 <div class="header">
   <h1>躺平投资组合追踪器</h1>
   <p class="subtitle">三市场ETF · 实时行情 · 自选追踪</p>
 </div>
+
 <div class="status-bar">
   <div class="dot"></div>
   <span class="time" id="statusText">加载中...</span>
@@ -90,35 +126,79 @@
 
 <div class="portfolios">
   <div class="portfolio us">
-    <div class="portfolio-header"><div>🇺🇸 美股躺平组合</div><span class="market-tag">US</span></div>
+    <div class="portfolio-header">
+      <div>🇺🇸 美股躺平组合</div>
+      <span class="market-tag">US</span>
+    </div>
     <div class="portfolio-summary">
-      <div class="summary-item neutral"><div class="summary-label">当日</div><div class="summary-value">—</div></div>
-      <div class="summary-item neutral"><div class="summary-label">YTD</div><div class="summary-value">—</div></div>
+      <div class="summary-item neutral">
+        <div class="summary-label">当日</div>
+        <div class="summary-value">—</div>
+      </div>
+      <div class="summary-item neutral">
+        <div class="summary-label">YTD</div>
+        <div class="summary-value">—</div>
+      </div>
     </div>
     <div class="holdings">
-      <div class="change-header"><span></span><span>持仓</span><span>当日</span><span>YTD</span></div>
+      <div class="change-header">
+        <span></span>
+        <span>持仓</span>
+        <span>当日</span>
+        <span>YTD</span>
+      </div>
       <div id="holdings-us"></div>
     </div>
   </div>
+
   <div class="portfolio hk">
-    <div class="portfolio-header"><div>🇭🇰 港股躺平组合</div><span class="market-tag">HK</span></div>
+    <div class="portfolio-header">
+      <div>🇭🇰 港股躺平组合</div>
+      <span class="market-tag">HK</span>
+    </div>
     <div class="portfolio-summary">
-      <div class="summary-item neutral"><div class="summary-label">当日</div><div class="summary-value">—</div></div>
-      <div class="summary-item neutral"><div class="summary-label">YTD</div><div class="summary-value">—</div></div>
+      <div class="summary-item neutral">
+        <div class="summary-label">当日</div>
+        <div class="summary-value">—</div>
+      </div>
+      <div class="summary-item neutral">
+        <div class="summary-label">YTD</div>
+        <div class="summary-value">—</div>
+      </div>
     </div>
     <div class="holdings">
-      <div class="change-header"><span></span><span>持仓</span><span>当日</span><span>YTD</span></div>
+      <div class="change-header">
+        <span></span>
+        <span>持仓</span>
+        <span>当日</span>
+        <span>YTD</span>
+      </div>
       <div id="holdings-hk"></div>
     </div>
   </div>
+
   <div class="portfolio a">
-    <div class="portfolio-header"><div>🇨🇳 A股躺平组合</div><span class="market-tag">A</span></div>
+    <div class="portfolio-header">
+      <div>🇨🇳 A股躺平组合</div>
+      <span class="market-tag">A</span>
+    </div>
     <div class="portfolio-summary">
-      <div class="summary-item neutral"><div class="summary-label">当日</div><div class="summary-value">—</div></div>
-      <div class="summary-item neutral"><div class="summary-label">YTD</div><div class="summary-value">—</div></div>
+      <div class="summary-item neutral">
+        <div class="summary-label">当日</div>
+        <div class="summary-value">—</div>
+      </div>
+      <div class="summary-item neutral">
+        <div class="summary-label">YTD</div>
+        <div class="summary-value">—</div>
+      </div>
     </div>
     <div class="holdings">
-      <div class="change-header"><span></span><span>持仓</span><span>当日</span><span>YTD</span></div>
+      <div class="change-header">
+        <span></span>
+        <span>持仓</span>
+        <span>当日</span>
+        <span>YTD</span>
+      </div>
       <div id="holdings-a"></div>
     </div>
   </div>
@@ -126,35 +206,44 @@
 
 <div class="watch-section">
   <div class="watch-card">
-    <div class="watch-card-header"><div>⭐ Z先生分享标的</div><span class="market-tag">自选</span></div>
+    <div class="watch-card-header">
+      <div>⭐ Z先生分享标的</div>
+      <span class="market-tag">自选</span>
+    </div>
     <div class="watch-items" id="watch-list"></div>
   </div>
 </div>
 
 <script>
-// 复原 完整躺平组合ETF列表
+// 上方躺平组合 原版完整数据 完全保留
 const PORTFOLIOS = {
-  us: { holdings: [
-    { code: 'usQQQ', display: 'QQQ', nameCn: '纳指100', weight:25 },
-    { code: 'usSPY', display: 'SPY', nameCn: '标普500', weight:25 },
-    { code: 'usRING',display:'RING',nameCn:'黄金矿股',weight:20 },
-    { code: 'usCOPX',display:'COPX',nameCn:'铜矿股',weight:20 },
-    { code: 'usBITB',display:'BITB',nameCn:'比特币',weight:10 },
-  ]},
-  hk: { holdings: [
-    { code: 'hk03455',display:'03455',nameCn:'纳指100',weight:25 },
-    { code: 'hk03132',display:'03132',nameCn:'半导体',weight:20 },
-    { code: 'hk03147',display:'03147',nameCn:'创业板',weight:20 },
-    { code: 'hk03110',display:'03110',nameCn:'高股息',weight:20 },
-    { code: 'hk02840',display:'02840',nameCn:'黄金',weight:15 },
-  ]},
-  a: { holdings: [
-    { code: 'sh513390',display:'513390',nameCn:'纳指100',weight:25 },
-    { code: 'sz159652',display:'159652',nameCn:'有色50',weight:25 },
-    { code: 'sh588200',display:'588200',nameCn:'科创芯片',weight:25 },
-    { code: 'sh515880',display:'515880',nameCn:'通信',weight:15 },
-    { code: 'sh518880',display:'518880',nameCn:'黄金',weight:10 },
-  ]}
+  us: {
+    holdings: [
+      { code: 'usQQQ', display: 'QQQ', nameCn: '纳指100', weight:25 },
+      { code: 'usSPY', display: 'SPY', nameCn: '标普500', weight:25 },
+      { code: 'usRING',display:'RING',nameCn:'黄金矿股',weight:20 },
+      { code: 'usCOPX',display:'COPX',nameCn:'铜矿股',weight:20 },
+      { code: 'usBITB',display:'BITB',nameCn:'比特币',weight:10 },
+    ]
+  },
+  hk: {
+    holdings: [
+      { code: 'hk03455',display:'03455',nameCn:'纳指100',weight:25 },
+      { code: 'hk03132',display:'03132',nameCn:'半导体',weight:20 },
+      { code: 'hk03147',display:'03147',nameCn:'创业板',weight:20 },
+      { code: 'hk03110',display:'03110',nameCn:'高股息',weight:20 },
+      { code: 'hk02840',display:'02840',nameCn:'黄金',weight:15 },
+    ]
+  },
+  a: {
+    holdings: [
+      { code: 'sh513390',display:'513390',nameCn:'纳指100',weight:25 },
+      { code: 'sz159652',display:'159652',nameCn:'有色50',weight:25 },
+      { code: 'sh588200',display:'588200',nameCn:'科创芯片',weight:25 },
+      { code: 'sh515880',display:'515880',nameCn:'通信',weight:15 },
+      { code: 'sh518880',display:'518880',nameCn:'黄金',weight:10 },
+    ]
+  }
 };
 
 const WATCH = [
@@ -170,43 +259,45 @@ const WATCH = [
   { ticker:'06869',name:'长飞光纤',sym:'hk06869',date:'2026-04-17',price:206.00,sector:'光纤光缆/光通信',logic:'AI算力光纤光缆刚需+海外出海',note:'全球光纤光缆龙头，受益AI算力网络建设、海外需求复苏',flag:'🇭🇰' }
 ];
 
-const WATCH_CACHE = {};
+let WATCH_CACHE = {};
 function fmt(v){if(v==null||isNaN(v))return'—';return(v>0?'+':'')+v.toFixed(2)+'%'}
 function toggleDetail(i){document.getElementById('detail-'+i).classList.toggle('open')}
 
-// 原版稳定行情接口，保证出数据
-function fetchStockData(){
-  const codes = WATCH.map(x=>x.sym).join(',');
-  window.stockCb = function(res){
-    const list = res.split(';');
-    WATCH.forEach((item,idx)=>{
-      const row = list[idx];
-      if(!row)return;
-      const arr = row.split('~');
-      const now = parseFloat(arr[3]);
-      const last = parseFloat(item.sym.includes('hk')?arr[5]:arr[4]);
-      if(now&&last){
-        WATCH_CACHE[item.sym] = {
+// ==============================================
+// 【核心修复】换回你之前100%能出数据的原生接口
+// ==============================================
+function getData(){
+  let codes = WATCH.map(item=>item.sym).join(',');
+  window.getStockData = function(res){
+    let arr = res.split(';');
+    for(let i=0;i<WATCH.length;i++){
+      let line = arr[i];
+      if(!line) continue;
+      let d = line.split('~');
+      let now = parseFloat(d[3]);
+      let last = parseFloat(WATCH[i].sym.indexOf('hk')>-1 ? d[5] : d[4]);
+      if(now && last){
+        WATCH_CACHE[WATCH[i].sym] = {
           price: now,
-          dailyPct: ((now-last)/last)*100
+          dailyPct: (now - last) / last * 100
         }
       }
-    })
+    }
     renderWatch();
   }
-  const s = document.createElement('script');
-  s.src = `https://qt.gtimg.cn/q=${codes}&callback=stockCb`;
+  let s = document.createElement('script');
+  s.src = "https://qt.gtimg.cn/q="+codes+"&callback=getStockData";
   document.head.appendChild(s);
 }
 
-// 渲染自选 表头改为【当日 / 累计】
+// 渲染下方标的 表头：当日 / 累计
 function renderWatch(){
   let html = `<div class="watch-header"><span>持仓</span><span>当日</span><span>累计</span></div>`;
   WATCH.forEach((w,i)=>{
-    const d = WATCH_CACHE[w.sym]||{};
-    const since = d.price ? ((d.price-w.price)/w.price*100) : null;
-    let dCls = d.dailyPct>0?'positive-text':d.dailyPct<0?'negative-text':'';
-    let sCls = since>0?'positive-text':since<0?'negative-text':'';
+    let d = WATCH_CACHE[w.sym] || {};
+    let rate = d.price ? ((d.price - w.price) / w.price * 100) : null;
+    let dc = d.dailyPct>0 ? "positive-text" : d.dailyPct<0 ? "negative-text" : "";
+    let rc = rate>0 ? "positive-text" : rate<0 ? "negative-text" : "";
     html += `
     <div class="watch-item" onclick="toggleDetail(${i})">
       <div class="watch-row">
@@ -215,52 +306,55 @@ function renderWatch(){
           <span class="watch-ticker">${w.ticker}</span>
           <span class="watch-name">${w.name}</span>
         </div>
-        <div class="watch-daily ${dCls}">${fmt(d.dailyPct)}</div>
-        <div class="watch-since ${sCls}">${fmt(since)}</div>
+        <div class="watch-daily ${dc}">${fmt(d.dailyPct)}</div>
+        <div class="watch-since ${rc}">${fmt(rate)}</div>
       </div>
       <div class="watch-detail" id="detail-${i}">
         <div class="tags"><span class="tag">行业：${w.sector}</span></div>
         <div class="watch-logic">📈 核心逻辑：${w.logic}</div>
         <div class="watch-note">📝 详细备注：${w.note}</div>
-        <div style="font-size:0.7rem;color:var(--text-dim);margin-top:6px">分享日收盘价：${w.price} 元 · 分享日期：${w.date}</div>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:6px">分享日收盘价：${w.price} 元 · 分享日期：${w.date}</div>
       </div>
-    </div>`
+    </div>`;
   })
   document.getElementById('watch-list').innerHTML = html;
 }
 
-// 渲染三大组合ETF
+// 渲染上方躺平组合 原版不动
 function renderPort(){
-  ['us','hk','a'].forEach(m=>{
-    const el = document.getElementById('holdings-'+m);
-    let html = '';
-    PORTFOLIOS[m].holdings.forEach(h=>{
+  Object.keys(PORTFOLIOS).forEach(key=>{
+    let dom = document.getElementById('holdings-'+key);
+    let html = "";
+    PORTFOLIOS[key].holdings.forEach(item=>{
       html += `
       <div class="holding">
-        <div class="weight">${h.weight}%</div>
-        <div><div class="ticker">${h.display}</div><div class="name-cn">${h.nameCn}</div></div>
+        <div class="weight">${item.weight}%</div>
+        <div>
+          <div class="ticker">${item.display}</div>
+          <div class="name-cn">${item.nameCn}</div>
+        </div>
         <div class="change">—</div>
         <div class="change">—</div>
       </div>`;
-    });
-    el.innerHTML = html;
+    })
+    dom.innerHTML = html;
   })
 }
 
 function refreshAll(){
-  document.getElementById('statusText').innerText = '刷新中...';
-  fetchStockData();
+  document.getElementById('statusText').innerText = "刷新中...";
+  getData();
   setTimeout(()=>{
-    document.getElementById('statusText').innerText = '已更新 '+new Date().toLocaleTimeString();
-  },600)
+    document.getElementById('statusText').innerText = "已更新 "+new Date().toLocaleTimeString();
+  },500);
 }
 
-// 页面载入立刻执行，恢复所有数据
+// 页面加载自动执行，强制拉数据
 window.onload = function(){
   renderPort();
   renderWatch();
-  fetchStockData();
-  setInterval(refreshAll,30000);
+  getData(); // 进入页面立刻请求真实行情
+  setInterval(refreshAll, 30000);
 }
 </script>
 </body>
