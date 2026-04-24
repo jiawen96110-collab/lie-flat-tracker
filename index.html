@@ -250,86 +250,69 @@
     color: var(--text-dim);
     background: rgba(249,115,22,0.03);
   }
-  .watch-items { padding: 8px 12px 16px; }
-  /* 核心优化：三栏布局，当日左、累计右，左右对称 */
-  .watch-item {
-    display: grid;
-    grid-template-columns: 1fr auto auto;
-    gap: 20px;
-    align-items: center;
-    padding: 16px 12px;
-    border-radius: 12px;
-    transition: background 0.15s;
-    border-bottom: 1px solid var(--border);
-  }
-  .watch-item:last-child { border-bottom: none; }
-  .watch-item:hover { background: var(--card-hover); }
-  .watch-left { flex: 1; }
-  .watch-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 6px;
-  }
-  .watch-flag { font-size: 1rem; }
-  .watch-ticker {
-    font-weight: 700;
-    font-size: 1rem;
-    color: #818cf8;
-  }
-  .watch-name { font-size: 0.9rem; color: var(--text); font-weight: 500; }
-  .sector-tag {
-    font-size: 0.68rem;
-    font-weight: 600;
-    padding: 2px 8px;
-    border-radius: 5px;
-    background: rgba(249,115,22,0.15);
-    color: var(--accent-watch);
-  }
-  .logic-tag {
-    font-size: 0.68rem;
-    font-weight: 600;
-    padding: 2px 8px;
-    border-radius: 5px;
-    background: rgba(99,102,241,0.15);
-    color: var(--accent-us);
-  }
-  .watch-note { font-size: 0.78rem; color: var(--text-dim); line-height: 1.6; margin-bottom: 6px; }
-  /* 当日涨幅列（左） */
-  .today-col {
-    text-align: right;
-    flex-shrink: 0;
-    min-width: 100px;
-  }
-  .today-pill {
-    display: inline-block;
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-  }
-  .today-pill.up   { color: var(--red); background: var(--red-bg); }
-  .today-pill.down { color: var(--green); background: var(--green-bg); }
-  .today-pill.flat { color: var(--text-dim); background: rgba(136,146,168,0.1); }
-  /* 累计涨幅列（右） */
-  .since-col {
-    text-align: right;
-    flex-shrink: 0;
-    min-width: 120px;
-  }
-  .since-pct {
-    font-size: 1.5rem;
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
-    line-height: 1.1;
-  }
-  .since-date {
-    font-size: 0.72rem;
-    color: var(--text-dim);
-    margin-top: 4px;
-  }
+
+/* ———————————————————————————————————————————————————— */
+/* ✅ 以下 100% 全新重写：只改下方标的，紧凑 + 可展开 + 手机适配 */
+/* ———————————————————————————————————————————————————— */
+.watch-items { padding: 0; }
+.watch-item {
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  user-select: none;
+}
+.watch-item:last-child { border-bottom: none; }
+
+/* 一级行：紧凑小字体，名称不换行 */
+.watch-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  font-size: 12px;
+}
+.watch-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.watch-flag { font-size: 12px; }
+.watch-ticker {
+  font-weight: 600;
+  color: #818cf8;
+}
+.watch-name {
+  white-space: nowrap;
+  overflow: visible;
+}
+.watch-day, .watch-since {
+  text-align: right;
+  font-weight: 600;
+  min-width: 50px;
+}
+
+/* 二级详情：点击展开 */
+.watch-detail {
+  padding: 8px 14px 12px;
+  border-top: 1px dashed var(--border);
+  background: rgba(0,0,0,0.02);
+  display: none;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-dim);
+}
+.watch-detail.open {
+  display: block;
+}
+.watch-detail .row {
+  margin: 4px 0;
+}
+.watch-detail .label {
+  color: var(--text);
+  font-weight: 600;
+  margin-right: 6px;
+}
 
   .loading-skeleton {
     height: 20px;
@@ -354,13 +337,9 @@
 
   /* 响应式：手机端自动切换为上下排列 */
   @media (max-width: 768px) {
-    .watch-item {
-      grid-template-columns: 1fr;
-      gap: 12px;
-    }
-    .today-col, .since-col {
-      text-align: left;
-      margin-top: 8px;
+    .watch-row {
+      grid-template-columns: auto 1fr auto;
+      gap: 6px;
     }
   }
 
@@ -449,7 +428,7 @@
       <span class="watch-market-tag">自选追踪</span>
     </div>
     <div class="watch-banner">
-      📡 实时跟踪 · <strong style="color:var(--text)">分享以来涨跌</strong>从推荐日收盘价起算
+      📡 实时跟踪 · 点击展开详情 · 紧凑列表
     </div>
     <div class="watch-items" id="watch-list"></div>
   </div>
@@ -549,64 +528,11 @@ const YTD_BASE = {
   'sh515880': 1.027,   'sh518880': 9.301,
 };
 const WATCH = [
-  // A 股标的
-  {
-    ticker:  '300782',
-    name:    '卓胜微',
-    sym:     'sz300782',
-    date:    '2026-03-26',
-    price:   87.00,
-    sector:  '射频芯片',
-    logic:   'AI手机射频升级 + 国产替代',
-    note:    '国内射频前端龙头，垄断安卓高端机射频模组，受益AI手机射频复杂度提升与国产替代加速',
-    flag:    '🇨🇳'
-  },
-  {
-    ticker:  '002428',
-    name:    '云南锗业',
-    sym:     'sz002428',
-    date:    '2026-04-10',
-    price:   56.79,
-    sector:  '磷化铟/锗半导体材料',
-    logic:   '光模块上游核心晶圆材料',
-    note:    '国内稀缺量产磷化铟晶圆企业，主营磷化铟单晶、锗基半导体衬底，AI光模块激光器核心上游原材料，深度受益光通信产业链高景气',
-    flag:    '🇨🇳'
-  },
-  // 美股标的
-  {
-    ticker:  'MRVL',
-    name:    '迈威尔科技',
-    sym:     'usMRVL',
-    date:    '2026-03-18',
-    price:   87.58,
-    sector:  'AI芯片/光互连',
-    logic:   'AI数据中心定制芯片 + 光互连芯片',
-    note:    'AI数据中心核心标的，ASIC定制芯片+硅光互连双轮驱动，深度受益全球算力基建扩张',
-    flag:    '🇺🇸'
-  },
-  {
-    ticker:  'AAOI',
-    name:    '应用光电',
-    sym:     'usAAOI',
-    date:    '2026-04-10',
-    price:   150.60,
-    sector:  '光模块/光通信',
-    logic:   'AI算力光互连爆发 + 1.6T高速光模块',
-    note:    '高速光模块龙头，垂直整合激光器芯片，深度受益AI算力网络对1.6T及以上光模块需求爆发',
-    flag:    '🇺🇸'
-  },
-  // 港股标的
-  {
-  ticker:  '06869',
-  name:    '长飞光纤',
-  sym:     'hk06869',
-  date:    '2026-04-17',
-  price:   206.00,
-  sector:  '光纤光缆/光通信',
-  logic:   'AI算力光纤光缆刚需 + 海外出海',
-  note:    '全球光纤光缆龙头，受益AI算力网络建设、海外需求复苏，低估值高股息，具备强周期底部配置价值',
-  flag:    '🇭🇰'
-},
+  { ticker:'300782',name:'卓胜微',sym:'sz300782',date:'2026-03-26',price:87.00,sector:'射频芯片',logic:'AI手机射频升级+国产替代',note:'国内射频前端龙头，垄断安卓高端机射频模组，受益AI手机射频复杂度提升与国产替代加速',flag:'🇨🇳' },
+  { ticker:'002428',name:'云南锗业',sym:'sz002428',date:'2026-04-10',price:56.79,sector:'磷化铟/锗半导体材料',logic:'光模块上游核心晶圆材料',note:'国内稀缺量产磷化铟晶圆企业，主营磷化铟单晶、锗基半导体衬底，AI光模块激光器核心上游原材料',flag:'🇨🇳' },
+  { ticker:'MRVL',name:'迈威尔科技',sym:'usMRVL',date:'2026-03-18',price:87.58,sector:'AI芯片/光互连',logic:'AI数据中心定制芯片+光互连芯片',note:'AI数据中心核心标的，ASIC定制芯片+硅光互连双轮驱动，深度受益全球算力基建扩张',flag:'🇺🇸' },
+  { ticker:'AAOI',name:'应用光电',sym:'usAAOI',date:'2026-04-10',price:150.60,sector:'光模块/光通信',logic:'AI算力光互连爆发+1.6T高速光模块',note:'高速光模块龙头，垂直整合激光器芯片，深度受益AI算力网络需求爆发',flag:'🇺🇸' },
+  { ticker:'06869',name:'长飞光纤',sym:'hk06869',date:'2026-04-17',price:206.00,sector:'光纤光缆/光通信',logic:'AI算力光纤光缆刚需+海外出海',note:'全球光纤光缆龙头，受益AI算力网络建设、海外需求复苏',flag:'🇭🇰' }
 ];
 
 let _jid = 0;
@@ -695,45 +621,41 @@ function renderLoadingHoldings(key) {
   ).join('');
 }
 
+/* ———————————————————————————————————————————————————— */
+/* ✅ 下方标的渲染：紧凑列表 + 点击展开（只改这里） */
+/* ———————————————————————————————————————————————————— */
 function renderWatch() {
   const container = document.getElementById('watch-list');
-  if (!WATCH.length) {
-    container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-dim);font-size:14px">暂无分享标的</div>';
-    return;
-  }
-  container.innerHTML = WATCH.map((w, i) => {
+  container.innerHTML = WATCH.map((w, idx) => {
     const d = WATCH_CACHE[w.sym] || {};
-    let sinceHtml, sinceClass = 'neutral-text';
-    if (w.price && d.price > 0) {
-      const pct = (d.price - w.price) / w.price * 100;
-      sinceClass = getColorClass(pct);
-      sinceHtml = `
-        <span class="since-pct ${sinceClass}">${fmt(pct)}</span>
-        <span class="since-date">${w.date} · ${w.price.toFixed(2)} → ${d.price.toFixed(2)}</span>`;
-    } else {
-      sinceHtml = `
-        <span class="since-pct neutral-text" style="font-size:1.2rem"><div class="loading-skeleton" style="width:70px;height:22px"></div></span>
-        <span class="since-date">${w.date}</span>`;
-    }
-    return `<div class="watch-item">
-      <div class="watch-left">
-        <div class="watch-header">
-          <span class="watch-flag">${w.flag || ''}</span>
+    const since = d.price ? ((d.price - w.price) / w.price * 100) : null;
+    const c1 = getColorClass(d.dailyPct);
+    const c2 = getColorClass(since);
+
+    return `
+    <div class="watch-item" onclick="toggleDetail(${idx})">
+      <div class="watch-row">
+        <div class="watch-left">
+          <span class="watch-flag">${w.flag}</span>
           <span class="watch-ticker">${w.ticker}</span>
           <span class="watch-name">${w.name}</span>
-          <span class="sector-tag">${w.sector}</span>
-          ${w.logic ? `<span class="logic-tag">${w.logic}</span>` : ''}
         </div>
-        <div class="watch-note">${w.note}</div>
+        <div class="watch-day ${c1}">${fmt(d.dailyPct)}</div>
+        <div class="watch-since ${c2}">${fmt(since)}</div>
       </div>
-      <!-- 当日涨幅列（左） -->
-      <div class="today-col">
-        <span class="today-pill ${getPillClass(d.dailyPct)}">今日 ${fmt(d.dailyPct)}</span>
+      <div class="watch-detail" id="detail-${idx}">
+        <div class="row"><span class="label">行业：</span>${w.sector}</div>
+        <div class="row"><span class="label">逻辑：</span>${w.logic}</div>
+        <div class="row"><span class="label">备注：</span>${w.note}</div>
+        <div class="row"><span class="label">分享：</span>${w.date} · 成本 ${w.price.toFixed(2)}</div>
       </div>
-      <!-- 累计涨幅列（右） -->
-      <div class="since-col">${sinceHtml}</div>
     </div>`;
   }).join('');
+}
+
+function toggleDetail(i){
+  const el = document.getElementById('detail-'+i);
+  el.classList.toggle('open');
 }
 
 async function loadPortfolio(key) {
