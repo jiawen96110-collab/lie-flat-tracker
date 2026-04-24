@@ -664,27 +664,38 @@ const WATCH = [
   },
 ];
 
-let _jid = 0;
+// 重写的兼容版JSONP请求函数，适配腾讯财经接口
 function qqJsonp(codes, timeout = 8000) {
   return new Promise((resolve, reject) => {
-    const callbackName = 'quote_data_' + (_jid++);
-    const s = document.createElement('script');
-    const timer = setTimeout(() => { s.remove(); reject(new Error('timeout')); }, timeout);
-    s.onload = () => {
-      clearTimeout(timer);
-      s.remove();
-      const results = {};
-      codes.forEach((c, i) => {
-        const parts = window[callbackName]?.split(';') || [];
-        if (parts[i]) results[c] = parts[i];
-      });
+    const callbackName = 'qqCallback_' + Date.now();
+    const script = document.createElement('script');
+    const timer = setTimeout(() => {
+      script.remove();
       delete window[callbackName];
+      reject(new Error('请求超时'));
+    }, timeout);
+
+    window[callbackName] = function(data) {
+      clearTimeout(timer);
+      script.remove();
+      delete window[callbackName];
+      const results = {};
+      // 按顺序解析返回的数据
+      const parts = data.split(';');
+      codes.forEach((code, i) => {
+        if (parts[i]) results[code] = parts[i];
+      });
       resolve(results);
     };
-    s.onerror = () => { clearTimeout(timer); s.remove(); reject(new Error('script error')); };
-    window[callbackName] = '';
-    s.src = `https://qt.gtimg.cn/q=${codes.join(',')}&callback=${callbackName}`;
-    document.head.appendChild(s);
+
+    script.src = `https://qt.gtimg.cn/q=${codes.join(',')}&callback=${callbackName}`;
+    script.onerror = () => {
+      clearTimeout(timer);
+      script.remove();
+      delete window[callbackName];
+      reject(new Error('脚本加载失败'));
+    };
+    document.head.appendChild(script);
   });
 }
 
