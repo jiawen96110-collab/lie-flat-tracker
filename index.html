@@ -156,56 +156,62 @@
     background: rgba(249,115,22,0.15); color: var(--accent-watch);
   }
 
-  /* ✅ 关键修复：表头和数据行用完全相同的 grid，padding 完全一致 */
-  .watch-table-header {
-    display: grid;
-    grid-template-columns: 1fr 80px 84px;
-    padding: 8px 14px 8px 12px;
-    font-size: 0.7rem;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    border-bottom: 1px solid var(--border);
-    background: rgba(249,115,22,0.03);
-  }
-  .watch-table-header span:nth-child(2),
-  .watch-table-header span:nth-child(3) { text-align: right; }
+/* ✅ 关键修复：表头和数据行用完全相同的 grid，padding 完全一致 */
+.watch-table-header {
+  display: grid;
+  grid-template-columns: 1fr 80px 84px;
+  padding: 10px 14px 10px 12px;  /* 增加上下padding */
+  font-size: 0.8rem;  /* 增大字体 */
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(249,115,22,0.03);
+}
+.watch-table-header span:nth-child(2),
+.watch-table-header span:nth-child(3) { text-align: right; }
 
-  .watch-items { padding: 0; }
-  .watch-item { border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; }
-  .watch-item:last-child { border-bottom: none; }
-  .watch-item:hover .watch-row { background: var(--card-hover); }
+.watch-items { padding: 0; }
+.watch-item { border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; }
+.watch-item:last-child { border-bottom: none; }
+.watch-item:hover .watch-row { background: var(--card-hover); }
 
-  .watch-row {
-    display: grid;
-    grid-template-columns: 1fr 80px 84px;
-    align-items: center;
-    gap: 0;
-    padding: 10px 14px 10px 12px;
-    font-size: 12px;
-    border-radius: 0;
-    transition: background 0.15s;
-  }
-  .watch-left {
-    display: flex; align-items: center; gap: 5px;
-    overflow: hidden; padding-right: 8px;
-  }
-  .watch-flag { font-size: 11px; flex-shrink: 0; }
-  .watch-ticker { font-weight: 600; color: #818cf8; flex-shrink: 0; font-size: 12px; }
-  .watch-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 12px; }
-  .watch-day { text-align: right; font-weight: 600; font-size: 12px; font-variant-numeric: tabular-nums; }
-  .watch-since { text-align: right; font-weight: 600; font-size: 12px; font-variant-numeric: tabular-nums; }
+.watch-row {
+  display: grid;
+  grid-template-columns: 1fr 80px 84px;
+  align-items: center;
+  gap: 0;
+  padding: 12px 14px 12px 12px;  /* 增加行高 */
+  font-size: 13px;  /* 增大字体 */
+  border-radius: 0;
+  transition: background 0.15s;
+}
+.watch-left {
+  display: flex; align-items: center; gap: 8px;  /* 增加间距 */
+  overflow: hidden; padding-right: 8px;
+}
+.watch-flag { font-size: 12px; flex-shrink: 0; }
+.watch-ticker { font-weight: 600; color: #818cf8; flex-shrink: 0; font-size: 12px; min-width: 50px; }
+.watch-name { 
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; 
+  font-size: 13px; font-weight: 600;  /* 增大并加粗 */
+}
+.watch-day, .watch-since { 
+  text-align: right; font-weight: 600; 
+  font-size: 13px; font-variant-numeric: tabular-nums;  /* 增大字体 */
+}
 
-  .watch-detail {
-    padding: 8px 14px 12px 12px;
-    border-top: 1px dashed var(--border);
-    background: rgba(0,0,0,0.02);
-    display: none;
-    font-size: 12px; line-height: 1.6; color: var(--text-dim);
-  }
-  .watch-detail.open { display: block; }
-  .watch-detail .drow { margin: 3px 0; }
-  .watch-detail .dlbl { color: var(--text); font-weight: 600; margin-right: 4px; }
+.watch-detail {
+  padding: 12px 14px 16px 12px;  /* 增加内边距 */
+  border-top: 1px dashed var(--border);
+  background: rgba(0,0,0,0.02);
+  display: none;
+  font-size: 12px; line-height: 1.7;  /* 增加行高 */
+  color: var(--text-dim);
+}
+.watch-detail.open { display: block; }
+.watch-detail .drow { margin: 6px 0; }  /* 增加行间距 */
+.watch-detail .dlbl { color: var(--text); font-weight: 600; margin-right: 6px; }
 
   .loading-skeleton {
     height: 20px;
