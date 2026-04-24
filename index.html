@@ -7,333 +7,569 @@
 <style>
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #0f1117;
-      --card: #1a1d28;
-      --card-hover: #22263a;
-      --border: #2a2e3e;
-      --text: #e2e8f0;
-      --text-dim: #8892a8;
-      --accent-us: #6366f1;
-      --accent-hk: #f59e0b;
-      --accent-a: #ef4444;
-      --accent-watch: #f97316;
-      --red: #ef4444;
-      --green: #22c55e;
-      --red-bg: rgba(239,68,68,0.1);
-      --green-bg: rgba(34,197,94,0.1);
+      --bg: #0a0e1a;
+      --card: #151c2e;
+      --card-hover: #1d2538;
+      --border: #2a3145;
+      --text: #e8eef9;
+      --text-dim: #8a94a8;
+      --accent-us: #4e9ef8;
+      --accent-hk: #f9a825;
+      --accent-a: #f76c6c;
+      --accent-share: #ff9800;
+      --red: #f76c6c;
+      --green: #4caf7d;
+      --red-bg: rgba(247, 108, 108, 0.12);
+      --green-bg: rgba(76, 175, 125, 0.12);
+      --shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      --gradient-bg: linear-gradient(135deg, #0a0e1a 0%, #151c2e 100%);
     }
   }
   @media (prefers-color-scheme: light) {
     :root {
-      --bg: #ffffff;
-      --card: #f8f9fa;
-      --card-hover: #e9ecef;
-      --border: #dee2e6;
-      --text: #212529;
-      --text-dim: #6c757d;
-      --accent-us: #4f46e5;
-      --accent-hk: #d97706;
-      --accent-a: #dc2626;
-      --accent-watch: #ea580c;
-      --red: #dc2626;
-      --green: #16a34a;
-      --red-bg: rgba(220,38,38,0.08);
-      --green-bg: rgba(22,163,74,0.08);
+      --bg: #f5f8ff;
+      --card: #ffffff;
+      --card-hover: #f8fafc;
+      --border: #e2e8f0;
+      --text: #1a202c;
+      --text-dim: #718096;
+      --accent-us: #3b82f6;
+      --accent-hk: #f59e0b;
+      --accent-a: #ef4444;
+      --accent-share: #f97316;
+      --red: #ef4444;
+      --green: #10b981;
+      --red-bg: rgba(239, 68, 68, 0.08);
+      --green-bg: rgba(16, 185, 129, 0.08);
+      --shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      --gradient-bg: linear-gradient(135deg, #f5f8ff 0%, #ffffff 100%);
     }
   }
 
-  * { margin:0; padding:0; box-sizing:border-box; }
+  * { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+  }
+  
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-    background: var(--bg);
+    background: var(--gradient-bg);
     color: var(--text);
     min-height: 100vh;
-    padding: 20px;
-    transition: background 0.3s, color 0.3s;
+    padding: 16px;
+    line-height: 1.5;
   }
-  .header { text-align: center; padding: 30px 0 10px; }
+  
+  .main-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .header { 
+    text-align: center; 
+    padding: 32px 0 24px; 
+  }
+  
   .header h1 {
-    font-size: 2rem; font-weight: 700;
-    background: linear-gradient(135deg, #6366f1, #f59e0b, #ef4444);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--text);
     margin-bottom: 8px;
+    letter-spacing: -0.5px;
   }
-  .header .subtitle { color: var(--text-dim); font-size: 0.9rem; }
+  
+  .header .subtitle { 
+    font-size: 1rem; 
+    color: var(--text-dim); 
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
   .status-bar {
-    display: flex; justify-content: center; align-items: center;
-    gap: 16px; margin: 16px 0 24px; flex-wrap: wrap;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    background: var(--card);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    margin: 0 auto 24px;
+    font-size: 0.85rem;
   }
-  .status-bar .time { color: var(--text-dim); font-size: 0.85rem; }
-  .status-bar .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
-  .status-bar .dot.loading { background: var(--accent-us); }
-  .status-bar .dot.error { background: var(--red); animation: none; }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  
+  .status-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .status-bar .dot { 
+    width: 8px; 
+    height: 8px; 
+    border-radius: 50%; 
+    background: var(--green); 
+  }
+  
+  .status-bar .dot.loading { 
+    background: var(--accent-us);
+    animation: pulse 1.5s infinite;
+  }
+  
+  .status-bar .dot.error { 
+    background: var(--red);
+  }
+  
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+  
+  .status-bar .time { 
+    color: var(--text);
+    font-weight: 500;
+  }
+  
   .btn-refresh {
-    background: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.3);
-    color: var(--accent-us); padding: 6px 16px; border-radius: 8px;
-    cursor: pointer; font-size: 0.85rem; transition: all 0.2s;
+    background: var(--accent-us);
+    border: none;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
   }
-  .btn-refresh:hover { background: rgba(99,102,241,0.25); }
-  .btn-refresh:disabled { opacity: 0.5; cursor: not-allowed; }
-
+  
+  .btn-refresh:hover {
+    opacity: 0.9;
+  }
+  
+  .btn-refresh:disabled { 
+    opacity: 0.5; 
+    cursor: not-allowed; 
+  }
+  
   .portfolios {
-    max-width: 1400px; margin: 0 auto;
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 24px;
+    max-width: 1200px; 
+    margin: 0 auto 32px;
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); 
+    gap: 20px;
   }
+  
   .portfolio {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: 16px; overflow: hidden; transition: transform 0.2s;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.2s;
   }
-  .portfolio:hover { transform: translateY(-2px); }
+  
+  .portfolio:hover { 
+    box-shadow: var(--shadow);
+  }
+  
   .portfolio-header {
-    padding: 20px 24px; display: flex; justify-content: space-between;
-    align-items: center; border-bottom: 1px solid var(--border);
+    padding: 16px 20px; 
+    display: flex; 
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
   }
-  .portfolio-header .label { display: flex; align-items: center; gap: 10px; }
-  .portfolio-header .flag { font-size: 1.5rem; }
-  .portfolio-header .name { font-size: 1.1rem; font-weight: 600; }
-  .portfolio-header .market-tag { font-size: 0.7rem; padding: 3px 8px; border-radius: 6px; font-weight: 500; }
-  .us .market-tag { background: rgba(99,102,241,0.15); color: var(--accent-us); }
-  .hk .market-tag { background: rgba(245,158,11,0.15); color: var(--accent-hk); }
-  .a  .market-tag { background: rgba(239,68,68,0.15);  color: var(--accent-a); }
-
+  
+  .portfolio-header .left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .portfolio-header .flag { 
+    font-size: 1.4rem; 
+  }
+  
+  .portfolio-header .name { 
+    font-size: 1.1rem; 
+    font-weight: 700; 
+  }
+  
+  .market-tag { 
+    font-size: 0.7rem; 
+    padding: 4px 8px; 
+    border-radius: 6px; 
+    font-weight: 600;
+    color: #fff;
+  }
+  
+  .us .market-tag { 
+    background: var(--accent-us);
+  }
+  .hk .market-tag { 
+    background: var(--accent-hk);
+  }
+  .a  .market-tag { 
+    background: var(--accent-a);
+  }
+  
   .portfolio-summary {
-    padding: 16px 24px; display: grid; grid-template-columns: 1fr 1fr;
-    gap: 12px; border-bottom: 1px solid var(--border);
+    padding: 12px 20px; 
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
   }
-  .summary-item { padding: 12px; border-radius: 10px; text-align: center; }
-  .summary-item .summary-label { font-size: 0.75rem; color: var(--text-dim); margin-bottom: 4px; }
-  .summary-item .summary-value { font-size: 1.4rem; font-weight: 700; font-variant-numeric: tabular-nums; }
-  .summary-item.positive { background: var(--red-bg); color: var(--red); }
-  .summary-item.negative { background: var(--green-bg); color: var(--green); }
-  .summary-item.neutral { background: rgba(136,146,168,0.1); color: var(--text-dim); }
+  
+  .summary-item { 
+    text-align: center; 
+    flex: 1;
+  }
+  
+  .summary-item .summary-label { 
+    font-size: 0.75rem; 
+    color: var(--text-dim); 
+    margin-bottom: 6px; 
+  }
+  
+  .summary-value {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+  }
 
-  .holdings { padding: 8px 12px 16px; }
-  .holding {
-    display: grid; grid-template-columns: 44px 1fr 80px 80px;
-    align-items: center; gap: 8px; padding: 10px 12px;
-    border-radius: 10px; transition: background 0.15s;
+  .summary-item.positive .summary-value {
+    background: var(--red-bg);
+    color: var(--red);
   }
-  .holding:hover { background: var(--card-hover); }
-  .holding .weight {
-    background: rgba(255,255,255,0.06); border-radius: 6px;
-    padding: 4px 0; text-align: center; font-size: 0.75rem;
-    color: var(--text-dim); font-weight: 500;
+  .summary-item.negative .summary-value {
+    background: var(--green-bg);
+    color: var(--green);
   }
-  .holding .info .ticker { font-weight: 600; font-size: 0.9rem; }
-  .holding .info .name-cn { font-size: 0.75rem; color: var(--text-dim); margin-top: 1px; }
-  .holding .change { text-align: right; font-size: 0.85rem; font-weight: 600; font-variant-numeric: tabular-nums; }
-  .positive-text { color: var(--red); }
-  .negative-text { color: var(--green); }
-  .neutral-text { color: var(--text-dim); }
-
+  .summary-item.neutral .summary-value {
+    background: rgba(136, 146, 168, 0.1);
+    color: var(--text-dim);
+  }
+  
+  .holdings { 
+    padding: 8px 12px 12px; 
+  }
+  
   .change-header {
-    display: grid; grid-template-columns: 44px 1fr 80px 80px;
-    gap: 8px; padding: 6px 12px;
-    font-size: 0.7rem; color: var(--text-dim);
-    text-transform: uppercase; letter-spacing: 0.5px;
+    display: grid; 
+    grid-template-columns: 40px 1fr 70px 70px;
+    gap: 10px; 
+    padding: 8px 12px;
+    font-size: 0.7rem; 
+    color: var(--text-dim);
+    border-bottom: 1px solid var(--border);
   }
+  
   .change-header span:nth-child(3),
-  .change-header span:nth-child(4) { text-align: right; }
-
-  /* ── WATCH SECTION ── */
-  .watch-section { max-width: 1400px; margin: 24px auto 0; }
-  .watch-card {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: 16px; overflow: hidden; transition: transform 0.2s;
+  .change-header span:nth-child(4) { 
+    text-align: right; 
   }
-  .watch-card:hover { transform: translateY(-2px); }
-  .watch-card-header {
-    padding: 20px 24px; display: flex; justify-content: space-between;
-    align-items: center; border-bottom: 1px solid var(--border);
-    background: rgba(249,115,22,0.04);
+  
+  .holding {
+    display: grid; 
+    grid-template-columns: 40px 1fr 70px 70px;
+    align-items: center; 
+    gap: 10px; 
+    padding: 10px 12px;
   }
-  .watch-card-header .label { display: flex; align-items: center; gap: 10px; }
-  .watch-card-header .flag { font-size: 1.5rem; }
-  .watch-card-header .name { font-size: 1.1rem; font-weight: 600; }
-  .watch-market-tag {
-    font-size: 0.7rem; padding: 3px 8px; border-radius: 6px; font-weight: 500;
-    background: rgba(249,115,22,0.15); color: var(--accent-watch);
+  
+  .holding:hover { 
+    background: var(--card-hover);
   }
+  
+  .holding .weight {
+    background: var(--accent-us);
+    border-radius: 6px;
+    padding: 6px 0;
+    text-align: center;
+    font-size: 0.8rem;
+    color: white;
+    font-weight: 600;
+  }
+  
+  .holding .info .ticker { 
+    font-weight: 600; 
+    font-size: 0.9rem; 
+  }
+  
+  .holding .info .name-cn { 
+    font-size: 0.75rem; 
+    color: var(--text-dim); 
+  }
+  
+  .holding .change {
+    text-align: right;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+  .positive-text { color: var(--red) !important; }
+  .negative-text { color: var(--green) !important; }
 
-/* ✅ 关键修复：表头和数据行用完全相同的 grid，padding 完全一致 */
-.watch-table-header {
-  display: grid;
-  grid-template-columns: 1fr 80px 84px;
-  padding: 10px 14px 10px 12px;  /* 增加上下padding */
-  font-size: 0.8rem;  /* 增大字体 */
-  color: var(--text-dim);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  border-bottom: 1px solid var(--border);
-  background: rgba(249,115,22,0.03);
-}
-.watch-table-header span:nth-child(2),
-.watch-table-header span:nth-child(3) { text-align: right; }
-
-.watch-items { padding: 0; }
-.watch-item { border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; }
-.watch-item:last-child { border-bottom: none; }
-.watch-item:hover .watch-row { background: var(--card-hover); }
-
-.watch-row {
-  display: grid;
-  grid-template-columns: 1fr 80px 84px;
-  align-items: center;
-  gap: 0;
-  padding: 12px 14px 12px 12px;  /* 增加行高 */
-  font-size: 13px;  /* 增大字体 */
-  border-radius: 0;
-  transition: background 0.15s;
-}
-.watch-left {
-  display: flex; align-items: center; gap: 8px;  /* 增加间距 */
-  overflow: hidden; padding-right: 8px;
-}
-.watch-flag { font-size: 12px; flex-shrink: 0; }
-.watch-ticker { font-weight: 600; color: #818cf8; flex-shrink: 0; font-size: 12px; min-width: 50px; }
-.watch-name { 
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; 
-  font-size: 13px; font-weight: 600;  /* 增大并加粗 */
-}
-.watch-day, .watch-since { 
-  text-align: right; font-weight: 600; 
-  font-size: 13px; font-variant-numeric: tabular-nums;  /* 增大字体 */
-}
-
-.watch-detail {
-  padding: 12px 14px 16px 12px;  /* 增加内边距 */
-  border-top: 1px dashed var(--border);
-  background: rgba(0,0,0,0.02);
-  display: none;
-  font-size: 12px; line-height: 1.7;  /* 增加行高 */
-  color: var(--text-dim);
-}
-.watch-detail.open { display: block; }
-.watch-detail .drow { margin: 6px 0; }  /* 增加行间距 */
-.watch-detail .dlbl { color: var(--text); font-weight: 600; margin-right: 6px; }
-
+  .share-section { 
+    max-width: 1200px; 
+    margin: 0 auto 40px; 
+  }
+  
+  .share-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  
+  .share-card-header {
+    padding: 16px 20px; 
+    display: flex; 
+    justify-content: space-between;
+    align-items: center; 
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .share-card-header .label { 
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+  }
+  
+  .share-card-header .flag { 
+    font-size: 1.4rem; 
+  }
+  
+  .share-card-header .name { 
+    font-size: 1.1rem; 
+    font-weight: 700; 
+  }
+  
+  .share-note {
+    font-size: 0.7rem; 
+    padding: 4px 10px; 
+    border-radius: 6px; 
+    font-weight: 600;
+    background: #6b7280;
+    color: white;
+  }
+  
+  .share-table-header {
+    display: grid;
+    grid-template-columns: 1fr 70px 70px;
+    padding: 10px 12px;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    border-bottom: 1px solid var(--border);
+    text-align: right;
+  }
+  .share-table-header span:first-child { text-align:left; }
+  
+  .share-items { padding: 0; }
+  .share-item { border-bottom: 1px solid var(--border); cursor: pointer; }
+  .share-item:last-child { border-bottom: none; }
+  .share-item:hover .share-row { background: var(--card-hover); }
+  
+  .share-row {
+    display: grid;
+    grid-template-columns: 1fr 70px 70px;
+    align-items: center;
+    padding: 12px;
+    font-size: 12px;
+    text-align:right;
+  }
+  .share-row .share-left { text-align:left; }
+  
+  .share-left {
+    display: flex; 
+    align-items: center; 
+    gap: 8px;
+  }
+  
+  .share-flag { font-size: 12px; }
+  .share-ticker { font-weight: 600; color: var(--accent-us); }
+  .share-name { font-weight: 600; }
+  
+  .share-day, .share-since { 
+    font-weight: 600;
+  }
+  
+  .share-detail {
+    padding: 16px 12px;
+    border-top: 1px dashed var(--border);
+    display: none;
+    font-size: 12px; 
+  }
+  
+  .share-detail.open { display: block; }
+  
+  .detail-row { 
+    margin: 8px 0; 
+    padding: 8px 10px;
+    border-radius: 6px;
+  }
+  
+  .sector-row {
+    background: rgba(59, 130, 246, 0.08);
+    border-left: 3px solid var(--accent-us);
+  }
+  
+  .logic-row {
+    background: rgba(249, 115, 22, 0.08);
+    border-left: 3px solid var(--accent-share);
+  }
+  
+  .analysis-row {
+    background: rgba(168, 85, 247, 0.08);
+    border-left: 3px solid #a855f7;
+  }
+  
+  .info-row {
+    background: rgba(136, 146, 168, 0.08);
+    border-left: 3px solid var(--text-dim);
+  }
+  
+  .detail-label { font-weight: 600; margin-right: 8px; }
+  
   .loading-skeleton {
-    height: 20px;
-    background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 75%);
-    background-size: 200% 100%;
+    height: 16px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.08) 25%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.08) 75%);
+    background-size: 400% 100%;
     animation: shimmer 1.5s infinite;
     border-radius: 4px;
   }
-  @keyframes shimmer { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
-
+  
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  
   .footer {
-    text-align: center; padding: 32px 0 16px;
-    color: var(--text-dim); font-size: 0.75rem;
-    max-width: 1400px; margin: 0 auto;
+    text-align: center; 
+    padding: 24px 0 16px;
+    color: var(--text-dim); 
+    font-size: 0.8rem;
+  }
+  
+  .footer-note {
+    font-size: 0.75rem;
+    margin-top: 8px;
+    opacity: 0.7;
   }
 
-  @media (max-width: 500px) {
+  @media (max-width: 900px) {
     .portfolios { grid-template-columns: 1fr; }
-    .header h1 { font-size: 1.5rem; }
-    .holding { grid-template-columns: 36px 1fr 64px 64px; gap: 4px; padding: 8px; }
-    .change-header { grid-template-columns: 36px 1fr 64px 64px; gap: 4px; }
+  }
+  
+  @media (max-width: 768px) {
+    body { padding: 12px; }
+    .holding {
+      grid-template-columns: 36px 1fr 60px 60px;
+      padding: 8px;
+    }
   }
 </style>
 </head>
 <body>
 
-<div class="header">
-  <h1>躺平投资组合追踪器</h1>
-  <p class="subtitle">三市场 ETF 组合 · 实时行情 · Z先生分享追踪</p>
-</div>
-
-<div class="status-bar">
-  <div class="dot" id="statusDot"></div>
-  <span class="time" id="statusText">正在加载数据...</span>
-  <button class="btn-refresh" id="btnRefresh" onclick="refreshAll()">刷新</button>
-</div>
-
-<div class="portfolios" id="portfolios">
-  <div class="portfolio us" id="port-us">
-    <div class="portfolio-header">
-      <div class="label"><span class="flag">🇺🇸</span><span class="name">美股躺平组合</span></div>
-      <span class="market-tag">US Market</span>
-    </div>
-    <div class="portfolio-summary" id="summary-us">
-      <div class="summary-item neutral"><div class="summary-label">当日涨跌</div><div class="summary-value"><div class="loading-skeleton" style="width:80px;margin:0 auto"></div></div></div>
-      <div class="summary-item neutral"><div class="summary-label">年初至今</div><div class="summary-value"><div class="loading-skeleton" style="width:80px;margin:0 auto"></div></div></div>
-    </div>
-    <div class="holdings">
-      <div class="change-header"><span></span><span>持仓</span><span>当日</span><span>YTD</span></div>
-      <div id="holdings-us"></div>
-    </div>
+<div class="main-container">
+  <div class="header">
+    <h1>躺平投资组合追踪器</h1>
+    <p class="subtitle">追踪Z先生分享的ETF组合与公开机会</p>
   </div>
 
-  <div class="portfolio hk" id="port-hk">
-    <div class="portfolio-header">
-      <div class="label"><span class="flag">🇭🇰</span><span class="name">港股躺平组合</span></div>
-      <span class="market-tag">HK Market</span>
+  <div class="status-bar">
+    <div class="status-info">
+      <div class="dot" id="statusDot"></div>
+      <span class="time" id="statusText">正在加载数据...</span>
     </div>
-    <div class="portfolio-summary" id="summary-hk">
-      <div class="summary-item neutral"><div class="summary-label">当日涨跌</div><div class="summary-value"><div class="loading-skeleton" style="width:80px;margin:0 auto"></div></div></div>
-      <div class="summary-item neutral"><div class="summary-label">年初至今</div><div class="summary-value"><div class="loading-skeleton" style="width:80px;margin:0 auto"></div></div></div>
-    </div>
-    <div class="holdings">
-      <div class="change-header"><span></span><span>持仓</span><span>当日</span><span>YTD</span></div>
-      <div id="holdings-hk"></div>
-    </div>
+    <button class="btn-refresh" id="btnRefresh" onclick="refreshAll()">刷新</button>
   </div>
 
-  <div class="portfolio a" id="port-a">
-    <div class="portfolio-header">
-      <div class="label"><span class="flag">🇨🇳</span><span class="name">A股躺平组合</span></div>
-      <span class="market-tag">CN Market</span>
-    </div>
-    <div class="portfolio-summary" id="summary-a">
-      <div class="summary-item neutral"><div class="summary-label">当日涨跌</div><div class="summary-value"><div class="loading-skeleton" style="width:80px;margin:0 auto"></div></div></div>
-      <div class="summary-item neutral"><div class="summary-label">年初至今</div><div class="summary-value"><div class="loading-skeleton" style="width:80px;margin:0 auto"></div></div></div>
-    </div>
-    <div class="holdings">
-      <div class="change-header"><span></span><span>持仓</span><span>当日</span><span>YTD</span></div>
-      <div id="holdings-a"></div>
-    </div>
-  </div>
-</div>
-
-<div class="watch-section">
-  <div class="watch-card">
-    <div class="watch-card-header">
-      <div class="label">
-        <span class="flag">⭐</span>
-        <span class="name">Z先生分享标的</span>
+  <div class="portfolios" id="portfolios">
+    <div class="portfolio us" id="port-us">
+      <div class="portfolio-header">
+        <div class="left">
+          <span class="flag">🇺🇸</span>
+          <span class="name">美股躺平组合</span>
+        </div>
+        <span class="market-tag">US Market</span>
       </div>
-      <span class="watch-market-tag">📡 实时跟踪</span>
+      <div class="portfolio-summary" id="summary-us">
+        <div class="summary-item neutral"><div class="summary-label">当日</div><div class="summary-value"><div class="loading-skeleton" style="width:60px;margin:0 auto"></div></div></div>
+        <div class="summary-item neutral"><div class="summary-label">YTD</div><div class="summary-value"><div class="loading-skeleton" style="width:60px;margin:0 auto"></div></div></div>
+      </div>
+      <div class="holdings">
+        <div class="change-header"><span></span><span>持仓</span><span>当日</span><span>YTD</span></div>
+        <div id="holdings-us"></div>
+      </div>
     </div>
-    <!-- 表头和数据行用完全相同的 grid + padding，保证对齐 -->
-    <div class="watch-table-header">
-      <span>⬇️ 点击展开详情</span>
-      <span>当日</span>
-      <span>累计</span>
+
+    <div class="portfolio hk" id="port-hk">
+      <div class="portfolio-header">
+        <div class="left">
+          <span class="flag">🇭🇰</span>
+          <span class="name">港股躺平组合</span>
+        </div>
+        <span class="market-tag">HK Market</span>
+      </div>
+      <div class="portfolio-summary" id="summary-hk">
+        <div class="summary-item neutral"><div class="summary-label">当日</div><div class="summary-value"><div class="loading-skeleton" style="width:60px;margin:0 auto"></div></div></div>
+        <div class="summary-item neutral"><div class="summary-label">YTD</div><div class="summary-value"><div class="loading-skeleton" style="width:60px;margin:0 auto"></div></div></div>
+      </div>
+      <div class="holdings">
+        <div class="change-header"><span></span><span>持仓</span><span>当日</span><span>YTD</span></div>
+        <div id="holdings-hk"></div>
+      </div>
     </div>
-    <div class="watch-items" id="watch-list"></div>
+
+    <div class="portfolio a" id="port-a">
+      <div class="portfolio-header">
+        <div class="left">
+          <span class="flag">🇨🇳</span>
+          <span class="name">A股躺平组合</span>
+        </div>
+        <span class="market-tag">CN Market</span>
+      </div>
+      <div class="portfolio-summary" id="summary-a">
+        <div class="summary-item neutral"><div class="summary-label">当日</div><div class="summary-value"><div class="loading-skeleton" style="width:60px;margin:0 auto"></div></div></div>
+        <div class="summary-item neutral"><div class="summary-label">YTD</div><div class="summary-value"><div class="loading-skeleton" style="width:60px;margin:0 auto"></div></div></div>
+      </div>
+      <div class="holdings">
+        <div class="change-header"><span></span><span>持仓</span><span>当日</span><span>YTD</span></div>
+        <div id="holdings-a"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="share-section">
+    <div class="share-card">
+      <div class="share-card-header">
+        <div class="label">
+          <span class="flag">📈</span>
+          <span class="name">Z先生分享记录</span>
+        </div>
+        <span class="share-note">仅供记录，不构成投资建议</span>
+      </div>
+      <div class="share-table-header">
+        <span>点击查看详情</span>
+        <span>当日</span>
+        <span>累计</span>
+      </div>
+      <div class="share-items" id="share-list"></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    数据来源: 腾讯财经 · 自动刷新间隔 30s<br>
+    <span class="footer-note">本页面为Z先生公开分享的ETF组合与投资机会记录，不构成投资建议。市场有风险，投资需谨慎。</span>
   </div>
 </div>
-
-<div class="footer">
-  数据来源: 腾讯财经 · 自动刷新间隔 30s · 仅供参考，不构成投资建议
-</div>
-
-<details style="max-width:1400px;margin:8px auto;padding:0 0">
-  <summary style="color:#8892a8;font-size:12px;cursor:pointer;padding:0 4px">调试日志</summary>
-  <pre id="dbg" style="background:#0a0a0f;color:#6a6;font-size:11px;padding:10px;border-radius:8px;max-height:300px;overflow:auto;white-space:pre-wrap"></pre>
-</details>
 
 <script>
 if (window.matchMedia) {
   const mq = window.matchMedia('(prefers-color-scheme: dark)');
   const upd = () => document.documentElement.setAttribute('data-theme', mq.matches ? 'dark' : 'light');
   mq.addEventListener('change', upd); upd();
-}
-
-function dbg(msg) {
-  const el = document.getElementById('dbg');
-  if (el) { el.textContent += new Date().toLocaleTimeString() + ' ' + msg + '\n'; el.scrollTop = el.scrollHeight; }
 }
 
 function formatFullDate() {
@@ -347,17 +583,14 @@ function formatFullDate() {
 }
 
 function getColorClass(val) {
-  if (val==null||isNaN(val)) return 'neutral-text';
-  return val>0.001?'positive-text':val<-0.001?'negative-text':'neutral-text';
+  if (val==null||isNaN(val)) return '';
+  return val>0.001 ? 'positive-text' : val<-0.001 ? 'negative-text' : '';
 }
 function getSummaryClass(val) {
   if (val==null||isNaN(val)) return 'neutral';
   return val>0.001?'positive':val<-0.001?'negative':'neutral';
 }
 
-// ══════════════════════════════════════
-// ETF 组合数据
-// ══════════════════════════════════════
 const PORTFOLIOS = {
   us: {
     name: '美股躺平组合',
@@ -397,83 +630,17 @@ const YTD_BASE = {
   'sh513390':2.107,'sz159652':1.674,'sh588200':2.342,'sh515880':1.027,'sh518880':9.301,
 };
 
-// ══════════════════════════════════════
-// ⭐ Z先生分享标的追踪 (已合并原有+新增)
-// ══════════════════════════════════════
-const WATCH = [
-  // --- 原有的旧标的 ---
-  {
-    ticker:'300782', name:'卓胜微', sym:'sz300782', flag:'🇨🇳',
-    date:'2026-03-26', price:87.00,
-    sector:'射频芯片',
-    logic:'AI手机射频升级 + 国产替代加速',
-    note:'国内射频前端龙头，垄断安卓高端机射频模组，受益AI手机射频复杂度提升与美国制裁替代窗口'
-  },
-  {
-    ticker:'002428', name:'云南锗业', sym:'sz002428', flag:'🇨🇳',
-    date:'2026-04-10', price:56.79,
-    sector:'磷化铟/锗半导体材料',
-    logic:'光模块上游核心晶圆材料',
-    note:'国内稀缺量产磷化铟晶圆企业，主营磷化铟单晶、锗基半导体衬底，AI光模块激光器核心上游原材料'
-  },
-  {
-    ticker:'MRVL', name:'迈威尔科技', sym:'usMRVL', flag:'🇺🇸',
-    date:'2026-03-18', price:87.58,
-    sector:'AI芯片/光互连',
-    logic:'AI数据中心定制芯片 + 光互连芯片双轮驱动',
-    note:'AI数据中心核心标的，ASIC定制芯片+硅光互连，深度受益全球算力基建扩张'
-  },
-  {
-    ticker:'AAOI', name:'应用光电', sym:'usAAOI', flag:'🇺🇸',
-    date:'2026-04-10', price:150.60,
-    sector:'光模块/光通信',
-    logic:'AI算力光互连爆发 + 1.6T高速光模块放量',
-    note:'高速光模块龙头，垂直整合激光器芯片，深度受益AI算力网络需求爆发'
-  },
-  {
-    ticker:'06869', name:'长飞光纤', sym:'hk06869', flag:'🇭🇰',
-    date:'2026-04-17', price:206.00,
-    sector:'光纤光缆/光通信',
-    logic:'AI算力光纤光缆刚需 + 海外出海',
-    note:'全球光纤光缆龙头，受益AI算力网络建设、海外需求复苏'
-  },
-  
-  // --- 新增的 4.22 SpaceX 产业链标的 (京城Z先生分享) ---
-  {
-    ticker:'300136', name:'信维通信', sym:'sz300136', flag:'🇨🇳',
-    date:'2026-04-22', price:79.52,
-    sector:'卫星通信',
-    logic:'SpaceX星链终端核心供应商',
-    note:'射频天线+连接器，为SpaceX星链终端提供核心射频组件'
-  },
-  {
-    ticker:'002149', name:'西部材料', sym:'sz002149', flag:'🇨🇳',
-    date:'2026-04-22', price:64.10,
-    sector:'航天材料',
-    logic:'火箭发动机用稀有金属',
-    note:'铌钛合金供货商，用于SpaceX火箭发动机高温部件'
-  },
-  {
-    ticker:'603308', name:'应流股份', sym:'sh603308', flag:'🇨🇳',
-    date:'2026-04-22', price:75.45,
-    sector:'航空航天',
-    logic:'航天发动机结构件',
-    note:'高温合金部件制造商，供应SpaceX航天发动机关键结构件'
-  },
-  {
-    ticker:'603601', name:'再升科技', sym:'sh603601', flag:'🇨🇳',
-    date:'2026-04-22', price:15.82,
-    sector:'航天材料',
-    logic:'火箭隔热保温材料',
-    note:'气凝胶供货商，为SpaceX火箭提供高效隔热保温材料'
-  },
-  {
-    ticker:'605123', name:'派克新材', sym:'sh605123', flag:'🇨🇳',
-    date:'2026-04-22', price:104.29,
-    sector:'航空航天',
-    logic:'航天环形锻件',
-    note:'高温合金定制件，用于SpaceX火箭及航天器结构'
-  }
+const SHARE_RECORDS = [
+  { ticker:'300782', name:'卓胜微', sym:'sz300782', flag:'🇨🇳', date:'2026-03-26', price:87.00, sector:'射频芯片', logic:'AI手机射频升级 + 国产替代加速', analysis:'国内射频前端龙头，垄断安卓高端机射频模组，受益AI手机射频复杂度提升与美国制裁替代窗口' },
+  { ticker:'002428', name:'云南锗业', sym:'sz002428', flag:'🇨🇳', date:'2026-04-10', price:56.79, sector:'磷化铟/锗半导体材料', logic:'光模块上游核心晶圆材料', analysis:'国内稀缺量产磷化铟晶圆企业，主营磷化铟单晶、锗基半导体衬底，AI光模块激光器核心上游原材料' },
+  { ticker:'MRVL', name:'迈威尔科技', sym:'usMRVL', flag:'🇺🇸', date:'2026-03-18', price:87.58, sector:'AI芯片/光互连', logic:'AI数据中心定制芯片 + 光互连芯片双轮驱动', analysis:'AI数据中心核心标的，ASIC定制芯片+硅光互连，深度受益全球算力基建扩张' },
+  { ticker:'AAOI', name:'应用光电', sym:'usAAOI', flag:'🇺🇸', date:'2026-04-10', price:150.60, sector:'光模块/光通信', logic:'AI算力光互连爆发 + 1.6T高速光模块放量', analysis:'高速光模块龙头，垂直整合激光器芯片，深度受益AI算力网络需求爆发' },
+  { ticker:'06869', name:'长飞光纤', sym:'hk06869', flag:'🇭🇰', date:'2026-04-17', price:206.00, sector:'光纤光缆/光通信', logic:'AI算力光纤光缆刚需 + 海外出海', analysis:'全球光纤光缆龙头，受益AI算力网络建设、海外需求复苏' },
+  { ticker:'300136', name:'信维通信', sym:'sz300136', flag:'🇨🇳', date:'2026-04-22', price:79.52, sector:'卫星通信', logic:'SpaceX星链终端核心供应商', analysis:'射频天线+连接器，为SpaceX星链终端提供核心射频组件' },
+  { ticker:'002149', name:'西部材料', sym:'sz002149', flag:'🇨🇳', date:'2026-04-22', price:64.10, sector:'航天材料', logic:'火箭发动机用稀有金属', analysis:'铌钛合金供货商，用于SpaceX火箭发动机高温部件' },
+  { ticker:'603308', name:'应流股份', sym:'sh603308', flag:'🇨🇳', date:'2026-04-22', price:75.45, sector:'航空航天', logic:'航天发动机结构件', analysis:'高温合金部件制造商，供应SpaceX航天发动机关键结构件' },
+  { ticker:'603601', name:'再升科技', sym:'sh603601', flag:'🇨🇳', date:'2026-04-22', price:15.82, sector:'航天材料', logic:'火箭隔热保温材料', analysis:'气凝胶供货商，为SpaceX火箭提供高效隔热保温材料' },
+  { ticker:'605123', name:'派克新材', sym:'sh605123', flag:'🇨🇳', date:'2026-04-22', price:104.29, sector:'航空航天', logic:'航天环形锻件', analysis:'高温合金定制件，用于SpaceX火箭及航天器结构' }
 ];
 
 let _jid = 0;
@@ -481,12 +648,7 @@ function qqJsonp(codes, timeout=8000) {
   return new Promise((resolve, reject) => {
     const s = document.createElement('script');
     const timer = setTimeout(() => { s.remove(); reject(new Error('timeout')); }, timeout);
-    s.onload = () => {
-      clearTimeout(timer); s.remove();
-      const results = {};
-      codes.forEach(c => { const val = window['v_'+c]; if(val) results[c]=val; });
-      resolve(results);
-    };
+    s.onload = () => { clearTimeout(timer); s.remove(); const results = {}; codes.forEach(c => { const val = window['v_'+c]; if(val) results[c]=val; }); resolve(results); };
     s.onerror = () => { clearTimeout(timer); s.remove(); reject(new Error('script error')); };
     s.src = `https://qt.gtimg.cn/q=${codes.join(',')}`;
     document.head.appendChild(s);
@@ -506,12 +668,8 @@ function parseQuote(code, raw) {
   return { code, price, dailyPct: isNaN(dailyPct)?null:dailyPct };
 }
 
-const CACHE = {
-  us: {rt:{},ytd:{},loaded:false},
-  hk: {rt:{},ytd:{},loaded:false},
-  a:  {rt:{},ytd:{},loaded:false},
-};
-const WATCH_CACHE = {};
+const CACHE = { us: {rt:{},ytd:{},loaded:false}, hk: {rt:{},ytd:{},loaded:false}, a: {rt:{},ytd:{},loaded:false} };
+const SHARE_CACHE = {};
 
 function fmt(v) {
   if (v==null||isNaN(v)) return '—';
@@ -541,8 +699,8 @@ function renderSummary(key, rt, ytd) {
   });
   const dv=dOk?dW:null, yv=yOk?yW:null;
   document.getElementById(`summary-${key}`).innerHTML = `
-    <div class="summary-item ${getSummaryClass(dv)}"><div class="summary-label">当日涨跌</div><div class="summary-value">${fmt(dv)}</div></div>
-    <div class="summary-item ${getSummaryClass(yv)}"><div class="summary-label">年初至今</div><div class="summary-value">${fmt(yv)}</div></div>`;
+    <div class="summary-item ${getSummaryClass(dv)}"><div class="summary-label">当日</div><div class="summary-value">${fmt(dv)}</div></div>
+    <div class="summary-item ${getSummaryClass(yv)}"><div class="summary-label">YTD</div><div class="summary-value">${fmt(yv)}</div></div>`;
 }
 
 function renderLoadingHoldings(key) {
@@ -556,38 +714,37 @@ function renderLoadingHoldings(key) {
   ).join('');
 }
 
-// ✅ renderWatch：表头和数据行用完全相同的 grid，完美对齐
-function renderWatch() {
-  const container = document.getElementById('watch-list');
-  container.innerHTML = WATCH.map((w, idx) => {
-    const d = WATCH_CACHE[w.sym] || {};
+function renderShareRecords() {
+  const container = document.getElementById('share-list');
+  container.innerHTML = SHARE_RECORDS.map((w, idx) => {
+    const d = SHARE_CACHE[w.sym] || {};
     const since = (d.price&&w.price) ? ((d.price-w.price)/w.price*100) : null;
     const c1 = getColorClass(d.dailyPct);
     const c2 = getColorClass(since);
     const priceStr = d.price ? d.price.toFixed(2) : '--';
     return `
-    <div class="watch-item" onclick="toggleDetail(${idx})">
-      <div class="watch-row">
-        <div class="watch-left">
-          <span class="watch-flag">${w.flag}</span>
-          <span class="watch-ticker">${w.ticker}</span>
-          <span class="watch-name">${w.name}</span>
+    <div class="share-item" onclick="toggleShareDetail(${idx})">
+      <div class="share-row">
+        <div class="share-left">
+          <span class="share-flag">${w.flag}</span>
+          <span class="share-ticker">${w.ticker}</span>
+          <span class="share-name">${w.name}</span>
         </div>
-        <div class="watch-day ${c1}">${fmt(d.dailyPct)}</div>
-        <div class="watch-since ${c2}">${fmt(since)}</div>
+        <div class="${c1}">${fmt(d.dailyPct)}</div>
+        <div class="${c2}">${fmt(since)}</div>
       </div>
-      <div class="watch-detail" id="detail-${idx}">
-        <div class="drow"><span class="dlbl">行业：</span>${w.sector}</div>
-        <div class="drow"><span class="dlbl">逻辑：</span>${w.logic}</div>
-        <div class="drow"><span class="dlbl">备注：</span>${w.note}</div>
-        <div class="drow"><span class="dlbl">分享日：</span>${w.date} &nbsp;·&nbsp; 参考价 ${w.price.toFixed(2)} → 现价 ${priceStr}</div>
+      <div class="share-detail" id="share-detail-${idx}">
+        <div class="detail-row sector-row"><span class="detail-label">行业：</span>${w.sector}</div>
+        <div class="detail-row logic-row"><span class="detail-label">逻辑：</span>${w.logic}</div>
+        <div class="detail-row analysis-row"><span class="detail-label">分析：</span>${w.analysis}</div>
+        <div class="detail-row info-row"><span class="detail-label">记录：</span>${w.date} · 参考价 ${w.price.toFixed(2)} → 现价 ${priceStr}</div>
       </div>
     </div>`;
   }).join('');
 }
 
-function toggleDetail(i) {
-  document.getElementById('detail-'+i).classList.toggle('open');
+function toggleShareDetail(i) {
+  document.getElementById('share-detail-'+i).classList.toggle('open');
 }
 
 async function loadPortfolio(key) {
@@ -604,27 +761,29 @@ async function loadPortfolio(key) {
         if(base>0&&q.price>0) c.ytd[h.code]=((q.price-base)/base)*100;
       }
     });
-  } catch(e) { dbg(`${key} 失败: ${e.message}`); }
+  } catch(e) {}
   renderHoldings(key,c.rt,c.ytd);
   renderSummary(key,c.rt,c.ytd);
   c.loaded=true;
 }
 
-async function loadWatch() {
+async function loadShareRecords() {
   try {
-    const codes = WATCH.map(w=>w.sym);
+    const codes = SHARE_RECORDS.map(w=>w.sym);
     const rawMap = await qqJsonp(codes);
-    WATCH.forEach(w => {
+    SHARE_RECORDS.forEach(w => {
       const q = parseQuote(w.sym, rawMap[w.sym]);
-      if (q) WATCH_CACHE[w.sym]=q;
+      if (q) SHARE_CACHE[w.sym]=q;
     });
-  } catch(e) { dbg(`自选失败: ${e.message}`); }
-  renderWatch();
+  } catch(e) {}
+  renderShareRecords();
 }
 
 function setStatus(s, m) {
-  document.getElementById('statusDot').className='dot '+(s==='ok'?'':s==='loading'?'loading':'error');
-  document.getElementById('statusText').textContent=m;
+  const dot = document.getElementById('statusDot');
+  const text = document.getElementById('statusText');
+  dot.className = 'dot ' + (s==='ok'?'':s==='loading'?'loading':'error');
+  text.textContent = m;
 }
 
 let _timer=null, _first=true;
@@ -634,10 +793,7 @@ async function refreshAll() {
   const t0=performance.now();
   setStatus('loading', _first?'正在获取数据...':'刷新中...');
   try {
-    await Promise.allSettled([
-      ...['us','hk','a'].map(k=>loadPortfolio(k)),
-      loadWatch()
-    ]);
+    await Promise.allSettled([...['us','hk','a'].map(k=>loadPortfolio(k)), loadShareRecords()]);
     _first=false;
     const ms=((performance.now()-t0)/1000).toFixed(1);
     setStatus('ok', `${formatFullDate()} (${ms}s)`);
@@ -649,7 +805,7 @@ async function refreshAll() {
 
 document.addEventListener('DOMContentLoaded', () => {
   ['us','hk','a'].forEach(k=>renderLoadingHoldings(k));
-  renderWatch();
+  renderShareRecords();
   refreshAll();
 });
 </script>
