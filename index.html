@@ -572,61 +572,6 @@ const WATCH = [
     note:    '国内稀缺量产磷化铟晶圆企业，主营磷化铟单晶、锗基半导体衬底，AI光模块激光器核心上游原材料，深度受益光通信产业链高景气',
     flag:    '🇨🇳'
   },
-  {
-    ticker:  '300136',
-    name:    '信维通信',
-    sym:     'sz300136',
-    date:    '2026-04-22',
-    price:   79.52,
-    sector:  '射频连接器/商业航天',
-    logic:   'SpaceX星链终端核心供应商',
-    note:    '国内射频器件龙头，深度绑定星链供应链，供应高频高速连接器，适配卫星终端航天级要求，商业卫星组网高景气加持',
-    flag:    '🇨🇳'
-  },
-  {
-    ticker:  '002149',
-    name:    '西部材料',
-    sym:     'sz002149',
-    date:    '2026-04-22',
-    price:   64.10,
-    sector:  '高温合金/特种航天材料',
-    logic:   'SpaceX火箭发动机耐热材料',
-    note:    '稀有金属高端材料龙头，供应火箭发动机高温特种合金，切入猎鹰、星舰供应链，航天军工+商业火箭双赛道共振',
-    flag:    '🇨🇳'
-  },
-  {
-    ticker:  '603308',
-    name:    '应流股份',
-    sym:     'sh603308',
-    date:    '2026-04-22',
-    price:   75.45,
-    sector:  '高端精密铸造/航空航天',
-    logic:   'SpaceX动力系统精密铸件',
-    note:    '高温合金精密铸造龙头，通过航天体系认证，为火箭发动机提供核心铸件，受益商业火箭量产扩张',
-    flag:    '🇨🇳'
-  },
-  {
-    ticker:  '603601',
-    name:    '再升科技',
-    sym:     'sh603601',
-    date:    '2026-04-22',
-    price:   15.82,
-    sector:  '玻纤隔热新材料/航天热控',
-    logic:   'SpaceX箭体卫星隔热材料',
-    note:    '高端绝热玻纤材料龙头，供货航天级耐高温隔热制品，应用于星链卫星与火箭箭体热控防护，赛道稀缺性突出',
-    flag:    '🇨🇳'
-  },
-  {
-    ticker:  '605123',
-    name:    '派克新材',
-    sym:     'sh605123',
-    date:    '2026-04-22',
-    price:   104.29,
-    sector:  '高端合金锻件/航天结构件',
-    logic:   'SpaceX箭体及发动机锻件',
-    note:    '航空航天高端锻件核心厂商，产品覆盖火箭结构件、发动机关键锻件，切入海外商业航天供应链，业绩增量明确',
-    flag:    '🇨🇳'
-  },
   // 美股标的
   {
     ticker:  'MRVL',
@@ -652,50 +597,32 @@ const WATCH = [
   },
   // 港股标的
   {
-    ticker:  '06869',
-    name:    '长飞光纤',
-    sym:     'hk06869',
-    date:    '2026-04-17',
-    price:   206.00,
-    sector:  '光纤光缆/光通信',
-    logic:   'AI算力光纤光缆刚需 + 海外出海',
-    note:    '全球光纤光缆龙头，受益AI算力网络建设、海外需求复苏，低估值高股息，具备强周期底部配置价值',
-    flag:    '🇭🇰'
-  },
+  ticker:  '06869',
+  name:    '长飞光纤',
+  sym:     'hk06869',
+  date:    '2026-04-17',
+  price:   206.00,
+  sector:  '光纤光缆/光通信',
+  logic:   'AI算力光纤光缆刚需 + 海外出海',
+  note:    '全球光纤光缆龙头，受益AI算力网络建设、海外需求复苏，低估值高股息，具备强周期底部配置价值',
+  flag:    '🇭🇰'
+},
 ];
 
-// 重写的兼容版JSONP请求函数，适配腾讯财经接口
+let _jid = 0;
 function qqJsonp(codes, timeout = 8000) {
   return new Promise((resolve, reject) => {
-    const callbackName = 'qqCallback_' + Date.now();
-    const script = document.createElement('script');
-    const timer = setTimeout(() => {
-      script.remove();
-      delete window[callbackName];
-      reject(new Error('请求超时'));
-    }, timeout);
-
-    window[callbackName] = function(data) {
-      clearTimeout(timer);
-      script.remove();
-      delete window[callbackName];
+    const s = document.createElement('script');
+    const timer = setTimeout(() => { s.remove(); reject(new Error('timeout')); }, timeout);
+    s.onload = () => {
+      clearTimeout(timer); s.remove();
       const results = {};
-      // 按顺序解析返回的数据
-      const parts = data.split(';');
-      codes.forEach((code, i) => {
-        if (parts[i]) results[code] = parts[i];
-      });
+      codes.forEach(c => { const val = window['v_' + c]; if (val) results[c] = val; });
       resolve(results);
     };
-
-    script.src = `https://qt.gtimg.cn/q=${codes.join(',')}&callback=${callbackName}`;
-    script.onerror = () => {
-      clearTimeout(timer);
-      script.remove();
-      delete window[callbackName];
-      reject(new Error('脚本加载失败'));
-    };
-    document.head.appendChild(script);
+    s.onerror = () => { clearTimeout(timer); s.remove(); reject(new Error('script error')); };
+    s.src = `https://qt.gtimg.cn/q=${codes.join(',')}`;
+    document.head.appendChild(s);
   });
 }
 
