@@ -686,7 +686,6 @@ async function refreshAll(){
     _first=false;
     const ms=((performance.now()-t0)/1000).toFixed(1);
     setStatus('ok',formatFullDate());
-    document.getElementById('updateBadge').textContent=`· ${ms}s`;
   }catch(e){setStatus('error','加载失败');}
   btn.disabled=false;
   clearTimeout(_timer);
