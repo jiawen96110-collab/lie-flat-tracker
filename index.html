@@ -19,9 +19,9 @@
       --accent-share: #ff9800;
       --red: #f76c6c;
       --green: #4caf7d;
-      --red-bg: rgba(247, 108, 108, 0.12);
-      --green-bg: rgba(76, 175, 125, 0.12);
-      --shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      --red-bg: rgba(247,108,108,0.12);
+      --green-bg: rgba(76,175,125,0.12);
+      --shadow: 0 8px 24px rgba(0,0,0,0.3);
     }
   }
   @media (prefers-color-scheme: light) {
@@ -38,269 +38,303 @@
       --accent-share: #f97316;
       --red: #ef4444;
       --green: #10b981;
-      --red-bg: rgba(239, 68, 68, 0.08);
-      --green-bg: rgba(16, 185, 129, 0.08);
-      --shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      --red-bg: rgba(239,68,68,0.08);
+      --green-bg: rgba(16,185,129,0.08);
+      --shadow: 0 8px 24px rgba(0,0,0,0.08);
     }
   }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  * { margin:0; padding:0; box-sizing:border-box; }
 
   html, body {
-    width: 100%;
-    min-height: 100vh;
-    background-color: var(--bg) !important;
-    color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-    padding: 16px;
-    line-height: 1.5;
-    overflow-x: hidden;
-    -webkit-overflow-scrolling: touch;
+    width:100%; min-height:100vh;
+    background-color:var(--bg) !important;
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
+    padding:16px; line-height:1.5;
+    overflow-x:hidden; -webkit-overflow-scrolling:touch;
   }
 
-  .main-container { max-width: 1200px; margin: 0 auto; }
+  .main-container { max-width:1200px; margin:0 auto; }
 
-  .header { text-align: center; padding: 32px 0 24px; }
-  .header h1 { font-size: 2.2rem; font-weight: 800; color: var(--text); margin-bottom: 8px; letter-spacing: -0.5px; }
-  .header .subtitle { font-size: 1rem; color: var(--text-dim); max-width: 500px; margin: 0 auto; }
+  /* ── 头部 ── */
+  .header { text-align:center; padding:32px 0 24px; }
+  .header h1 { font-size:2.2rem; font-weight:800; color:var(--text); margin-bottom:8px; letter-spacing:-0.5px; }
+  .header .subtitle { font-size:1rem; color:var(--text-dim); max-width:500px; margin:0 auto; }
 
+  /* ── 状态栏 ── */
   .status-bar {
-    display: flex; align-items: center; gap: 10px;
-    padding: 10px 16px;
-    background: var(--card);
-    border-radius: 12px;
-    border: 1px solid var(--border);
-    margin: 0 auto 24px;
-    font-size: 0.85rem;
+    display:flex; align-items:center; justify-content:space-between;
+    gap:10px; padding:10px 16px;
+    background:var(--card); border-radius:12px;
+    border:1px solid var(--border); margin:0 auto 8px;
+    font-size:0.85rem;
   }
-  .status-info { display: flex; align-items: center; gap: 8px; }
-  .status-bar .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
-  .status-bar .dot.loading { background: var(--accent-us); animation: pulse 1.5s infinite; }
-  .status-bar .dot.error { background: var(--red); }
-  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-  .status-bar .time { color: var(--text); font-weight: 500; }
+  .status-left { display:flex; align-items:center; gap:8px; flex:1; min-width:0; }
+  .status-bar .dot { width:8px; height:8px; border-radius:50%; background:var(--green); flex-shrink:0; }
+  .status-bar .dot.loading { background:var(--accent-us); animation:pulse 1.5s infinite; }
+  .status-bar .dot.error { background:var(--red); }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+  .status-bar .time { color:var(--text); font-weight:500; font-size:0.82rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .status-right { display:flex; align-items:center; gap:8px; flex-shrink:0; }
+
+  /* 更新时间醒目提示 */
+  .update-badge {
+    font-size:0.72rem; color:var(--text-dim);
+    background:rgba(136,146,168,0.1);
+    padding:3px 8px; border-radius:6px;
+    white-space:nowrap;
+  }
+
   .btn-refresh {
-    background: var(--accent-us); border: none; color: white;
-    padding: 4px 10px; border-radius: 6px; font-size: 0.75rem;
-    cursor: pointer; transition: all 0.2s;
+    background:var(--accent-us); border:none; color:white;
+    padding:5px 12px; border-radius:6px; font-size:0.75rem;
+    cursor:pointer; transition:all 0.2s; white-space:nowrap;
   }
-  .btn-refresh:hover { opacity: 0.9; }
-  .btn-refresh:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-refresh:hover { opacity:0.9; }
+  .btn-refresh:disabled { opacity:0.5; cursor:not-allowed; }
 
-  /* ── 概览统计栏 ── */
-  .overview-bar {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 12px;
-    margin: 0 auto 24px;
-  }
-  .overview-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 12px 16px;
-    text-align: center;
-  }
-  .overview-card .ov-label { font-size: 0.72rem; color: var(--text-dim); margin-bottom: 6px; }
-  .overview-card .ov-value { font-size: 1.05rem; font-weight: 700; }
-  .ov-red { color: var(--red); }
-  .ov-green { color: var(--green); }
-  .ov-neutral { color: var(--text-dim); }
-
-  /* ── 三市场 portfolio ── */
+  /* ── 三市场组合 ── */
   .portfolios {
-    max-width: 1200px; margin: 0 auto 32px;
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 20px;
+    max-width:1200px; margin:16px auto 32px;
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(360px,1fr)); gap:20px;
   }
-  .portfolio { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; transition: all 0.2s; }
-  .portfolio:hover { box-shadow: var(--shadow); }
+  .portfolio { background:var(--card); border:1px solid var(--border); border-radius:16px; overflow:hidden; transition:all 0.2s; }
+  .portfolio:hover { box-shadow:var(--shadow); }
+
   .portfolio-header {
-    padding: 16px 20px; display: flex; align-items: center;
-    justify-content: space-between; border-bottom: 1px solid var(--border);
+    padding:16px 20px; display:flex; align-items:center;
+    justify-content:space-between; border-bottom:1px solid var(--border);
   }
-  .portfolio-header .left { display: flex; align-items: center; gap: 10px; }
-  .portfolio-header .flag { font-size: 1.4rem; }
-  .portfolio-header .name { font-size: 1.1rem; font-weight: 700; }
-  .market-tag { font-size: 0.7rem; padding: 4px 8px; border-radius: 6px; font-weight: 600; color: #fff; }
-  .us .market-tag { background: var(--accent-us); }
-  .hk .market-tag { background: var(--accent-hk); }
-  .a  .market-tag { background: var(--accent-a); }
+  .portfolio-header .left { display:flex; align-items:center; gap:10px; }
+  .portfolio-header .flag { font-size:1.4rem; }
+  .portfolio-header .name { font-size:1.1rem; font-weight:700; }
+  .market-tag { font-size:0.7rem; padding:4px 8px; border-radius:6px; font-weight:600; color:#fff; }
+  .us .market-tag { background:var(--accent-us); }
+  .hk .market-tag { background:var(--accent-hk); }
+  .a  .market-tag { background:var(--accent-a); }
+
+  /* 权重色块按市场区分颜色 */
+  .us .holding .weight { background:var(--accent-us); }
+  .hk .holding .weight { background:var(--accent-hk); }
+  .a  .holding .weight { background:var(--accent-a); }
 
   .portfolio-summary {
-    padding: 12px 20px; display: flex;
-    justify-content: space-between; border-bottom: 1px solid var(--border);
+    padding:12px 20px; display:flex;
+    justify-content:space-between; border-bottom:1px solid var(--border);
   }
-  .summary-item { text-align: center; flex: 1; }
-  .summary-item .summary-label { font-size: 0.75rem; color: var(--text-dim); margin-bottom: 6px; }
-  .summary-value { display: inline-block; padding: 4px 10px; border-radius: 8px; font-size: 1rem; font-weight: 600; }
-  .summary-item.positive .summary-value { background: var(--red-bg); color: var(--red); }
-  .summary-item.negative .summary-value { background: var(--green-bg); color: var(--green); }
-  .summary-item.neutral  .summary-value { background: rgba(136,146,168,0.1); color: var(--text-dim); }
+  .summary-item { text-align:center; flex:1; }
+  .summary-item .summary-label { font-size:0.75rem; color:var(--text-dim); margin-bottom:6px; }
+  .summary-value { display:inline-block; padding:4px 10px; border-radius:8px; font-size:1rem; font-weight:600; }
+  .summary-item.positive .summary-value { background:var(--red-bg); color:var(--red); }
+  .summary-item.negative .summary-value { background:var(--green-bg); color:var(--green); }
+  .summary-item.neutral  .summary-value { background:rgba(136,146,168,0.1); color:var(--text-dim); }
 
-  .holdings { padding: 8px 12px 12px; }
+  .holdings { padding:8px 12px 12px; }
   .change-header {
-    display: grid; grid-template-columns: 40px 1fr 70px 70px;
-    gap: 10px; padding: 8px 12px;
-    font-size: 0.7rem; color: var(--text-dim);
-    border-bottom: 1px solid var(--border);
+    display:grid; grid-template-columns:40px 1fr 70px 70px;
+    gap:10px; padding:8px 12px;
+    font-size:0.7rem; color:var(--text-dim);
+    border-bottom:1px solid var(--border);
   }
   .change-header span:nth-child(3),
-  .change-header span:nth-child(4) { text-align: right; }
+  .change-header span:nth-child(4) { text-align:right; }
 
   .holding {
-    display: grid; grid-template-columns: 40px 1fr 70px 70px;
-    align-items: center; gap: 10px; padding: 10px 12px;
+    display:grid; grid-template-columns:40px 1fr 70px 70px;
+    align-items:center; gap:10px; padding:10px 12px;
   }
-  .holding:hover { background: var(--card-hover); }
+  .holding:hover { background:var(--card-hover); }
   .holding .weight {
-    background: var(--accent-us); border-radius: 6px;
-    padding: 6px 0; text-align: center;
-    font-size: 0.8rem; color: white; font-weight: 600;
+    border-radius:6px; padding:6px 0; text-align:center;
+    font-size:0.8rem; color:white; font-weight:600;
   }
-  .holding .info .ticker { font-weight: 600; font-size: 0.9rem; }
-  .holding .info .name-cn { font-size: 0.75rem; color: var(--text-dim); }
-  .holding .change { text-align: right; font-size: 0.8rem; font-weight: 600; }
-  .positive-text { color: var(--red) !important; }
-  .negative-text { color: var(--green) !important; }
+  .holding .info .ticker { font-weight:600; font-size:0.9rem; }
+  .holding .info .name-cn { font-size:0.75rem; color:var(--text-dim); }
+  .holding .change { text-align:right; font-size:0.8rem; font-weight:600; }
+  .positive-text { color:var(--red) !important; }
+  .negative-text { color:var(--green) !important; }
 
   /* ── 分享整理 ── */
-  .share-section { max-width: 1200px; margin: 0 auto 40px; }
-  .share-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+  .share-section { max-width:1200px; margin:0 auto 40px; }
+  .share-card { background:var(--card); border:1px solid var(--border); border-radius:16px; overflow:hidden; }
+
   .share-card-header {
-    padding: 16px 20px; display: flex; justify-content: space-between;
-    align-items: center; border-bottom: 1px solid var(--border);
-    flex-wrap: nowrap; gap: 12px;
+    padding:16px 20px; display:flex; justify-content:space-between;
+    align-items:center; border-bottom:1px solid var(--border);
+    flex-wrap:nowrap; gap:12px;
   }
-  .share-card-header .label { display: flex; align-items: center; gap: 10px; white-space: nowrap; flex-shrink: 0; }
-  .share-card-header .flag { font-size: 1.4rem; }
-  .share-card-header .name { font-size: 1.1rem; font-weight: 700; }
+  .share-card-header .label { display:flex; align-items:center; gap:10px; white-space:nowrap; flex-shrink:0; }
+  .share-card-header .flag { font-size:1.4rem; }
+  .share-card-header .name { font-size:1.1rem; font-weight:700; }
   .share-note {
-    font-size: 0.7rem; padding: 4px 10px; border-radius: 6px;
-    font-weight: 600; background: #6b7280; color: white;
-    white-space: nowrap; flex-shrink: 0;
+    font-size:0.7rem; padding:4px 10px; border-radius:6px;
+    font-weight:600; background:#6b7280; color:white;
+    white-space:nowrap; flex-shrink:0;
   }
 
   /* ── 排序工具栏 ── */
   .share-toolbar {
-    display: flex; align-items: center; gap: 8px;
-    padding: 10px 12px; border-bottom: 1px solid var(--border);
-    font-size: 0.75rem; color: var(--text-dim);
-    flex-wrap: wrap;
+    display:flex; align-items:center; gap:6px;
+    padding:9px 12px; border-bottom:1px solid var(--border);
+    font-size:0.75rem; color:var(--text-dim); flex-wrap:wrap;
   }
-  .sort-label { margin-right: 4px; }
+  .sort-label { margin-right:2px; flex-shrink:0; }
   .sort-btn {
-    background: none; border: 1px solid var(--border);
-    border-radius: 6px; padding: 3px 10px; font-size: 0.72rem;
-    color: var(--text-dim); cursor: pointer; transition: all 0.15s;
+    background:none; border:1px solid var(--border);
+    border-radius:6px; padding:3px 9px; font-size:0.72rem;
+    color:var(--text-dim); cursor:pointer; transition:all 0.15s;
+    display:inline-flex; align-items:center; gap:4px;
   }
-  .sort-btn:hover { background: var(--card-hover); }
-  .sort-btn.active { background: var(--accent-us); border-color: var(--accent-us); color: #fff; }
+  .sort-btn:hover { background:var(--card-hover); }
+  .sort-btn.active { background:var(--accent-us); border-color:var(--accent-us); color:#fff; }
 
   /* ── 表头 ── */
   .share-table-header {
-    display: grid;
-    grid-template-columns: 20px 70px minmax(0,1fr) 64px 64px;
-    padding: 8px 12px;
-    font-size: 0.72rem; color: var(--text-dim);
-    border-bottom: 1px solid var(--border);
-    gap: 8px;
+    display:grid;
+    grid-template-columns:20px 70px minmax(0,1fr) 64px 64px;
+    padding:8px 12px; gap:8px;
+    font-size:0.72rem; color:var(--text-dim);
+    border-bottom:1px solid var(--border);
   }
   .share-table-header span:nth-child(4),
-  .share-table-header span:nth-child(5) { text-align: right; }
+  .share-table-header span:nth-child(5) { text-align:right; }
+
+  /* ── 分组标题 ── */
+  .group-header {
+    display:flex; align-items:center; gap:8px;
+    padding:8px 12px 6px;
+    font-size:0.72rem; font-weight:700;
+    color:var(--text-dim);
+    border-bottom:1px dashed var(--border);
+    letter-spacing:0.5px;
+    margin-top:2px;
+  }
+  .group-dot {
+    width:6px; height:6px; border-radius:50%; flex-shrink:0;
+  }
 
   /* ── 行 ── */
-  .share-items { padding: 0; }
-  .share-item { border-bottom: 1px solid var(--border); cursor: pointer; }
-  .share-item:last-child { border-bottom: none; }
-  .share-item:hover .share-row { background: var(--card-hover); }
+  .share-items { padding:0; }
+  .share-item { border-bottom:1px solid var(--border); cursor:pointer; }
+  .share-item:last-child { border-bottom:none; }
+  .share-item:hover .share-row { background:var(--card-hover); }
 
   .share-row {
-    display: grid;
-    grid-template-columns: 20px 70px minmax(0,1fr) 64px 64px;
-    align-items: center;
-    padding: 11px 12px;
-    font-size: 12px;
-    gap: 8px;
+    display:grid;
+    grid-template-columns:20px 70px minmax(0,1fr) 64px 64px;
+    align-items:center; padding:9px 12px;
+    font-size:12px; gap:8px;
   }
 
   /* 国旗列 */
   .share-flag {
-    font-size: 14px;
-    display: flex; align-items: center; justify-content: center;
-    line-height: 1;
+    font-size:14px; display:flex;
+    align-items:center; justify-content:center; line-height:1;
   }
   /* 代码列 */
   .share-ticker {
-    font-weight: 600; color: var(--accent-us);
-    display: flex; align-items: center;
-    white-space: nowrap; overflow: hidden;
-    text-overflow: ellipsis; line-height: 1;
+    font-weight:600; color:var(--accent-us);
+    display:flex; align-items:center;
+    white-space:nowrap; overflow:hidden;
+    text-overflow:ellipsis; line-height:1;
   }
   /* 名称列 */
   .share-name {
-    font-weight: 600;
-    display: flex; align-items: center;
-    white-space: nowrap; overflow: hidden;
-    text-overflow: ellipsis; line-height: 1;
+    font-weight:600;
+    display:flex; align-items:center;
+    white-space:nowrap; overflow:hidden;
+    text-overflow:ellipsis; line-height:1;
   }
   /* 当日 / 累计 */
   .share-day, .share-since {
-    font-weight: 600; text-align: right;
-    white-space: nowrap; line-height: 1;
-    display: flex; align-items: center; justify-content: flex-end;
+    font-weight:600; text-align:right;
+    white-space:nowrap; line-height:1;
+    display:flex; align-items:center; justify-content:flex-end;
+    font-size:13px;
   }
 
   /* ── 展开详情 ── */
-  .share-detail { padding: 14px 12px; border-top: 1px dashed var(--border); display: none; font-size: 12px; }
-  .share-detail.open { display: block; }
-  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
-  .detail-row { margin: 0; padding: 8px 10px; border-radius: 6px; line-height: 1.6; }
-  .sector-row   { background: rgba(59,130,246,0.08); border-left: 3px solid var(--accent-us); }
-  .logic-row    { background: rgba(249,115,22,0.08);  border-left: 3px solid var(--accent-share); }
-  .analysis-row { background: rgba(168,85,247,0.08);  border-left: 3px solid #a855f7; }
-  .info-row     { background: rgba(136,146,168,0.08); border-left: 3px solid var(--text-dim); }
-  .detail-label { font-weight: 600; margin-right: 6px; }
+  .share-detail {
+    padding:12px 12px 14px;
+    border-top:1px dashed var(--border);
+    display:none; font-size:12px;
+  }
+  .share-detail.open { display:block; }
+
+  .detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px; }
+  .detail-row { padding:8px 10px; border-radius:6px; line-height:1.65; border-radius:0; }
+  .sector-row   { background:rgba(59,130,246,0.08);  border-left:3px solid var(--accent-us); border-radius:0 4px 4px 0; }
+  .logic-row    { background:rgba(249,115,22,0.08);   border-left:3px solid var(--accent-share); border-radius:0 4px 4px 0; margin-bottom:8px; }
+  .analysis-row { background:rgba(168,85,247,0.08);   border-left:3px solid #a855f7; border-radius:0 4px 4px 0; margin-bottom:8px; }
+  .info-row     { background:rgba(136,146,168,0.08);  border-left:3px solid var(--text-dim); border-radius:0 4px 4px 0; }
+  .detail-label { font-weight:700; margin-right:6px; }
+
+  /* 价格追踪卡片 */
+  .price-track {
+    display:flex; align-items:center; gap:8px;
+    padding:9px 12px; border-radius:6px; margin-bottom:0;
+    background:rgba(136,146,168,0.08);
+    border-left:3px solid var(--text-dim);
+    border-radius:0 4px 4px 0;
+    font-size:12px;
+  }
+  .price-item { display:flex; flex-direction:column; gap:2px; }
+  .price-lbl { font-size:0.68rem; color:var(--text-dim); }
+  .price-val { font-weight:700; font-size:13px; }
+  .price-arrow { color:var(--text-dim); font-size:14px; }
+  .price-since {
+    margin-left:auto; padding:4px 10px; border-radius:6px;
+    font-weight:700; font-size:13px;
+  }
+  .price-since.up   { background:var(--red-bg);   color:var(--red); }
+  .price-since.down { background:var(--green-bg); color:var(--green); }
+  .price-since.flat { background:rgba(136,146,168,0.1); color:var(--text-dim); }
 
   /* ── 加载骨架 ── */
   .loading-skeleton {
-    height: 16px;
-    background: linear-gradient(90deg,rgba(255,255,255,0.08) 25%,rgba(255,255,255,0.12) 50%,rgba(255,255,255,0.08) 75%);
-    background-size: 400% 100%; animation: shimmer 1.5s infinite; border-radius: 4px;
+    height:16px;
+    background:linear-gradient(90deg,rgba(255,255,255,0.08) 25%,rgba(255,255,255,0.12) 50%,rgba(255,255,255,0.08) 75%);
+    background-size:400% 100%; animation:shimmer 1.5s infinite; border-radius:4px;
   }
   @keyframes shimmer { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
 
   /* ── 页脚 ── */
-  .footer { text-align: center; padding: 24px 0 16px; color: var(--text-dim); font-size: 0.8rem; }
-  .footer-note { font-size: 0.75rem; margin-top: 8px; opacity: 0.7; }
+  .footer { text-align:center; padding:24px 0 16px; color:var(--text-dim); font-size:0.8rem; }
+  .footer-note { font-size:0.75rem; margin-top:8px; opacity:0.7; }
 
-  @media (max-width: 900px) { .portfolios { grid-template-columns: 1fr; } }
-  @media (max-width: 768px) {
-    body { padding: 12px; }
-    .holding { grid-template-columns: 36px 1fr 60px 60px; padding: 8px; }
+  @media (max-width:900px) { .portfolios { grid-template-columns:1fr; } }
+  @media (max-width:768px) {
+    body { padding:12px; }
+    .holding { grid-template-columns:36px 1fr 62px 62px; padding:8px; }
+    .holding .change { font-size:0.85rem; }
     .share-row,
-    .share-table-header {
-      grid-template-columns: 20px 60px minmax(0,1fr) 58px 58px;
-    }
-    .detail-grid { grid-template-columns: 1fr; }
+    .share-table-header { grid-template-columns:20px 60px minmax(0,1fr) 58px 58px; }
+    .share-day, .share-since { font-size:13px; }
+    .detail-grid { grid-template-columns:1fr; }
   }
 </style>
 </head>
 <body>
-
 <div class="main-container">
+
   <div class="header">
     <h1>🛏 躺平投资组合追踪器</h1>
     <p class="subtitle">三市场ETF组合 · Z先生分享整理</p>
   </div>
 
   <div class="status-bar">
-    <div class="status-info">
+    <div class="status-left">
       <div class="dot" id="statusDot"></div>
       <span class="time" id="statusText">正在加载数据...</span>
     </div>
-    <button class="btn-refresh" id="btnRefresh" onclick="refreshAll()">刷新</button>
+    <div class="status-right">
+      <span class="update-badge" id="updateBadge">—</span>
+      <button class="btn-refresh" id="btnRefresh" onclick="refreshAll()">⟳ 刷新</button>
+    </div>
   </div>
 
+  <!-- 三市场组合 -->
   <div class="portfolios" id="portfolios">
     <div class="portfolio us" id="port-us">
       <div class="portfolio-header">
@@ -348,6 +382,7 @@
     </div>
   </div>
 
+  <!-- 分享整理 -->
   <div class="share-section">
     <div class="share-card">
       <div class="share-card-header">
@@ -358,14 +393,13 @@
         <span class="share-note">仅供记录，不构成投资建议</span>
       </div>
 
-      <!-- 排序工具栏 -->
       <div class="share-toolbar">
         <span class="sort-label">排序：</span>
-        <button class="sort-btn active" id="sort-default" onclick="sortShares('default')">默认</button>
-        <button class="sort-btn" id="sort-since-desc" onclick="sortShares('since-desc')">累计 ↓</button>
-        <button class="sort-btn" id="sort-since-asc" onclick="sortShares('since-asc')">累计 ↑</button>
-        <button class="sort-btn" id="sort-day-desc" onclick="sortShares('day-desc')">当日 ↓</button>
-        <button class="sort-btn" id="sort-date-desc" onclick="sortShares('date-desc')">最新记录</button>
+        <button class="sort-btn active" id="sort-default"    onclick="sortShares('default')">📋 默认</button>
+        <button class="sort-btn"        id="sort-since-desc" onclick="sortShares('since-desc')">累计 ↓</button>
+        <button class="sort-btn"        id="sort-since-asc"  onclick="sortShares('since-asc')">累计 ↑</button>
+        <button class="sort-btn"        id="sort-day-desc"   onclick="sortShares('day-desc')">当日 ↓</button>
+        <button class="sort-btn"        id="sort-date-desc"  onclick="sortShares('date-desc')">🕐 最新</button>
       </div>
 
       <div class="share-table-header">
@@ -388,28 +422,26 @@
 <script>
 if (window.matchMedia) {
   const mq = window.matchMedia('(prefers-color-scheme: dark)');
-  const upd = () => document.documentElement.setAttribute('data-theme', mq.matches ? 'dark' : 'light');
+  const upd = () => document.documentElement.setAttribute('data-theme', mq.matches?'dark':'light');
   mq.addEventListener('change', upd); upd();
 }
 
 function formatFullDate() {
-  const weekArr=['周日','周一','周二','周三','周四','周五','周六'];
-  const now=new Date();
-  const y=now.getFullYear(),m=(now.getMonth()+1).toString().padStart(2,'0');
-  const d=now.getDate().toString().padStart(2,'0'),w=weekArr[now.getDay()];
-  const h=now.getHours().toString().padStart(2,'0'),mi=now.getMinutes().toString().padStart(2,'0');
-  const s=now.getSeconds().toString().padStart(2,'0');
-  return `${y}年${m}月${d}日 ${w} ${h}:${mi}:${s}`;
+  const w=['周日','周一','周二','周三','周四','周五','周六'];
+  const n=new Date();
+  const y=n.getFullYear(),m=(n.getMonth()+1).toString().padStart(2,'0');
+  const d=n.getDate().toString().padStart(2,'0'),wd=w[n.getDay()];
+  const h=n.getHours().toString().padStart(2,'0'),mi=n.getMinutes().toString().padStart(2,'0'),s=n.getSeconds().toString().padStart(2,'0');
+  return `${y}年${m}月${d}日 ${wd} ${h}:${mi}:${s}`;
+}
+function formatShortTime() {
+  const n=new Date();
+  const h=n.getHours().toString().padStart(2,'0'),mi=n.getMinutes().toString().padStart(2,'0'),s=n.getSeconds().toString().padStart(2,'0');
+  return `${h}:${mi}:${s} 更新`;
 }
 
-function getColorClass(val){
-  if(val==null||isNaN(val))return '';
-  return val>0.001?'positive-text':val<-0.001?'negative-text':'';
-}
-function getSummaryClass(val){
-  if(val==null||isNaN(val))return 'neutral';
-  return val>0.001?'positive':val<-0.001?'negative':'neutral';
-}
+function getColorClass(v){ if(v==null||isNaN(v))return ''; return v>0.001?'positive-text':v<-0.001?'negative-text':''; }
+function getSummaryClass(v){ if(v==null||isNaN(v))return 'neutral'; return v>0.001?'positive':v<-0.001?'negative':'neutral'; }
 
 const PORTFOLIOS = {
   us:{name:'美股躺平组合',holdings:[
@@ -424,7 +456,7 @@ const PORTFOLIOS = {
     {code:'hk03132',display:'03132',nameCn:'全球半导体 ETF',weight:20},
     {code:'hk03147',display:'03147',nameCn:'中国创业板 ETF',weight:20},
     {code:'hk03110',display:'03110',nameCn:'恒生高股息 ETF',weight:20},
-    {code:'hk02840',display:'02840',nameCn:'黄金 ETF',       weight:15},
+    {code:'hk02840',display:'02840',nameCn:'黄金 ETF',      weight:15},
   ]},
   a:{name:'A股躺平组合',holdings:[
     {code:'sh513390',display:'513390',nameCn:'纳指100 ETF', weight:25},
@@ -441,27 +473,38 @@ const YTD_BASE = {
   'sh513390':2.107,'sz159652':1.674,'sh588200':2.342,'sh515880':1.027,'sh518880':9.301,
 };
 
+/* 分享记录 — 含 group 字段用于分组 */
 const SHARE_RECORDS = [
-  {ticker:'300782',name:'卓胜微',   sym:'sz300782',flag:'🇨🇳',date:'2026-03-26',price:87.00,  sector:'射频芯片',         logic:'AI手机射频升级 + 国产替代加速',           analysis:'国内射频前端龙头，垄断安卓高端机射频模组，受益AI手机射频复杂度提升与美国制裁替代窗口'},
-  {ticker:'002428',name:'云南锗业', sym:'sz002428',flag:'🇨🇳',date:'2026-04-10',price:56.79,  sector:'磷化铟/锗半导体材料',logic:'光模块上游核心晶圆材料',               analysis:'国内稀缺量产磷化铟晶圆企业，主营磷化铟单晶、锗基半导体衬底，AI光模块激光器核心上游原材料'},
-  {ticker:'MRVL',  name:'迈威尔科技',sym:'usMRVL', flag:'🇺🇸',date:'2026-03-18',price:87.58,  sector:'AI芯片/光互连',     logic:'AI数据中心定制芯片 + 光互连芯片双轮驱动', analysis:'AI数据中心核心标的，ASIC定制芯片+硅光互连，深度受益全球算力基建扩张'},
-  {ticker:'AAOI',  name:'应用光电', sym:'usAAOI', flag:'🇺🇸',date:'2026-04-10',price:150.60, sector:'光模块/光通信',     logic:'AI算力光互连爆发 + 1.6T高速光模块放量',  analysis:'高速光模块龙头，垂直整合激光器芯片，深度受益AI算力网络需求爆发'},
-  {ticker:'06869', name:'长飞光纤', sym:'hk06869',flag:'🇭🇰',date:'2026-04-17',price:206.00, sector:'光纤光缆/光通信',   logic:'AI算力光纤光缆刚需 + 海外出海',          analysis:'全球光纤光缆龙头，受益AI算力网络建设、海外需求复苏'},
-  {ticker:'GLW',   name:'康宁',     sym:'usGLW',  flag:'🇺🇸',date:'2026-05-10',price:186.94, sector:'光学玻璃/光通信',   logic:'AI高速光互连 + 硅光玻璃材料核心龙头',    analysis:'全球光学玻璃、硅光基板龙头，英伟达光网络合作核心供应商，受益AI算力光链路基建爆发'},
-  {ticker:'300136',name:'信维通信', sym:'sz300136',flag:'🇨🇳',date:'2026-04-22',price:79.52,  sector:'卫星通信',         logic:'SpaceX星链终端核心供应商',                analysis:'射频天线+连接器，为SpaceX星链终端提供核心射频组件'},
-  {ticker:'002149',name:'西部材料', sym:'sz002149',flag:'🇨🇳',date:'2026-04-22',price:64.10,  sector:'航天材料',         logic:'火箭发动机用稀有金属',                    analysis:'铌钛合金供货商，用于SpaceX火箭发动机高温部件'},
-  {ticker:'603308',name:'应流股份', sym:'sh603308',flag:'🇨🇳',date:'2026-04-22',price:75.45,  sector:'航空航天',         logic:'航天发动机结构件',                        analysis:'高温合金部件制造商，供应SpaceX航天发动机关键结构件'},
-  {ticker:'603601',name:'再升科技', sym:'sh603601',flag:'🇨🇳',date:'2026-04-22',price:15.82,  sector:'航天材料',         logic:'火箭隔热保温材料',                        analysis:'气凝胶供货商，为SpaceX火箭提供高效隔热保温材料'},
-  {ticker:'605123',name:'派克新材', sym:'sh605123',flag:'🇨🇳',date:'2026-04-22',price:104.29, sector:'航空航天',         logic:'航天环形锻件',                            analysis:'高温合金定制件，用于SpaceX火箭及航天器结构'},
+  /* AI光互连 */
+  {ticker:'MRVL',  name:'迈威尔科技',sym:'usMRVL', flag:'🇺🇸',date:'2026-03-18',price:87.58,  group:'AI光互连',sector:'AI芯片/光互连',    logic:'AI数据中心定制芯片 + 光互连芯片双轮驱动',analysis:'AI数据中心核心标的，ASIC定制芯片+硅光互连，深度受益全球算力基建扩张'},
+  {ticker:'AAOI',  name:'应用光电',  sym:'usAAOI', flag:'🇺🇸',date:'2026-04-10',price:150.60, group:'AI光互连',sector:'光模块/光通信',    logic:'AI算力光互连爆发 + 1.6T高速光模块放量',  analysis:'高速光模块龙头，垂直整合激光器芯片，深度受益AI算力网络需求爆发'},
+  {ticker:'06869', name:'长飞光纤',  sym:'hk06869',flag:'🇭🇰',date:'2026-04-17',price:206.00, group:'AI光互连',sector:'光纤光缆/光通信',  logic:'AI算力光纤光缆刚需 + 海外出海',          analysis:'全球光纤光缆龙头，受益AI算力网络建设、海外需求复苏'},
+  {ticker:'GLW',   name:'康宁',      sym:'usGLW',  flag:'🇺🇸',date:'2026-05-10',price:186.94, group:'AI光互连',sector:'光学玻璃/光通信',  logic:'AI高速光互连 + 硅光玻璃材料核心龙头',    analysis:'全球光学玻璃、硅光基板龙头，英伟达光网络合作核心供应商，受益AI算力光链路基建爆发'},
+  {ticker:'002428',name:'云南锗业',  sym:'sz002428',flag:'🇨🇳',date:'2026-04-10',price:56.79,  group:'AI光互连',sector:'磷化铟/锗半导体',  logic:'光模块上游核心晶圆材料',                 analysis:'国内稀缺量产磷化铟晶圆企业，主营磷化铟单晶、锗基半导体衬底，AI光模块激光器核心上游原材料'},
+  /* AI射频芯片 */
+  {ticker:'300782',name:'卓胜微',    sym:'sz300782',flag:'🇨🇳',date:'2026-03-26',price:87.00,  group:'AI射频芯片',sector:'射频芯片',       logic:'AI手机射频升级 + 国产替代加速',           analysis:'国内射频前端龙头，垄断安卓高端机射频模组，受益AI手机射频复杂度提升与美国制裁替代窗口'},
+  /* SpaceX概念 */
+  {ticker:'300136',name:'信维通信',  sym:'sz300136',flag:'🇨🇳',date:'2026-04-22',price:79.52,  group:'SpaceX概念',sector:'卫星通信',       logic:'SpaceX星链终端核心供应商',                analysis:'射频天线+连接器，为SpaceX星链终端提供核心射频组件'},
+  {ticker:'002149',name:'西部材料',  sym:'sz002149',flag:'🇨🇳',date:'2026-04-22',price:64.10,  group:'SpaceX概念',sector:'航天材料',       logic:'火箭发动机用稀有金属',                    analysis:'铌钛合金供货商，用于SpaceX火箭发动机高温部件'},
+  {ticker:'603308',name:'应流股份',  sym:'sh603308',flag:'🇨🇳',date:'2026-04-22',price:75.45,  group:'SpaceX概念',sector:'航空航天',       logic:'航天发动机结构件',                        analysis:'高温合金部件制造商，供应SpaceX航天发动机关键结构件'},
+  {ticker:'603601',name:'再升科技',  sym:'sh603601',flag:'🇨🇳',date:'2026-04-22',price:15.82,  group:'SpaceX概念',sector:'航天材料',       logic:'火箭隔热保温材料',                        analysis:'气凝胶供货商，为SpaceX火箭提供高效隔热保温材料'},
+  {ticker:'605123',name:'派克新材',  sym:'sh605123',flag:'🇨🇳',date:'2026-04-22',price:104.29, group:'SpaceX概念',sector:'航空航天',       logic:'航天环形锻件',                            analysis:'高温合金定制件，用于SpaceX火箭及航天器结构'},
 ];
+
+/* 分组颜色映射 */
+const GROUP_COLORS = {
+  'AI光互连':  '#4e9ef8',
+  'AI射频芯片':'#a855f7',
+  'SpaceX概念':'#f97316',
+};
 
 let _jid=0;
 function qqJsonp(codes,timeout=8000){
   return new Promise((resolve,reject)=>{
     const s=document.createElement('script');
     const timer=setTimeout(()=>{s.remove();reject(new Error('timeout'));},timeout);
-    s.onload=()=>{clearTimeout(timer);s.remove();const results={};codes.forEach(c=>{const val=window['v_'+c];if(val)results[c]=val;});resolve(results);};
-    s.onerror=()=>{clearTimeout(timer);s.remove();reject(new Error('script error'));};
+    s.onload=()=>{clearTimeout(timer);s.remove();const r={};codes.forEach(c=>{const v=window['v_'+c];if(v)r[c]=v;});resolve(r);};
+    s.onerror=()=>{clearTimeout(timer);s.remove();reject(new Error('err'));};
     s.src=`https://qt.gtimg.cn/q=${codes.join(',')}`;
     document.head.appendChild(s);
   });
@@ -469,28 +512,21 @@ function qqJsonp(codes,timeout=8000){
 
 function parseQuote(code,raw){
   if(!raw)return null;
-  const parts=raw.split('~');
-  const price=parseFloat(parts[3]);
+  const p=raw.split('~');
+  const price=parseFloat(p[3]);
   if(!price||price<=0)return null;
-  let dailyPct=parseFloat(parts[32]);
-  if(isNaN(dailyPct)){
-    const prev=parseFloat(code.startsWith('hk')?parts[5]:parts[4]);
-    if(prev>0)dailyPct=((price-prev)/prev)*100;
-  }
-  return{code,price,dailyPct:isNaN(dailyPct)?null:dailyPct};
+  let dp=parseFloat(p[32]);
+  if(isNaN(dp)){const prev=parseFloat(code.startsWith('hk')?p[5]:p[4]);if(prev>0)dp=((price-prev)/prev)*100;}
+  return{code,price,dailyPct:isNaN(dp)?null:dp};
 }
 
 const CACHE={us:{rt:{},ytd:{},loaded:false},hk:{rt:{},ytd:{},loaded:false},a:{rt:{},ytd:{},loaded:false}};
 const SHARE_CACHE={};
 
-function fmt(v){
-  if(v==null||isNaN(v))return '—';
-  return(v>0?'+':'')+v.toFixed(2)+'%';
-}
+function fmt(v){ if(v==null||isNaN(v))return '—'; return(v>0?'+':'')+v.toFixed(2)+'%'; }
 
 function renderHoldings(key,rt,ytd){
-  const port=PORTFOLIOS[key];
-  document.getElementById(`holdings-${key}`).innerHTML=port.holdings.map(h=>{
+  document.getElementById(`holdings-${key}`).innerHTML=PORTFOLIOS[key].holdings.map(h=>{
     const q=rt[h.code]||{},d=q.dailyPct,y=ytd[h.code];
     return`<div class="holding">
       <div class="weight">${h.weight}%</div>
@@ -525,33 +561,6 @@ function renderLoadingHoldings(key){
     </div>`).join('');
 }
 
-// 更新概览统计
-function updateOverview(){
-  const records=SHARE_RECORDS;
-  const n=records.length;
-  let upCount=0,downCount=0,bestSince=-Infinity,bestName='',sinceSum=0,sinceCount=0;
-  records.forEach(w=>{
-    const d=SHARE_CACHE[w.sym];
-    if(d&&d.dailyPct!=null){
-      if(d.dailyPct>0.001)upCount++;
-      else if(d.dailyPct<-0.001)downCount++;
-    }
-    if(d&&d.price&&w.price){
-      const since=(d.price-w.price)/w.price*100;
-      sinceSum+=since;sinceCount++;
-      if(since>bestSince){bestSince=since;bestName=w.name;}
-    }
-  });
-  document.getElementById('ov-count').textContent=n+'只';
-  document.getElementById('ov-up').textContent=upCount+'只';
-  document.getElementById('ov-down').textContent=downCount+'只';
-  document.getElementById('ov-best').textContent=sinceCount>0?`${bestName} ${bestSince>0?'+':''}${bestSince.toFixed(1)}%`:'—';
-  const avg=sinceCount>0?sinceSum/sinceCount:null;
-  const avgEl=document.getElementById('ov-avg');
-  avgEl.textContent=avg!=null?fmt(avg):'—';
-  avgEl.className='ov-value '+(avg==null?'ov-neutral':avg>0.001?'ov-red':'ov-green');
-}
-
 let currentSort='default';
 function sortShares(mode){
   currentSort=mode;
@@ -562,27 +571,50 @@ function sortShares(mode){
 }
 
 function getSharesSorted(){
-  const list=[...SHARE_RECORDS.map((w,i)=>({...w,_origIdx:i}))];
-  const getSince=w=>{const d=SHARE_CACHE[w.sym];return(d&&d.price&&w.price)?(d.price-w.price)/w.price*100:null;};
-  const getDay=w=>{const d=SHARE_CACHE[w.sym];return d?d.dailyPct:null;};
-  if(currentSort==='since-desc')list.sort((a,b)=>{const sa=getSince(a),sb=getSince(b);if(sa==null&&sb==null)return 0;if(sa==null)return 1;if(sb==null)return -1;return sb-sa;});
-  else if(currentSort==='since-asc')list.sort((a,b)=>{const sa=getSince(a),sb=getSince(b);if(sa==null&&sb==null)return 0;if(sa==null)return 1;if(sb==null)return -1;return sa-sb;});
-  else if(currentSort==='day-desc')list.sort((a,b)=>{const da=getDay(a),db=getDay(b);if(da==null&&db==null)return 0;if(da==null)return 1;if(db==null)return -1;return db-da;});
-  else if(currentSort==='date-desc')list.sort((a,b)=>b.date.localeCompare(a.date));
+  const list=[...SHARE_RECORDS.map((w,i)=>({...w,_i:i}))];
+  const gs=w=>{const d=SHARE_CACHE[w.sym];return(d&&d.price&&w.price)?(d.price-w.price)/w.price*100:null;};
+  const gd=w=>{const d=SHARE_CACHE[w.sym];return d?d.dailyPct:null;};
+  if(currentSort==='since-desc') list.sort((a,b)=>{const sa=gs(a),sb=gs(b);if(sa==null&&sb==null)return 0;if(sa==null)return 1;if(sb==null)return -1;return sb-sa;});
+  else if(currentSort==='since-asc')  list.sort((a,b)=>{const sa=gs(a),sb=gs(b);if(sa==null&&sb==null)return 0;if(sa==null)return 1;if(sb==null)return -1;return sa-sb;});
+  else if(currentSort==='day-desc')   list.sort((a,b)=>{const da=gd(a),db=gd(b);if(da==null&&db==null)return 0;if(da==null)return 1;if(db==null)return -1;return db-da;});
+  else if(currentSort==='date-desc')  list.sort((a,b)=>b.date.localeCompare(a.date));
   return list;
 }
 
 function renderShareRecords(){
   const container=document.getElementById('share-list');
   const list=getSharesSorted();
-  container.innerHTML=list.map((w)=>{
-    const origIdx=w._origIdx;
+  const useGroup=(currentSort==='default');
+  let html='';
+  let lastGroup='';
+
+  list.forEach(w=>{
+    /* 默认排序时插入分组标题 */
+    if(useGroup && w.group!==lastGroup){
+      lastGroup=w.group;
+      const col=GROUP_COLORS[w.group]||'var(--text-dim)';
+      html+=`<div class="group-header">
+        <span class="group-dot" style="background:${col}"></span>
+        <span style="color:${col}">${w.group}</span>
+      </div>`;
+    }
+
     const d=SHARE_CACHE[w.sym]||{};
     const since=(d.price&&w.price)?((d.price-w.price)/w.price*100):null;
     const c1=getColorClass(d.dailyPct);
     const c2=getColorClass(since);
-    const priceStr=d.price?d.price.toFixed(2):'--';
-    return`<div class="share-item" onclick="toggleShareDetail('detail-${origIdx}')">
+    const nowPrice=d.price?d.price.toFixed(2):'--';
+
+    /* 价格追踪块 */
+    const sinceClass=since==null?'flat':since>0.001?'up':'down';
+    const priceBadge=`<div class="price-track">
+      <div class="price-item"><span class="price-lbl">记录价</span><span class="price-val">${w.price.toFixed(2)}</span></div>
+      <span class="price-arrow">→</span>
+      <div class="price-item"><span class="price-lbl">现价</span><span class="price-val">${nowPrice}</span></div>
+      <div class="price-since ${sinceClass}">${fmt(since)}</div>
+    </div>`;
+
+    html+=`<div class="share-item" onclick="toggleShareDetail('sd-${w._i}')">
       <div class="share-row">
         <div class="share-flag">${w.flag}</div>
         <div class="share-ticker">${w.ticker}</div>
@@ -590,18 +622,18 @@ function renderShareRecords(){
         <div class="share-day ${c1}">${fmt(d.dailyPct)}</div>
         <div class="share-since ${c2}">${fmt(since)}</div>
       </div>
-      <div class="share-detail" id="detail-${origIdx}">
+      <div class="share-detail" id="sd-${w._i}">
         <div class="detail-grid">
-          <div class="detail-row sector-row"><span class="detail-label">行业：</span>${w.sector}</div>
-          <div class="detail-row info-row"><span class="detail-label">记录日期：</span>${w.date}</div>
+          <div class="detail-row sector-row"><span class="detail-label">行业</span>${w.sector}</div>
+          <div class="detail-row info-row"><span class="detail-label">记录日期</span>${w.date}</div>
         </div>
-        <div class="detail-row logic-row" style="margin-bottom:8px"><span class="detail-label">逻辑：</span>${w.logic}</div>
-        <div class="detail-row analysis-row" style="margin-bottom:8px"><span class="detail-label">分析：</span>${w.analysis}</div>
-        <div class="detail-row info-row"><span class="detail-label">价格追踪：</span>记录价 <strong>${w.price.toFixed(2)}</strong> → 现价 <strong>${priceStr}</strong>　累计 <strong class="${c2}">${fmt(since)}</strong></div>
+        <div class="detail-row logic-row"><span class="detail-label">逻辑</span>${w.logic}</div>
+        <div class="detail-row analysis-row"><span class="detail-label">分析</span>${w.analysis}</div>
+        ${priceBadge}
       </div>
     </div>`;
-  }).join('');
-  updateOverview();
+  });
+  container.innerHTML=html;
 }
 
 function toggleShareDetail(id){
@@ -653,7 +685,8 @@ async function refreshAll(){
     await Promise.allSettled([...['us','hk','a'].map(k=>loadPortfolio(k)),loadShareRecords()]);
     _first=false;
     const ms=((performance.now()-t0)/1000).toFixed(1);
-    setStatus('ok',`${formatFullDate()} (${ms}s)`);
+    setStatus('ok',formatFullDate());
+    document.getElementById('updateBadge').textContent=`${formatShortTime()} · ${ms}s`;
   }catch(e){setStatus('error','加载失败');}
   btn.disabled=false;
   clearTimeout(_timer);
