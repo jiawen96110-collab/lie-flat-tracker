@@ -20,7 +20,7 @@
 ---
 
 ## 🔗 在线访问
-**公开访问地址**：https://jiawen96110-collab.github.io/tangping-tracker/
+**公开访问地址**：https://lie-flat-tracker.pages.dev/
 
 ---
 
