@@ -327,9 +327,9 @@
     <div class="status-left">
       <div class="dot" id="statusDot"></div>
       <span class="time" id="statusText">正在加载数据...</span>
+      <span class="update-badge" id="updateBadge"></span>
     </div>
     <div class="status-right">
-      <span class="update-badge" id="updateBadge">—</span>
       <button class="btn-refresh" id="btnRefresh" onclick="refreshAll()">⟳ 刷新</button>
     </div>
   </div>
@@ -686,7 +686,7 @@ async function refreshAll(){
     _first=false;
     const ms=((performance.now()-t0)/1000).toFixed(1);
     setStatus('ok',formatFullDate());
-    document.getElementById('updateBadge').textContent=`${formatShortTime()} · ${ms}s`;
+    document.getElementById('updateBadge').textContent=`· ${ms}s`;
   }catch(e){setStatus('error','加载失败');}
   btn.disabled=false;
   clearTimeout(_timer);
