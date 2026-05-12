@@ -395,14 +395,15 @@
     gap: 8px;
   }
   
-  .share-flag { font-size: 12px; }
-  .share-ticker { font-weight: 600; color: var(--accent-us); }
-  .share-name { font-weight: 600; }
+  /* 替换这三行 */
+.share-flag { font-size: 12px; display: inline-flex; align-items: center; vertical-align: middle; line-height: 1; }
+.share-ticker { font-weight: 600; color: var(--accent-us); display: inline-flex; align-items: center; vertical-align: middle; line-height: 1; }
+.share-name { font-weight: 600; display: inline-flex; align-items: center; vertical-align: middle; line-height: 1; } 
   
   .share-day, .share-since { 
     font-weight: 600;
   }
-  
+
   .share-detail {
     padding: 16px 12px;
     border-top: 1px dashed var(--border);
