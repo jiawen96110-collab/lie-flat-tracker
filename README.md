@@ -1,55 +1,68 @@
-# lie-flat-tracker
-# Tangping Tracker - 躺平投资组合实时追踪器
+# 躺平组合数据整理
 
-> 基于开源项目二次开发，专为「京城Z先生」打造的专属投资组合追踪工具
+这是一个用于查看三市场 ETF 组合和若干关注标的表现的静态网页项目。
 
----
+在线访问地址：
 
-## ✨ 项目简介
-这是一个**纯前端、零后端、30秒自动刷新**的投资组合实时行情追踪工具，完美适配美股、港股、A股三大市场，同时新增「自选股跟踪」专属功能，让你一键掌握持仓与关注标的的实时动态。
+- Cloudflare Pages: https://lie-flat-tracker.pages.dev/
 
----
+## 项目功能
 
-## 🚀 核心功能
-- 📊 **三市场行情覆盖**：美股/港股/A股实时行情展示，统一「涨红跌绿」显示逻辑
-- ⚡ **30秒自动刷新**：无需手动刷新，实时同步最新行情数据
-- 🎯 **自选股跟踪**：新增「京城Z先生分享标的」专属板块，自定义关注个股
-- 🎨 **精致UI设计**：复刻开源项目的简约深色风格，视觉舒适，适配手机/电脑端
-- 🌐 **纯前端部署**：基于 GitHub Pages 一键部署，无需服务器，开箱即用
+- 展示美股、港股、A 股三个 ETF 组合
+- 展示每个持仓的权重、当日涨跌和 YTD 表现
+- 展示“数据整理”关注列表，支持默认分组、累计涨幅排序、记录日期排序
+- 支持点击关注标的查看行业、逻辑、分析和记录价对比
+- 每 30 秒自动刷新一次行情
+- 支持深色/浅色系统主题
 
----
+## 文件说明
 
-## 🔗 在线访问
-**公开访问地址**：https://lie-flat-tracker.pages.dev/
+```text
+index.html                 网页入口，只保留页面结构
+style.css                  页面样式，包括颜色、布局、移动端适配
+data.js                    组合配置、YTD 基准价、关注标的数据
+app.js                     页面交互、行情请求、排序、渲染逻辑
+data.json                  GitHub Actions 定时生成的行情数据
+fetch_stock_data.py        早期 Python 抓取脚本，目前网页未直接使用
+requirements.txt           Python 脚本依赖
+.github/workflows/         GitHub 自动任务配置
+```
 
----
+## 当前数据方式
 
-## 📌 开源说明
-本项目 **Fork 自开源项目 [7isiedemi/LazyPortfolio](sslocal://flow/file_open?url=https%3A%2F%2Fgithub.com%2F7isiedemi%2FLazyPortfolio&flow_extra=eyJsaW5rX3R5cGUiOiJjb2RlX2ludGVycHJldGVyIn0=)**，在原项目基础上进行了以下二次开发：
-1.  新增「自选股跟踪」专属功能，支持自定义关注个股
-2.  统一全市场「涨红跌绿」显示逻辑，符合国内投资者使用习惯
-3.  优化页面时间显示，补充年月日、星期信息
-4.  适配「京城Z先生」专属投资组合，定制化展示持仓标的
-5.  优化代码结构，提升页面加载与刷新效率
+当前网页主要通过腾讯财经接口在浏览器中实时获取行情：
 
----
+```text
+https://qt.gtimg.cn/q=...
+```
 
-## 🛠️ 部署说明
-### 本地使用
-直接下载 `index.html` 文件，用浏览器打开即可使用，无需任何环境配置。
+仓库中也保留了 `data.json` 和 GitHub Actions 自动更新逻辑，但当前 `index.html` 页面还没有改为读取 `data.json`。
 
-### 在线部署（GitHub Pages）
-1.  Fork 本项目到你的 GitHub 仓库
-2.  进入仓库 → Settings → Pages
-3.  Source 选择 `Deploy from a branch`，Branch 选择 `main`
-4.  保存后等待1-3分钟，即可通过 `https://你的用户名.github.io/仓库名/` 访问
+## 本地查看
 
----
+这个项目是纯静态网页，不需要安装复杂环境。
 
-## 📄 开源协议
-遵循原项目开源协议，本项目仅用于个人学习与交流，禁止商用。
+最简单的方式是直接用浏览器打开 `index.html`。
 
----
+如果想用本地服务打开，可以在项目目录启动一个静态服务器，然后访问本地地址。
 
-## 🙏 致谢
-特别感谢原作者 [7isiedemi](sslocal://flow/file_open?url=https%3A%2F%2Fgithub.com%2F7isiedemi&flow_extra=eyJsaW5rX3R5cGUiOiJjb2RlX2ludGVycHJldGVyIn0=) 提供的优秀开源项目，为本项目的开发奠定了基础。
+## 部署说明
+
+项目当前使用 GitHub 托管代码，并通过 Cloudflare Pages 发布网站。
+
+通常流程是：
+
+```text
+修改代码
+提交到 GitHub
+Cloudflare Pages 自动重新部署
+线上网址更新
+```
+
+只要保留仓库根目录下的 `index.html`，Cloudflare Pages 一般不需要额外调整。
+
+## 风险提示
+
+本项目仅用于公开数据整理和个人学习研究，不构成任何投资建议。
+
+市场有风险，投资需谨慎。
