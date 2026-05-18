@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-18T05:40:42Z",
+  "updated": "2026-05-18T09:43:09Z",
   "data": {
     "us_QQQ": {
       "today": -1.51,
@@ -22,48 +22,48 @@
       "price": 42.95
     },
     "hk_03455": {
-      "today": -1.24,
-      "price": 5516.0
+      "today": -1.0,
+      "price": 5529.0
     },
     "hk_03132": {
-      "today": -2.78,
-      "price": 60.8
+      "today": -2.24,
+      "price": 61.14
     },
     "hk_03147": {
-      "today": -0.32,
-      "price": 15.77
+      "today": 0.32,
+      "price": 15.87
     },
     "hk_03110": {
-      "today": -1.33,
-      "price": 32.54
+      "today": -1.39,
+      "price": 32.52
     },
     "hk_02840": {
-      "today": -0.55,
-      "price": 3269.0
+      "today": -0.64,
+      "price": 3266.0
     },
     "cn_513390": {
-      "today": -1.25,
-      "price": 2.282
+      "today": -1.77,
+      "price": 2.27
     },
     "cn_159652": {
-      "today": -1.19,
-      "price": 1.742
+      "today": -1.53,
+      "price": 1.736
     },
     "cn_588200": {
-      "today": 1.37,
-      "price": 3.469
+      "today": 1.05,
+      "price": 3.458
     },
     "cn_515880": {
-      "today": 1.4,
-      "price": 1.521
+      "today": 1.13,
+      "price": 1.517
     },
     "cn_518880": {
-      "today": -0.47,
-      "price": 9.509
+      "today": -0.43,
+      "price": 9.513
     },
     "watch_300782": {
-      "today": -1.74,
-      "price": 131.31
+      "today": -2.12,
+      "price": 130.8
     },
     "watch_MRVL": {
       "today": -3.12,
