@@ -1,25 +1,25 @@
 {
-  "updated": "2026-05-20T20:03:30Z",
+  "updated": "2026-05-20T22:08:06Z",
   "data": {
     "us_QQQ": {
       "today": 1.66,
       "price": 713.15
     },
     "us_SPY": {
-      "today": 1.03,
-      "price": 741.26
+      "today": 1.02,
+      "price": 741.25
     },
     "us_RING": {
       "today": 3.1,
       "price": 75.24
     },
     "us_COPX": {
-      "today": 3.68,
-      "price": 82.29
+      "today": 3.7,
+      "price": 82.31
     },
     "us_BITB": {
-      "today": 1.1,
-      "price": 42.14
+      "today": 1.13,
+      "price": 42.15
     },
     "hk_03455": {
       "today": -0.29,
