@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-08T20:03:04Z",
+  "updated": "2026-06-08T22:07:42Z",
   "data": {
     "us_QQQ": {
       "today": 1.56,
@@ -7,15 +7,15 @@
     },
     "us_SPY": {
       "today": 0.23,
-      "price": 739.27
+      "price": 739.22
     },
     "us_RING": {
       "today": -0.19,
       "price": 68.52
     },
     "us_COPX": {
-      "today": 0.71,
-      "price": 81.22
+      "today": 0.81,
+      "price": 81.29
     },
     "us_BITB": {
       "today": 5.07,
