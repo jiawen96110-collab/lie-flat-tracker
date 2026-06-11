@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f2f2ef">
   <title>躺平组合 · 数据整理</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=6">
 </head>
 <body>
   <main class="main-container">
@@ -15,10 +15,16 @@
         <span class="brand-en">Balance</span>
         <span class="brand-cn">躺平组合</span>
       </div>
-      <button class="btn-refresh" id="btnRefresh" onclick="refreshAll()">
-        <span class="refresh-icon" aria-hidden="true">↻</span>
-        刷新数据
-      </button>
+      <div class="top-actions">
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="切换显示模式" title="显示模式：跟随系统">
+          <span class="theme-icon" aria-hidden="true">◐</span>
+          <span class="theme-label">自动</span>
+        </button>
+        <button class="btn-refresh" id="btnRefresh" onclick="refreshAll()">
+          <span class="refresh-icon" aria-hidden="true">↻</span>
+          刷新数据
+        </button>
+      </div>
     </nav>
 
     <header class="header">
@@ -46,6 +52,10 @@
         <span>数据整理</span><small>关注标的</small>
       </button>
     </nav>
+
+    <div class="data-context" id="dataContext">
+      <span><i class="context-dot live"></i><span id="dataContextText">行情每 30 秒刷新 · 组合收益按当前权重估算</span></span>
+    </div>
 
     <section class="portfolios page-panel active" id="panel-portfolio" data-page-panel="portfolio" role="tabpanel" aria-labelledby="page-tab-portfolio" aria-label="三市场组合">
       <article class="portfolio us" id="port-us">
@@ -129,7 +139,7 @@
         <div class="valuation-list" id="valuationList"></div>
 
         <div class="valuation-note">
-          <span id="valuationSourceNote">估值基准来自所提供的美股周报截图，双数值代表两档情景假设。</span>
+          <span id="valuationSourceNote">估值基准来自所提供的美股周报截图，双数值代表两档情景假设；实时价格仅用于定位区间。</span>
           <a href="https://mp.weixin.qq.com/s/TPaGAS_BdopkUDS5hRU62A" target="_blank" rel="noreferrer">查看估值方法说明</a>
         </div>
       </div>
@@ -161,13 +171,13 @@
     </section>
 
     <footer class="footer">
-      <span>数据来源：腾讯财经 · 自动刷新间隔 30 秒</span>
-      <span class="footer-note">本内容为公开分享的 ETF 组合与行业概念数据整理。市场有风险，投资需谨慎。</span>
+      <span>行情来源：腾讯财经 · YTD 依据预设年初基准价计算</span>
+      <span class="footer-note">组合表现为当前权重的静态估算，不等同于真实账户净值或投资建议。市场有风险，投资需谨慎。</span>
     </footer>
   </main>
 
   <script src="data.js?v=2"></script>
   <script src="valuation.js?v=3"></script>
-  <script src="app.js?v=4"></script>
+  <script src="app.js?v=6"></script>
 </body>
 </html>

@@ -1,13 +1,25 @@
-if (window.matchMedia) {
-  const mq = window.matchMedia('(prefers-color-scheme: dark)');
-  const upd = () => {
-    const dark=mq.matches;
-    document.documentElement.setAttribute('data-theme',dark?'dark':'light');
-    const theme=document.querySelector('meta[name="theme-color"]');
-    if(theme)theme.setAttribute('content',dark?'#111210':'#f2f2ef');
-  };
-  mq.addEventListener('change', upd); upd();
+const THEME_MODES=['auto','light','dark'];
+const themeMedia=window.matchMedia?window.matchMedia('(prefers-color-scheme: dark)'):null;
+let themeMode=localStorage.getItem('themeMode')||'auto';
+
+function applyTheme(){
+  if(!THEME_MODES.includes(themeMode))themeMode='auto';
+  const dark=themeMode==='dark'||(themeMode==='auto'&&themeMedia&&themeMedia.matches);
+  document.documentElement.setAttribute('data-theme',dark?'dark':'light');
+  const theme=document.querySelector('meta[name="theme-color"]');
+  if(theme)theme.setAttribute('content',dark?'#111210':'#f2f2ef');
+  const button=document.getElementById('themeToggle');
+  if(button){
+    const labels={auto:'自动',light:'浅色',dark:'深色'};
+    const icons={auto:'◐',light:'☼',dark:'☾'};
+    button.querySelector('.theme-label').textContent=labels[themeMode];
+    button.querySelector('.theme-icon').textContent=icons[themeMode];
+    button.title=`显示模式：${labels[themeMode]}`;
+  }
 }
+
+if(themeMedia)themeMedia.addEventListener('change',()=>{if(themeMode==='auto')applyTheme();});
+applyTheme();
 
 function formatFullDate() {
   const w=['周日','周一','周二','周三','周四','周五','周六'];
@@ -238,7 +250,7 @@ function renderValuations(){
     const sellStart=(v.sell[0]-min)/(max-min)*100;
     const live=VALUATION_CACHE[v.sym]&&VALUATION_CACHE[v.sym].price;
     const holding=v.holding?`${v.holding.toFixed(1)}%`:'观察';
-    const currency=v.market==='US'?'$':'¥';
+    const currency=v.market==='US'?'$':v.market==='港股'?'HK$':'¥';
 
     return `<article class="valuation-row state-${state.key}">
       <div class="valuation-company">
@@ -251,7 +263,7 @@ function renderValuations(){
       </div>
       <div class="valuation-current">
         <strong>${currency}${compactPrice(price)}</strong>
-        <span>${live?'实时行情':'截图参考价'}</span>
+        <span>${live?'实时行情':'周报参考价 · 非实时'}</span>
       </div>
       <div class="valuation-range">
         <div class="range-labels">
@@ -279,7 +291,7 @@ function renderValuations(){
   document.getElementById('valuationReserveLabel').textContent=group.reserveLabel;
   document.getElementById('valuationReserve').textContent=`${group.reserve.toFixed(1)}%`;
   document.getElementById('valuationSourceNote').textContent=
-    `估值基准来自所提供的${currentValuationMarket==='us'?'美股':'A/H 股'}周报截图，双数值代表两档情景假设。`;
+    `估值基准来自所提供的${currentValuationMarket==='us'?'美股':'A/H 股'}周报截图，双数值代表两档情景假设；实时价格仅用于定位区间。`;
 }
 
 async function loadValuations(){
@@ -309,6 +321,11 @@ function switchValuationMarket(market){
 
 function switchPageTab(tab,{updateHash=true,scroll=true}={}){
   if(!PAGE_TABS.includes(tab))tab='portfolio';
+  const contextText={
+    portfolio:'行情每 30 秒刷新 · 组合收益按当前权重估算',
+    valuation:'估值基准来自周报 · 实时行情仅用于区间定位',
+    research:'记录价对比实时行情 · 内容不构成投资建议'
+  };
   document.querySelectorAll('[data-page-tab]').forEach(button=>{
     const active=button.dataset.pageTab===tab;
     button.classList.toggle('active',active);
@@ -319,6 +336,8 @@ function switchPageTab(tab,{updateHash=true,scroll=true}={}){
     panel.classList.toggle('active',active);
     panel.hidden=!active;
   });
+  const context=document.getElementById('dataContextText');
+  if(context)context.textContent=contextText[tab];
   if(updateHash)history.replaceState(null,'',`#${tab}`);
   if(scroll){
     const tabs=document.querySelector('.page-tabs');
@@ -367,6 +386,7 @@ async function refreshAll(){
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
+  applyTheme();
   ['us','hk','a'].forEach(k=>renderLoadingHoldings(k));
   renderShareRecords();
   renderValuations();
@@ -375,6 +395,13 @@ document.addEventListener('DOMContentLoaded',()=>{
   });
   document.querySelectorAll('[data-page-tab]').forEach(button=>{
     button.addEventListener('click',()=>switchPageTab(button.dataset.pageTab));
+  });
+  const context=document.getElementById('dataContextText');
+  if(context)context.textContent=contextText[tab];
+  document.getElementById('themeToggle')?.addEventListener('click',()=>{
+    themeMode=THEME_MODES[(THEME_MODES.indexOf(themeMode)+1)%THEME_MODES.length];
+    localStorage.setItem('themeMode',themeMode);
+    applyTheme();
   });
   switchPageTab(pageTabFromHash(),{updateHash:false,scroll:false});
   refreshAll();
