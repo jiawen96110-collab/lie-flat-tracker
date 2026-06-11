@@ -1,6 +1,11 @@
 if (window.matchMedia) {
   const mq = window.matchMedia('(prefers-color-scheme: dark)');
-  const upd = () => document.documentElement.setAttribute('data-theme', mq.matches?'dark':'light');
+  const upd = () => {
+    const dark=mq.matches;
+    document.documentElement.setAttribute('data-theme',dark?'dark':'light');
+    const theme=document.querySelector('meta[name="theme-color"]');
+    if(theme)theme.setAttribute('content',dark?'#111210':'#f2f2ef');
+  };
   mq.addEventListener('change', upd); upd();
 }
 
