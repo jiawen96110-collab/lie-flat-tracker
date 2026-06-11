@@ -47,6 +47,7 @@ const CACHE={us:{rt:{},ytd:{},loaded:false},hk:{rt:{},ytd:{},loaded:false},a:{rt
 const SHARE_CACHE={};
 const VALUATION_CACHE={};
 let currentValuationMarket='us';
+const PAGE_TABS=['portfolio','valuation','research'];
 
 function fmt(v){ if(v==null||isNaN(v))return '—'; return(v>0?'+':'')+v.toFixed(2)+'%'; }
 
@@ -301,6 +302,31 @@ function switchValuationMarket(market){
   renderValuations();
 }
 
+function switchPageTab(tab,{updateHash=true,scroll=true}={}){
+  if(!PAGE_TABS.includes(tab))tab='portfolio';
+  document.querySelectorAll('[data-page-tab]').forEach(button=>{
+    const active=button.dataset.pageTab===tab;
+    button.classList.toggle('active',active);
+    button.setAttribute('aria-selected',active?'true':'false');
+  });
+  document.querySelectorAll('[data-page-panel]').forEach(panel=>{
+    const active=panel.dataset.pagePanel===tab;
+    panel.classList.toggle('active',active);
+    panel.hidden=!active;
+  });
+  if(updateHash)history.replaceState(null,'',`#${tab}`);
+  if(scroll){
+    const tabs=document.querySelector('.page-tabs');
+    const top=tabs?tabs.getBoundingClientRect().top+window.scrollY-12:0;
+    window.scrollTo({top:Math.max(0,top),behavior:'smooth'});
+  }
+}
+
+function pageTabFromHash(){
+  const tab=window.location.hash.replace('#','');
+  return PAGE_TABS.includes(tab)?tab:'portfolio';
+}
+
 function setStatus(s,m){
   const dot=document.getElementById('statusDot');
   const text=document.getElementById('statusText');
@@ -341,7 +367,15 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.querySelectorAll('.valuation-tab').forEach(button=>{
     button.addEventListener('click',()=>switchValuationMarket(button.dataset.market));
   });
+  document.querySelectorAll('[data-page-tab]').forEach(button=>{
+    button.addEventListener('click',()=>switchPageTab(button.dataset.pageTab));
+  });
+  switchPageTab(pageTabFromHash(),{updateHash:false,scroll:false});
   refreshAll();
+});
+
+window.addEventListener('hashchange',()=>{
+  switchPageTab(pageTabFromHash(),{updateHash:false,scroll:false});
 });
 
 document.addEventListener('visibilitychange',()=>{

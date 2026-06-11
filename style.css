@@ -67,6 +67,26 @@ button { font:inherit; }
 @keyframes pulse { 50% { opacity:.35; } }
 .update-badge { color:var(--text-dim); }
 
+.page-tabs {
+  position:relative; z-index:10; display:grid; grid-template-columns:repeat(3,1fr);
+  gap:6px; margin:0 0 12px; padding:5px; border:1px solid var(--border);
+  border-radius:18px; background:color-mix(in srgb,var(--card) 88%,transparent);
+  box-shadow:inset 0 1px rgba(255,255,255,.58); backdrop-filter:blur(24px);
+}
+.page-tab {
+  display:flex; align-items:center; justify-content:center; gap:9px; min-height:48px;
+  padding:8px 14px; color:var(--text-dim); border:0; border-radius:13px;
+  background:transparent; cursor:pointer; transition:background .2s,color .2s,box-shadow .2s;
+}
+.page-tab span { font-size:13px; font-weight:680; }
+.page-tab small { font-size:9px; }
+.page-tab:hover { color:var(--text); background:var(--card-hover); }
+.page-tab.active {
+  color:var(--text); background:var(--card);
+  box-shadow:0 3px 14px rgba(0,0,0,.06),inset 0 0 0 1px var(--border);
+}
+.page-panel[hidden] { display:none !important; }
+
 .portfolios {
   display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; padding:12px;
   border:1px solid rgba(255,255,255,.6); border-radius:38px;
@@ -286,6 +306,16 @@ button { font:inherit; }
   .subtitle { font-size:13px; }
   .status-bar { padding:0 5px; }
   .update-badge { display:none; }
+  .page-tabs {
+    position:sticky; top:8px; grid-template-columns:repeat(3,minmax(0,1fr));
+    margin:0 0 10px; padding:4px; border-radius:16px;
+  }
+  .page-tab { min-width:0; min-height:47px; padding:7px 3px; gap:0; flex-direction:column; }
+  .page-tab span { font-size:12px; }
+  .page-tab small {
+    display:block; max-width:100%; margin-top:2px; overflow:hidden;
+    font-size:8px; text-overflow:ellipsis; white-space:nowrap;
+  }
   .portfolios { padding:7px; border-radius:29px; }
   .portfolio { display:block; border-radius:23px; }
   .portfolio-header { padding:21px 21px 17px; }

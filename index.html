@@ -34,7 +34,19 @@
       </div>
     </div>
 
-    <section class="portfolios" id="portfolios" aria-label="三市场组合">
+    <nav class="page-tabs" role="tablist" aria-label="数据类型">
+      <button class="page-tab active" id="page-tab-portfolio" data-page-tab="portfolio" role="tab" aria-controls="panel-portfolio" aria-selected="true">
+        <span>组合</span><small>三市场持仓</small>
+      </button>
+      <button class="page-tab" id="page-tab-valuation" data-page-tab="valuation" role="tab" aria-controls="panel-valuation" aria-selected="false">
+        <span>周报估值</span><small>美股 · A/H 股</small>
+      </button>
+      <button class="page-tab" id="page-tab-research" data-page-tab="research" role="tab" aria-controls="panel-research" aria-selected="false">
+        <span>数据整理</span><small>关注标的</small>
+      </button>
+    </nav>
+
+    <section class="portfolios page-panel active" id="panel-portfolio" data-page-panel="portfolio" role="tabpanel" aria-labelledby="page-tab-portfolio" aria-label="三市场组合">
       <article class="portfolio us" id="port-us">
         <div class="portfolio-header">
           <div class="market-number">01 / US</div>
@@ -84,7 +96,7 @@
       </article>
     </section>
 
-    <section class="valuation-section" aria-label="估值雷达">
+    <section class="valuation-section page-panel" id="panel-valuation" data-page-panel="valuation" role="tabpanel" aria-labelledby="page-tab-valuation" aria-label="估值雷达" hidden>
       <div class="valuation-card">
         <div class="valuation-header">
           <div>
@@ -126,7 +138,7 @@
       </div>
     </section>
 
-    <section class="share-section">
+    <section class="share-section page-panel" id="panel-research" data-page-panel="research" role="tabpanel" aria-labelledby="page-tab-research" hidden>
       <div class="share-card">
         <div class="share-card-header">
           <div>
@@ -160,6 +172,6 @@
 
   <script src="data.js?v=2"></script>
   <script src="valuation.js?v=3"></script>
-  <script src="app.js?v=3"></script>
+  <script src="app.js?v=4"></script>
 </body>
 </html>
