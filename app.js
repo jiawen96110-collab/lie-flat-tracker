@@ -331,7 +331,8 @@ function setStatus(s,m){
   const dot=document.getElementById('statusDot');
   const text=document.getElementById('statusText');
   dot.className='dot '+(s==='ok'?'':s==='loading'?'loading':'error');
-  text.textContent=m;
+  text.textContent=s==='ok'&&window.matchMedia('(max-width:640px)').matches?formatShortTime():m;
+  text.title=m;
 }
 
 function scheduleNextRefresh(){
