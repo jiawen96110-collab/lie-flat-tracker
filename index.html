@@ -1,114 +1,165 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>躺平组合·数据整理</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f2f2ef">
+  <title>平衡组合 · 数据整理</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="main-container">
-
-  <div class="header">
-    <h1>🛏 躺平组合·数据整理</h1>
-    <p class="subtitle">三市场ETF组合 · 数据整理（Z先生参考）</p>
-  </div>
-
-  <div class="status-bar">
-    <div class="status-left">
-      <div class="dot" id="statusDot"></div>
-      <span class="time" id="statusText">正在加载数据...</span>
-      <span class="update-badge" id="updateBadge"></span>
-    </div>
-    <div class="status-right">
-      <button class="btn-refresh" id="btnRefresh" onclick="refreshAll()">⟳ 刷新</button>
-    </div>
-  </div>
-
-  <!-- 三市场组合 -->
-  <div class="portfolios" id="portfolios">
-    <div class="portfolio us" id="port-us">
-      <div class="portfolio-header">
-        <div class="left"><span class="flag">🇺🇸</span><span class="name">美股躺平组合</span></div>
-        <span class="market-tag">全球科技+资源与另类资产</span>
+  <main class="main-container">
+    <nav class="topbar" aria-label="顶部导航">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        Balance
       </div>
-      <div class="portfolio-summary" id="summary-us">
-        <div class="summary-item neutral"><div class="summary-label">当日</div><div class="summary-value"><div class="loading-skeleton" style="width:60px;margin:0 auto"></div></div></div>
-        <div class="summary-item neutral"><div class="summary-label">YTD</div><div class="summary-value"><div class="loading-skeleton" style="width:60px;margin:0 auto"></div></div></div>
-      </div>
-      <div class="holdings">
-        <div class="change-header"><span></span><span>持仓</span><span>当日</span><span>YTD</span></div>
-        <div id="holdings-us"></div>
+      <button class="btn-refresh" id="btnRefresh" onclick="refreshAll()">
+        <span class="refresh-icon" aria-hidden="true">↻</span>
+        刷新数据
+      </button>
+    </nav>
+
+    <header class="header">
+      <p class="eyebrow">Multi-market portfolio</p>
+      <h1>平衡组合<br>数据整理</h1>
+      <p class="subtitle">三市场 ETF 组合与公开分享记录，在同一视野中保持清晰。</p>
+    </header>
+
+    <div class="status-bar">
+      <div class="status-left">
+        <div class="dot loading" id="statusDot"></div>
+        <span class="time" id="statusText">正在加载数据...</span>
+        <span class="update-badge" id="updateBadge"></span>
       </div>
     </div>
 
-    <div class="portfolio hk" id="port-hk">
-      <div class="portfolio-header">
-        <div class="left"><span class="flag">🇭🇰</span><span class="name">港股躺平组合</span></div>
-        <span class="market-tag">跨市场平衡配置，攻守兼备</span>
-      </div>
-      <div class="portfolio-summary" id="summary-hk">
-        <div class="summary-item neutral"><div class="summary-label">当日</div><div class="summary-value"><div class="loading-skeleton" style="width:60px;margin:0 auto"></div></div></div>
-        <div class="summary-item neutral"><div class="summary-label">YTD</div><div class="summary-value"><div class="loading-skeleton" style="width:60px;margin:0 auto"></div></div></div>
-      </div>
-      <div class="holdings">
-        <div class="change-header"><span></span><span>持仓</span><span>当日</span><span>YTD</span></div>
-        <div id="holdings-hk"></div>
-      </div>
-    </div>
-
-    <div class="portfolio a" id="port-a">
-      <div class="portfolio-header">
-        <div class="left"><span class="flag">🇨🇳</span><span class="name">A股躺平组合</span></div>
-        <span class="market-tag">科技主线为主，周期资产辅助</span>
-      </div>
-      <div class="portfolio-summary" id="summary-a">
-        <div class="summary-item neutral"><div class="summary-label">当日</div><div class="summary-value"><div class="loading-skeleton" style="width:60px;margin:0 auto"></div></div></div>
-        <div class="summary-item neutral"><div class="summary-label">YTD</div><div class="summary-value"><div class="loading-skeleton" style="width:60px;margin:0 auto"></div></div></div>
-      </div>
-      <div class="holdings">
-        <div class="change-header"><span></span><span>持仓</span><span>当日</span><span>YTD</span></div>
-        <div id="holdings-a"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 数据整理（Z先生参考） -->
-  <div class="share-section">
-    <div class="share-card">
-      <div class="share-card-header">
-        <div class="label">
-          <span class="flag">📈</span>
-          <span class="name">数据整理</span>
+    <section class="portfolios" id="portfolios" aria-label="三市场组合">
+      <article class="portfolio us" id="port-us">
+        <div class="portfolio-header">
+          <div class="market-number">01 / US</div>
+          <div class="left"><span class="name">美股平衡组合</span></div>
+          <span class="market-tag">全球科技 · 资源与另类资产</span>
         </div>
-        <span class="share-note">仅做记录</span>
+        <div class="portfolio-summary" id="summary-us">
+          <div class="summary-item neutral"><div class="summary-label">当日</div><div class="summary-value"><div class="loading-skeleton"></div></div></div>
+          <div class="summary-item neutral"><div class="summary-label">YTD</div><div class="summary-value"><div class="loading-skeleton"></div></div></div>
+        </div>
+        <div class="holdings">
+          <div class="change-header"><span>权重</span><span>持仓</span><span>当日</span><span>YTD</span></div>
+          <div id="holdings-us"></div>
+        </div>
+      </article>
+
+      <article class="portfolio hk" id="port-hk">
+        <div class="portfolio-header">
+          <div class="market-number">02 / HK</div>
+          <div class="left"><span class="name">港股平衡组合</span></div>
+          <span class="market-tag">跨市场平衡配置 · 攻守兼备</span>
+        </div>
+        <div class="portfolio-summary" id="summary-hk">
+          <div class="summary-item neutral"><div class="summary-label">当日</div><div class="summary-value"><div class="loading-skeleton"></div></div></div>
+          <div class="summary-item neutral"><div class="summary-label">YTD</div><div class="summary-value"><div class="loading-skeleton"></div></div></div>
+        </div>
+        <div class="holdings">
+          <div class="change-header"><span>权重</span><span>持仓</span><span>当日</span><span>YTD</span></div>
+          <div id="holdings-hk"></div>
+        </div>
+      </article>
+
+      <article class="portfolio a" id="port-a">
+        <div class="portfolio-header">
+          <div class="market-number">03 / CN</div>
+          <div class="left"><span class="name">A 股平衡组合</span></div>
+          <span class="market-tag">科技主线 · 周期资产辅助</span>
+        </div>
+        <div class="portfolio-summary" id="summary-a">
+          <div class="summary-item neutral"><div class="summary-label">当日</div><div class="summary-value"><div class="loading-skeleton"></div></div></div>
+          <div class="summary-item neutral"><div class="summary-label">YTD</div><div class="summary-value"><div class="loading-skeleton"></div></div></div>
+        </div>
+        <div class="holdings">
+          <div class="change-header"><span>权重</span><span>持仓</span><span>当日</span><span>YTD</span></div>
+          <div id="holdings-a"></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="valuation-section" aria-label="估值雷达">
+      <div class="valuation-card">
+        <div class="valuation-header">
+          <div>
+            <p class="section-kicker">Valuation radar</p>
+            <h2 class="valuation-title">周报估值雷达</h2>
+            <p class="valuation-description">美股与 A/H 股分别展示，按各自周报估值基准识别价格区间。</p>
+          </div>
+          <div class="valuation-legend" aria-label="估值状态图例">
+            <span><i class="legend-dot buy"></i>买入区</span>
+            <span><i class="legend-dot fair"></i>合理区</span>
+            <span><i class="legend-dot sell"></i>卖出区</span>
+          </div>
+        </div>
+
+        <div class="valuation-tabs" role="tablist" aria-label="估值市场">
+          <button class="valuation-tab active" id="valuation-tab-us" data-market="us" role="tab" aria-selected="true">美股估值</button>
+          <button class="valuation-tab" id="valuation-tab-ah" data-market="ah" role="tab" aria-selected="false">A / H 股估值</button>
+        </div>
+
+        <div class="valuation-summary" id="valuationSummary">
+          <div class="valuation-stat"><span>跟踪标的</span><strong id="valuationTotalCount">9</strong></div>
+          <div class="valuation-stat buy"><span>买入信号</span><strong id="buySignalCount">--</strong></div>
+          <div class="valuation-stat sell"><span>卖出观察</span><strong id="sellSignalCount">--</strong></div>
+          <div class="valuation-stat"><span id="valuationReserveLabel">现金 / 美债</span><strong id="valuationReserve">13.7%</strong></div>
+        </div>
+
+        <div class="valuation-table-head" aria-hidden="true">
+          <span>股票 / 持仓</span>
+          <span>实时价格</span>
+          <span>估值位置</span>
+          <span>当前状态</span>
+        </div>
+        <div class="valuation-list" id="valuationList"></div>
+
+        <div class="valuation-note">
+          <span id="valuationSourceNote">估值基准来自所提供的美股周报截图，双数值代表两档情景假设。</span>
+          <a href="https://mp.weixin.qq.com/s/TPaGAS_BdopkUDS5hRU62A" target="_blank" rel="noreferrer">查看估值方法说明</a>
+        </div>
       </div>
+    </section>
 
-      <div class="share-toolbar">
-        <span class="sort-label">排序：</span>
-        <button class="sort-btn active" id="sort-default"    onclick="sortShares('default')">📋 默认</button>
-        <button class="sort-btn"        id="sort-since-desc" onclick="sortShares('since-desc')">累计 ↓</button>
-        <button class="sort-btn"        id="sort-date-desc"  onclick="sortShares('date-desc')">🕐 最新</button>
+    <section class="share-section">
+      <div class="share-card">
+        <div class="share-card-header">
+          <div>
+            <p class="section-kicker">Research notes</p>
+            <div class="label"><span class="name">数据整理</span></div>
+            <p class="share-description">原始分享记录、记录价格与分析内容</p>
+          </div>
+          <span class="share-note">仅作记录</span>
+        </div>
+
+        <div class="share-toolbar">
+          <span class="sort-label">排序</span>
+          <button class="sort-btn active" id="sort-default" onclick="sortShares('default')">默认</button>
+          <button class="sort-btn" id="sort-since-desc" onclick="sortShares('since-desc')">累计表现</button>
+          <button class="sort-btn" id="sort-date-desc" onclick="sortShares('date-desc')">最新记录</button>
+        </div>
+
+        <div class="share-table-header">
+          <span></span><span>代码</span><span>名称</span>
+          <span>当日</span><span>累计</span>
+        </div>
+        <div class="share-items" id="share-list"></div>
       </div>
+    </section>
 
-      <div class="share-table-header">
-        <span></span>
-        <span>代码</span>
-        <span>名称</span>
-        <span style="text-align:right">当日</span>
-        <span style="text-align:right">累计</span>
-      </div>
-      <div class="share-items" id="share-list"></div>
-    </div>
-  </div>
+    <footer class="footer">
+      <span>数据来源：腾讯财经 · 自动刷新间隔 30 秒</span>
+      <span class="footer-note">本内容为公开分享的 ETF 组合与行业概念数据整理。市场有风险，投资需谨慎。</span>
+    </footer>
+  </main>
 
-  <div class="footer">
-    数据来源: 腾讯财经 · 自动刷新间隔 30s<br>
-    <span class="footer-note">本内容为Z先生公开分享的ETF组合与行业概念数据整理，如要参与请自行研究决策。市场有风险，投资需谨慎。</span>
-  </div>
-</div>
-
-<script src="data.js"></script>
-<script src="app.js"></script>
+  <script src="data.js?v=2"></script>
+  <script src="valuation.js?v=3"></script>
+  <script src="app.js?v=3"></script>
 </body>
 </html>

@@ -45,6 +45,8 @@ function parseQuote(code,raw){
 
 const CACHE={us:{rt:{},ytd:{},loaded:false},hk:{rt:{},ytd:{},loaded:false},a:{rt:{},ytd:{},loaded:false}};
 const SHARE_CACHE={};
+const VALUATION_CACHE={};
+let currentValuationMarket='us';
 
 function fmt(v){ if(v==null||isNaN(v))return '—'; return(v>0?'+':'')+v.toFixed(2)+'%'; }
 
@@ -188,6 +190,117 @@ async function loadShareRecords(){
   renderShareRecords();
 }
 
+function valuationPrice(v){
+  const quote=VALUATION_CACHE[v.sym];
+  return quote&&quote.price?quote.price:v.snapshot;
+}
+
+function valuationState(v,price){
+  if(price<=v.buy[0]) return {key:'strong-buy',label:'深度买入区',hint:'低于第一档理想买点'};
+  if(price<=v.buy[1]) return {key:'buy',label:'理想买入区',hint:'已进入理想买点'};
+  if(price<v.fair[0]) return {key:'watch',label:'等待区',hint:'距离合理价仍有空间'};
+  if(price<v.sell[0]) return {key:'fair',label:'止盈观察',hint:'已达到合理股价'};
+  return {key:'sell',label:'理想卖出区',hint:'已达到理想卖点'};
+}
+
+function compactPrice(value){
+  if(value==null||isNaN(value))return '--';
+  return value>=100?value.toFixed(0):value.toFixed(1);
+}
+
+function activeValuationGroup(){
+  return window.VALUATION_GROUPS&&window.VALUATION_GROUPS[currentValuationMarket];
+}
+
+function renderValuations(){
+  const container=document.getElementById('valuationList');
+  const group=activeValuationGroup();
+  if(!container||!group)return;
+  const records=group.records;
+  let buyCount=0,sellCount=0;
+  container.innerHTML=records.map(v=>{
+    const price=valuationPrice(v);
+    const state=valuationState(v,price);
+    if(state.key==='buy'||state.key==='strong-buy')buyCount++;
+    if(state.key==='fair'||state.key==='sell')sellCount++;
+
+    const min=v.buy[0]*0.82,max=v.sell[1]*1.08;
+    const position=Math.max(1,Math.min(99,(price-min)/(max-min)*100));
+    const buyEnd=(v.buy[1]-min)/(max-min)*100;
+    const fairStart=(v.fair[0]-min)/(max-min)*100;
+    const fairEnd=(v.fair[1]-min)/(max-min)*100;
+    const sellStart=(v.sell[0]-min)/(max-min)*100;
+    const live=VALUATION_CACHE[v.sym]&&VALUATION_CACHE[v.sym].price;
+    const holding=v.holding?`${v.holding.toFixed(1)}%`:'观察';
+    const currency=v.market==='US'?'$':'¥';
+
+    return `<article class="valuation-row state-${state.key}">
+      <div class="valuation-company">
+        <div class="valuation-symbol-line">
+          <strong>${v.name}</strong>
+          ${state.key==='buy'||state.key==='strong-buy'?'<span class="signal-pill buy">买入信号</span>':''}
+          ${state.key==='sell'?'<span class="signal-pill sell">卖出信号</span>':''}
+        </div>
+        <span><i class="market-mini ${v.market==='A股'?'cn':v.market==='港股'?'hk':'us'}">${v.market}</i>${v.ticker} · 持仓 ${holding}</span>
+      </div>
+      <div class="valuation-current">
+        <strong>${currency}${compactPrice(price)}</strong>
+        <span>${live?'实时行情':'截图参考价'}</span>
+      </div>
+      <div class="valuation-range">
+        <div class="range-labels">
+          <span>买 ${compactPrice(v.buy[0])}–${compactPrice(v.buy[1])}</span>
+          <span>合理 ${compactPrice(v.fair[0])}–${compactPrice(v.fair[1])}</span>
+          <span>卖 ${compactPrice(v.sell[0])}–${compactPrice(v.sell[1])}</span>
+        </div>
+        <div class="range-track">
+          <i class="range-zone buy" style="width:${buyEnd}%"></i>
+          <i class="range-zone fair" style="left:${fairStart}%;width:${Math.max(2,fairEnd-fairStart)}%"></i>
+          <i class="range-zone sell" style="left:${sellStart}%;right:0"></i>
+          <span class="price-pin" style="left:${position}%"><b>${currency}${compactPrice(price)}</b></span>
+        </div>
+      </div>
+      <div class="valuation-status">
+        <span class="status-chip ${state.key}">${state.label}</span>
+        <small>${state.hint}</small>
+      </div>
+    </article>`;
+  }).join('');
+
+  document.getElementById('buySignalCount').textContent=buyCount;
+  document.getElementById('sellSignalCount').textContent=sellCount;
+  document.getElementById('valuationTotalCount').textContent=records.length;
+  document.getElementById('valuationReserveLabel').textContent=group.reserveLabel;
+  document.getElementById('valuationReserve').textContent=`${group.reserve.toFixed(1)}%`;
+  document.getElementById('valuationSourceNote').textContent=
+    `估值基准来自所提供的${currentValuationMarket==='us'?'美股':'A/H 股'}周报截图，双数值代表两档情景假设。`;
+}
+
+async function loadValuations(){
+  if(!window.VALUATION_GROUPS)return;
+  try{
+    const allRecords=Object.values(VALUATION_GROUPS).flatMap(group=>group.records);
+    const codes=allRecords.map(v=>v.sym);
+    const rawMap=await qqJsonp(codes);
+    allRecords.forEach(v=>{
+      const q=parseQuote(v.sym,rawMap[v.sym]);
+      if(q)VALUATION_CACHE[v.sym]=q;
+    });
+  }catch(e){}
+  renderValuations();
+}
+
+function switchValuationMarket(market){
+  if(!window.VALUATION_GROUPS||!VALUATION_GROUPS[market])return;
+  currentValuationMarket=market;
+  document.querySelectorAll('.valuation-tab').forEach(button=>{
+    const active=button.dataset.market===market;
+    button.classList.toggle('active',active);
+    button.setAttribute('aria-selected',active?'true':'false');
+  });
+  renderValuations();
+}
+
 function setStatus(s,m){
   const dot=document.getElementById('statusDot');
   const text=document.getElementById('statusText');
@@ -211,7 +324,7 @@ async function refreshAll(){
   const t0=performance.now();
   setStatus('loading',_first?'正在获取数据...':'刷新中...');
   try{
-    await Promise.allSettled([...['us','hk','a'].map(k=>loadPortfolio(k)),loadShareRecords()]);
+    await Promise.allSettled([...['us','hk','a'].map(k=>loadPortfolio(k)),loadShareRecords(),loadValuations()]);
     _first=false;
     setStatus('ok',formatFullDate());
     const badge=document.getElementById('updateBadge');
@@ -224,6 +337,10 @@ async function refreshAll(){
 document.addEventListener('DOMContentLoaded',()=>{
   ['us','hk','a'].forEach(k=>renderLoadingHoldings(k));
   renderShareRecords();
+  renderValuations();
+  document.querySelectorAll('.valuation-tab').forEach(button=>{
+    button.addEventListener('click',()=>switchValuationMarket(button.dataset.market));
+  });
   refreshAll();
 });
 
