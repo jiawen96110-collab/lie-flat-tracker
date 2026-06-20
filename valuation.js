@@ -15,20 +15,20 @@ window.VALUATION_GROUPS = {
       { ticker:'SBSW', sym:'usSBSW', market:'US', name:'Sibanye',    buy:[9.3,12.4],    fair:[18.5,24.7],   sell:[26,34.6],     holding:0, targetHolding:0, snapshot:10.1 }
     ]
   },
-  ah: {
+    ah: {
     label:'A / H 股估值',
     reserveLabel:'其他',
-    reserve:3.7,
+    reserve:3.9,
     records:[
-      { ticker:'300502', sym:'sz300502', market:'A股', name:'新易盛',   buy:[478,637],       fair:[956,1274],     sell:[1434,1911], holding:23.5, targetHolding:21.7, snapshot:705 },
-      { ticker:'300308', sym:'sz300308', market:'A股', name:'中际旭创', buy:[675,900],       fair:[1350,1800],    sell:[1890,2520], holding:31.2, targetHolding:29.9, snapshot:1158 },
-      { ticker:'300476', sym:'sz300476', market:'A股', name:'胜宏科技', buy:[239,318.7],     fair:[478,637.3],    sell:[717,956],   holding:0, targetHolding:0, snapshot:419.3 },
-      { ticker:'09992',  sym:'hk09992',  market:'港股', name:'泡泡玛特', buy:[99.6,132.8],    fair:[199.2,265.6],  sell:[298.8,398.4],holding:0, targetHolding:0, snapshot:172 },
-      { ticker:'600547', sym:'sh600547', market:'A股', name:'山东黄金', buy:[22.5,30],       fair:[45,60],        sell:[67.5,90],    holding:0, targetHolding:0, snapshot:23.9 },
-      { ticker:'06869',  sym:'hk06869',  market:'港股', name:'长飞光纤', buy:[151,201.3],     fair:[301.9,402.6],  sell:[452.9,603.9],holding:31.3, targetHolding:21.9, snapshot:227 },
-      { ticker:'01138',  sym:'hk01138',  market:'港股', name:'中远海能', buy:[12.3,16.3],     fair:[24.5,32.7],    sell:[36.8,49],    holding:0, targetHolding:0, snapshot:16 },
-      { ticker:'03993',  sym:'hk03993',  market:'港股', name:'洛阳钼业', buy:[15,21],         fair:[31,41],        sell:[43,58],      holding:10.4, targetHolding:11.2, snapshot:18.3 },
-      { ticker:'02899',  sym:'hk02899',  market:'港股', name:'紫金矿业', buy:[32,42],         fair:[64,85],        sell:[89,119],     holding:0, targetHolding:11.3, snapshot:32.8 }
+      { ticker:'300502', sym:'sz300502', market:'A股', name:'新易盛',   buy:[443,591],       fair:[886,1181],     sell:[1329,1772], holding:25.0, targetHolding:23.6, snapshot:705 },
+      { ticker:'300308', sym:'sz300308', market:'A股', name:'中际旭创', buy:[874,1166],      fair:[1749,2332],    sell:[2448,3265], holding:33.8, targetHolding:30.9, snapshot:1158 },
+      { ticker:'300476', sym:'sz300476', market:'A股', name:'胜宏科技', buy:[272.8,363.7],   fair:[545.5,727.4],  sell:[818.3,1091],holding:0, targetHolding:0, snapshot:419.3 },
+      { ticker:'09992',  sym:'hk09992',  market:'港股', name:'泡泡玛特', buy:[140.6,187.4],   fair:[281.2,374.9],  sell:[421.7,562.3],holding:0, targetHolding:0, snapshot:172 },
+      { ticker:'600547', sym:'sh600547', market:'A股', name:'山东黄金', buy:[18,24],         fair:[36,48],        sell:[54,72],      holding:0, targetHolding:0, snapshot:23.9 },
+      { ticker:'06869',  sym:'hk06869',  market:'港股', name:'长飞光纤', buy:[151,201.3],     fair:[301.9,402.6],  sell:[452.9,603.9],holding:27.5, targetHolding:31.0, snapshot:227 },
+      { ticker:'01138',  sym:'hk01138',  market:'港股', name:'中远海能', buy:[10.7,14.3],     fair:[21.5,28.6],    sell:[32.2,42.9],  holding:0, targetHolding:0, snapshot:16 },
+      { ticker:'03993',  sym:'hk03993',  market:'港股', name:'洛阳钼业', buy:[13,18],         fair:[27,36],        sell:[38,50],      holding:9.8, targetHolding:10.6, snapshot:18.3 },
+      { ticker:'02899',  sym:'hk02899',  market:'港股', name:'紫金矿业', buy:[28,37],         fair:[56,74],        sell:[78,104],     holding:0, targetHolding:0, snapshot:32.8 }
     ]
   }
 };
