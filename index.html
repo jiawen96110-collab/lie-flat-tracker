@@ -5,13 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f2f2ef">
   <title>Z先生躺平致富观察 · 数据整理</title>
-  <link rel="stylesheet" href="style.css?v=7">
+  <link rel="stylesheet" href="style.css?v=10">
 </head>
 <body>
   <main class="main-container">
     <nav class="topbar" aria-label="顶部导航">
       <div class="brand">
-        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="brand-mark" aria-hidden="true">
+          <i></i><i></i><i></i>
+          <svg viewBox="0 0 32 22" focusable="false">
+            <path class="brand-line" d="M5 15.5 L12 11.5 L18 13.2 L27 6.4"></path>
+            <path class="brand-arrow" d="M23.4 5.9 L27 6.4 L26.1 9.7"></path>
+          </svg>
+        </span>
         <span class="brand-en">Balance</span>
         <span class="brand-cn">Z先生躺平致富观察</span>
       </div>
@@ -111,10 +117,10 @@
         </div>
 
         <div class="valuation-summary" id="valuationSummary">
-          <div class="valuation-stat"><span>跟踪标的</span><strong id="valuationTotalCount">9</strong></div>
-          <div class="valuation-stat buy"><span>买入信号</span><strong id="buySignalCount">--</strong></div>
-          <div class="valuation-stat sell"><span>卖出观察</span><strong id="sellSignalCount">--</strong></div>
-          <div class="valuation-stat"><span id="valuationReserveLabel">现金 / 美债</span><strong id="valuationReserve">13.7%</strong></div>
+          <div class="valuation-stat"><span>跟踪标的</span><strong id="valuationTotalCount">9</strong><em>Watchlist</em></div>
+          <div class="valuation-stat buy"><span>买入信号</span><strong id="buySignalCount">--</strong><em>Entry</em></div>
+          <div class="valuation-stat sell"><span>卖出观察</span><strong id="sellSignalCount">--</strong><em>Take profit</em></div>
+          <div class="valuation-stat"><span id="valuationReserveLabel">现金 / 美债</span><strong id="valuationReserve">13.7%</strong><em>Reserve</em></div>
         </div>
 
         <div class="valuation-table-head" aria-hidden="true">
@@ -156,6 +162,6 @@
 
   <script src="data.js?v=2"></script>
   <script src="valuation.js?v=5"></script>
-  <script src="app.js?v=5"></script>
+  <script src="app.js?v=7"></script>
 </body>
 </html>

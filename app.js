@@ -218,15 +218,37 @@ function activeValuationGroup(){
   return window.VALUATION_GROUPS&&window.VALUATION_GROUPS[currentValuationMarket];
 }
 
+function valuationSignalRank(key){
+  return {
+    'strong-buy':4,
+    buy:3,
+    sell:3,
+    fair:2,
+    watch:1
+  }[key]||0;
+}
+
 function renderValuations(){
   const container=document.getElementById('valuationList');
   const group=activeValuationGroup();
   if(!container||!group)return;
   const records=group.records;
   let buyCount=0,sellCount=0;
-  container.innerHTML=records.map(v=>{
+  const orderedRecords=records.map(v=>{
     const price=valuationPrice(v);
     const state=valuationState(v,price);
+    return {v,price,state};
+  }).sort((a,b)=>{
+    const holdingA=Number(a.v.holding)||0;
+    const holdingB=Number(b.v.holding)||0;
+    const activeA=holdingA>0?1:0;
+    const activeB=holdingB>0?1:0;
+    if(activeA!==activeB)return activeB-activeA;
+    if(holdingA!==holdingB)return holdingB-holdingA;
+    return valuationSignalRank(b.state.key)-valuationSignalRank(a.state.key);
+  });
+
+  container.innerHTML=orderedRecords.map(({v,price,state})=>{
     if(state.key==='buy'||state.key==='strong-buy')buyCount++;
     if(state.key==='fair'||state.key==='sell')sellCount++;
 
@@ -238,20 +260,25 @@ function renderValuations(){
     const sellStart=(v.sell[0]-min)/(max-min)*100;
     const live=VALUATION_CACHE[v.sym]&&VALUATION_CACHE[v.sym].price;
     const holding=v.holding?`${v.holding.toFixed(1)}%`:'观察';
+    const holdingClass=v.holding?'active':'watch';
     const currency=v.market==='US'?'$':'¥';
 
     return `<article class="valuation-row state-${state.key}">
       <div class="valuation-company">
         <div class="valuation-symbol-line">
+          <span class="valuation-ticker">${v.ticker}</span>
           <strong>${v.name}</strong>
-          ${state.key==='buy'||state.key==='strong-buy'?'<span class="signal-pill buy">买入信号</span>':''}
-          ${state.key==='sell'?'<span class="signal-pill sell">卖出信号</span>':''}
+          <span class="valuation-holding ${holdingClass}">${v.holding?'持仓 ':''}${holding}</span>
         </div>
-        <span class="valuation-meta">${v.market} · ${v.ticker} · 持仓 ${holding}</span>
+        <span class="valuation-meta">${v.market}</span>
       </div>
       <div class="valuation-current">
         <strong>${currency}${compactPrice(price)}</strong>
         <span>${live?'实时行情':'截图参考价'}</span>
+      </div>
+      <div class="valuation-status">
+        <span class="status-chip ${state.key}">${state.label}</span>
+        <small>${state.hint}</small>
       </div>
       <div class="valuation-range">
         <div class="range-labels">
@@ -265,10 +292,6 @@ function renderValuations(){
           <i class="range-zone sell" style="left:${sellStart}%;right:0"></i>
           <span class="price-pin" style="left:${position}%"><b>${currency}${compactPrice(price)}</b></span>
         </div>
-      </div>
-      <div class="valuation-status">
-        <span class="status-chip ${state.key}">${state.label}</span>
-        <small>${state.hint}</small>
       </div>
     </article>`;
   }).join('');
