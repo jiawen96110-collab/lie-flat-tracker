@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f2f2ef">
-  <title>躺平组合 · 数据整理</title>
-  <link rel="stylesheet" href="style.css?v=6">
+  <title>Z先生躺平致富观察 · 数据整理</title>
+  <link rel="stylesheet" href="style.css?v=7">
 </head>
 <body>
   <main class="main-container">
@@ -13,7 +13,7 @@
       <div class="brand">
         <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
         <span class="brand-en">Balance</span>
-        <span class="brand-cn">躺平组合</span>
+        <span class="brand-cn">Z先生躺平致富观察</span>
       </div>
       <button class="btn-refresh" id="btnRefresh" onclick="refreshAll()">
         <span class="refresh-icon" aria-hidden="true">↻</span>
@@ -23,7 +23,7 @@
 
     <header class="header">
       <p class="eyebrow">Multi-market portfolio</p>
-      <h1>躺平组合<span class="desktop-break"><br></span><span class="mobile-divider"> · </span>数据整理</h1>
+      <h1>Z先生躺平致富观察<span class="desktop-break"><br></span><span class="mobile-divider"> · </span>数据整理</h1>
       <p class="subtitle">三市场 ETF 组合与公开分享记录，在同一视野中保持清晰。</p>
     </header>
 
@@ -97,10 +97,7 @@
     <section class="valuation-section page-panel" id="panel-valuation" data-page-panel="valuation" role="tabpanel" aria-labelledby="page-tab-valuation" aria-label="估值雷达" hidden>
       <div class="valuation-card">
         <div class="valuation-header">
-          <div>
-            <h2 class="valuation-title">周报估值雷达</h2>
-            <p class="valuation-description">美股与 A/H 股分别展示，按各自周报估值基准识别价格区间。</p>
-          </div>
+          <a class="valuation-method-link" href="https://mp.weixin.qq.com/s/TPaGAS_BdopkUDS5hRU62A" target="_blank" rel="noreferrer">查看估值方法说明</a>
           <div class="valuation-legend" aria-label="估值状态图例">
             <span><i class="legend-dot buy"></i>买入区</span>
             <span><i class="legend-dot fair"></i>合理区</span>
@@ -130,21 +127,12 @@
 
         <div class="valuation-note">
           <span id="valuationSourceNote">估值基准来自所提供的美股周报截图，双数值代表两档情景假设。</span>
-          <a href="https://mp.weixin.qq.com/s/TPaGAS_BdopkUDS5hRU62A" target="_blank" rel="noreferrer">查看估值方法说明</a>
         </div>
       </div>
     </section>
 
     <section class="share-section page-panel" id="panel-research" data-page-panel="research" role="tabpanel" aria-labelledby="page-tab-research" hidden>
       <div class="share-card">
-        <div class="share-card-header">
-          <div>
-            <div class="label"><span class="name">数据整理</span></div>
-            <p class="share-description">原始分享记录、记录价格与分析内容</p>
-          </div>
-          <span class="share-note">仅作记录</span>
-        </div>
-
         <div class="share-toolbar">
           <span class="sort-label">排序</span>
           <button class="sort-btn active" id="sort-default" onclick="sortShares('default')">默认</button>
@@ -162,12 +150,12 @@
 
     <footer class="footer">
       <span>数据来源：腾讯财经 · 自动刷新间隔 30 秒</span>
-      <span class="footer-note">本内容为公开分享的 ETF 组合与行业概念数据整理。市场有风险，投资需谨慎。</span>
+      <span class="footer-note">本内容为Z先生公开分享的 ETF 组合与行业概念数据整理。市场有风险，投资需谨慎。</span>
     </footer>
   </main>
 
   <script src="data.js?v=2"></script>
-  <script src="valuation.js?v=4"></script>
-  <script src="app.js?v=4"></script>
+  <script src="valuation.js?v=5"></script>
+  <script src="app.js?v=5"></script>
 </body>
 </html>

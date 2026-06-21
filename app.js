@@ -247,7 +247,7 @@ function renderValuations(){
           ${state.key==='buy'||state.key==='strong-buy'?'<span class="signal-pill buy">买入信号</span>':''}
           ${state.key==='sell'?'<span class="signal-pill sell">卖出信号</span>':''}
         </div>
-        <span><i class="market-mini ${v.market==='A股'?'cn':v.market==='港股'?'hk':'us'}">${v.market}</i>${v.ticker} · 持仓 ${holding}</span>
+        <span class="valuation-meta">${v.market} · ${v.ticker} · 持仓 ${holding}</span>
       </div>
       <div class="valuation-current">
         <strong>${currency}${compactPrice(price)}</strong>

@@ -1,18 +1,18 @@
 window.VALUATION_GROUPS = {
   us: {
     label:'美股估值',
-    reserveLabel:'现金 / 美债',
-    reserve:13.7,
+    reserveLabel:'其他 / 美债',
+    reserve:11.9,
     records:[
-      { ticker:'MRVL', sym:'usMRVL', market:'US', name:'迈威尔科技', buy:[128.7,171.6], fair:[257.4,343.2], sell:[360.4,480.5], holding:8.8, targetHolding:14.1, snapshot:263.3 },
-      { ticker:'GLW',  sym:'usGLW',  market:'US', name:'康宁',       buy:[100.6,134.2], fair:[201.3,268.4], sell:[281.8,375.7], holding:12.7, targetHolding:13.0, snapshot:179.3 },
-      { ticker:'NEM',  sym:'usNEM',  market:'US', name:'纽蒙特',     buy:[82,109],      fair:[164,219],     sell:[230,306],     holding:12.5, targetHolding:13.8, snapshot:96.5 },
-      { ticker:'NVDA', sym:'usNVDA', market:'US', name:'英伟达',     buy:[141,189],     fair:[283,377],     sell:[396,528],     holding:11.0, targetHolding:11.3, snapshot:202.3 },
-      { ticker:'SNDK', sym:'usSNDK', market:'US', name:'闪迪',       buy:[748,998],     fair:[1497,1995],   sell:[2095,2794],   holding:31.2, targetHolding:34.0, snapshot:1558.9 },
-      { ticker:'BE',   sym:'usBE',   market:'US', name:'Bloom Energy',buy:[120.3,160.4],fair:[240.6,320.8], sell:[336.8,449.1], holding:0, targetHolding:0, snapshot:267.3 },
-      { ticker:'MU',   sym:'usMU',   market:'US', name:'美光科技',   buy:[448,598],     fair:[897,1195],    sell:[1255,1674],   holding:0, targetHolding:0, snapshot:864.1 },
-      { ticker:'LITE', sym:'usLITE', market:'US', name:'Lumentum',   buy:[450,600],     fair:[900,1200],    sell:[1260,1680],   holding:10.0, targetHolding:0, snapshot:867.5 },
-      { ticker:'SBSW', sym:'usSBSW', market:'US', name:'Sibanye',    buy:[9.3,12.4],    fair:[18.5,24.7],   sell:[26,34.6],     holding:0, targetHolding:0, snapshot:10.1 }
+      { ticker:'MRVL', sym:'usMRVL', market:'US', name:'迈威尔科技', buy:[133.0,177.3], fair:[266.0,354.7], sell:[372.4,496.6], holding:8.9, targetHolding:8.5, snapshot:263.3 },
+      { ticker:'GLW',  sym:'usGLW',  market:'US', name:'康宁',       buy:[100.6,134.2], fair:[201.3,268.4], sell:[281.8,375.7], holding:12.1, targetHolding:11.7, snapshot:179.3 },
+      { ticker:'NEM',  sym:'usNEM',  market:'US', name:'纽蒙特',     buy:[74,98],       fair:[147,197],     sell:[206,275],     holding:11.2, targetHolding:11.4, snapshot:96.5 },
+      { ticker:'NVDA', sym:'usNVDA', market:'US', name:'英伟达',     buy:[143,190],     fair:[285,380],     sell:[399,532],     holding:9.7, targetHolding:10.0, snapshot:202.3 },
+      { ticker:'SNDK', sym:'usSNDK', market:'US', name:'闪迪',       buy:[878,1171],    fair:[1757,2342],   sell:[2459,3279],   holding:37.7, targetHolding:36.1, snapshot:1558.9 },
+      { ticker:'BE',   sym:'usBE',   market:'US', name:'Bloom Energy',buy:[119.0,158.7],fair:[238.0,317.4], sell:[333.2,444.3], holding:0, targetHolding:0, snapshot:267.3 },
+      { ticker:'MU',   sym:'usMU',   market:'US', name:'美光科技',   buy:[502,669],     fair:[1003,1338],   sell:[1405,1873],   holding:0, targetHolding:0, snapshot:864.1 },
+      { ticker:'LITE', sym:'usLITE', market:'US', name:'Lumentum',   buy:[450,600],     fair:[900,1200],    sell:[1260,1680],   holding:8.6, targetHolding:9.8, snapshot:867.5 },
+      { ticker:'NOK',  sym:'usNOK',  market:'US', name:'诺基亚',     buy:[7.2,9.6],     fair:[14.4,19.2],   sell:[20.2,26.9],   holding:0, targetHolding:0, snapshot:10.1 }
     ]
   },
   ah: {
