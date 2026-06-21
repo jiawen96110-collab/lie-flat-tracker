@@ -1,77 +1,77 @@
 {
-  "updated": "2026-06-11T23:02:32Z",
+  "updated": "2026-06-21T10:51:36Z",
   "data": {
     "us_QQQ": {
-      "today": 3.38,
-      "price": 717.12
+      "today": 2.51,
+      "price": 740.62
     },
     "us_SPY": {
-      "today": 1.7,
-      "price": 737.76
+      "today": 1.04,
+      "price": 746.74
     },
     "us_RING": {
-      "today": 5.46,
-      "price": 67.4
+      "today": -2.37,
+      "price": 71.35
     },
     "us_COPX": {
-      "today": 7.37,
-      "price": 83.16
+      "today": -1.48,
+      "price": 85.48
     },
     "us_BITB": {
-      "today": 2.68,
-      "price": 34.51
+      "today": -2.09,
+      "price": 34.13
     },
     "hk_03455": {
-      "today": -0.42,
-      "price": 5499.0
+      "today": -0.24,
+      "price": 5755.0
     },
     "hk_03132": {
-      "today": -1.08,
-      "price": 64.3
+      "today": 1.59,
+      "price": 71.62
     },
     "hk_03147": {
-      "today": -1.16,
-      "price": 15.39
+      "today": 2.43,
+      "price": 17.3
     },
     "hk_03110": {
-      "today": -0.57,
-      "price": 31.14
+      "today": -2.08,
+      "price": 30.1
     },
     "hk_02840": {
-      "today": -1.69,
-      "price": 2961.0
+      "today": -0.77,
+      "price": 3088.0
     },
     "cn_513390": {
-      "today": -0.93,
-      "price": 2.336
+      "today": -0.36,
+      "price": 2.5
     },
     "cn_159652": {
-      "today": 1.92,
-      "price": 1.595
+      "today": -0.4,
+      "price": 1.723
     },
     "cn_588200": {
-      "today": 1.81,
-      "price": 3.539
+      "today": 4.48,
+      "price": 4.126
     },
     "cn_515880": {
-      "today": -1.66,
-      "price": 1.603
+      "today": 3.64,
+      "price": 1.822
     },
     "cn_518880": {
-      "today": -2.63,
-      "price": 8.506
+      "today": -0.55,
+      "price": 8.908
     },
     "watch_300782": {
-      "today": -2.81,
-      "price": 91.85
+      "today": 6.31,
+      "price": 106.1
     },
     "watch_MRVL": {
-      "today": 11.13,
-      "price": 280.71
+      "today": 7.27,
+      "price": 310.58
     },
     "watch_AAOI": {
-      "today": -1.34,
-      "price": 172.78
+      "today": -3.28,
+      "price": 161.85
     }
   }
 }
