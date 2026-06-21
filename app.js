@@ -262,15 +262,17 @@ function renderValuations(){
     const holding=v.holding?`${v.holding.toFixed(1)}%`:'观察';
     const holdingClass=v.holding?'active':'watch';
     const currency=v.market==='US'?'$':'¥';
+    const isUs=currentValuationMarket==='us';
+    const title=isUs?v.ticker:v.name;
+    const badge=isUs?'':v.market;
 
     return `<article class="valuation-row state-${state.key}">
       <div class="valuation-company">
         <div class="valuation-symbol-line">
-          <span class="valuation-ticker">${v.ticker}</span>
-          <strong>${v.name}</strong>
+          ${badge?`<span class="valuation-ticker">${badge}</span>`:''}
+          <strong>${title}</strong>
           <span class="valuation-holding ${holdingClass}">${v.holding?'持仓 ':''}${holding}</span>
         </div>
-        <span class="valuation-meta">${v.market}</span>
       </div>
       <div class="valuation-current">
         <strong>${currency}${compactPrice(price)}</strong>
