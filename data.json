@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-30T23:59:35Z",
+  "updated": "2026-07-01T04:15:44Z",
   "data": {
     "us_QQQ": {
       "today": 1.7,
@@ -42,28 +42,28 @@
       "price": 2908.0
     },
     "cn_513390": {
-      "today": 1.37,
-      "price": 2.435
+      "today": 0.62,
+      "price": 2.45
     },
     "cn_159652": {
-      "today": -0.63,
-      "price": 1.568
+      "today": 1.15,
+      "price": 1.586
     },
     "cn_588200": {
-      "today": 4.6,
-      "price": 4.936
+      "today": 0.02,
+      "price": 4.937
     },
     "cn_515880": {
-      "today": 4.72,
-      "price": 1.796
+      "today": -3.06,
+      "price": 1.741
     },
     "cn_518880": {
-      "today": -0.84,
-      "price": 8.378
+      "today": -1.03,
+      "price": 8.292
     },
     "watch_300782": {
-      "today": 8.71,
-      "price": 109.58
+      "today": -2.41,
+      "price": 106.94
     },
     "watch_MRVL": {
       "today": 7.25,
