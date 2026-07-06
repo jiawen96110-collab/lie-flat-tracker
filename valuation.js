@@ -1,3 +1,5 @@
+window.VALUATION_UPDATED_AT = '2026-07-06';
+
 window.VALUATION_GROUPS = {
   us: {
     label: '美股估值',
