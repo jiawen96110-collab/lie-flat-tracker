@@ -305,6 +305,8 @@ function renderValuations(){
   document.getElementById('valuationReserve').textContent=`${group.reserve.toFixed(1)}%`;
   document.getElementById('valuationSourceNote').textContent=
     `估值基准来自所提供的${currentValuationMarket==='us'?'美股':'A/H 股'}周报截图，双数值代表两档情景假设。`;
+  const updateStamp=document.getElementById('valuationUpdateStamp');
+  if(updateStamp)updateStamp.textContent=`\u5468\u62a5\u66f4\u65b0\uff1a${window.VALUATION_UPDATED_AT||'--'}`;
 }
 
 async function loadValuations(){
