@@ -26,7 +26,7 @@ window.VALUATION_GROUPS = {
       { ticker:'09992',  sym:'hk09992',  market:'港股', name:'泡泡玛特', buy:[140.6,187.4],  fair:[281.2,374.9],  sell:[421.7,562.3], holding:0, targetHolding:0, snapshot:153.5 },
       { ticker:'300476', sym:'sz300476', market:'A股', name:'胜宏科技', buy:[272.8,363.7],   fair:[545.5,727.4],  sell:[818.3,1091.0], holding:0, targetHolding:0, snapshot:331.5 },
       { ticker:'06869',  sym:'hk06869',  market:'港股', name:'长飞光纤', buy:[151.0,201.3],  fair:[301.9,402.6],  sell:[452.9,603.9], holding:29.0, targetHolding:32.1, snapshot:201.5 },
-      { ticker:'601099', sym:'sh601099', market:'A股', name:'太平洋',   buy:[95.5,127.3],    fair:[190.9,254.6],  sell:[286.4,381.9], holding:0, targetHolding:0, snapshot:204.0 },
+      { ticker:'00522',  sym:'hk00522',  market:'港股', name:'ASMPT',    buy:[95.5,127.3],    fair:[190.9,254.6],  sell:[286.4,381.9], holding:0, targetHolding:0, snapshot:204.0 },
       { ticker:'03993',  sym:'hk03993',  market:'港股', name:'洛阳钼业', buy:[13,18],        fair:[27,36],        sell:[38,50], holding:9.6, targetHolding:8.1, snapshot:15.2 },
       { ticker:'603986', sym:'sh603986', market:'A股', name:'兆易创新', buy:[529,705],       fair:[1058,1410],    sell:[1481,1974], holding:0, targetHolding:0, snapshot:914.0 }
     ]
