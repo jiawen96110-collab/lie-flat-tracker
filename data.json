@@ -1,13 +1,13 @@
 {
-  "updated": "2026-07-07T20:22:17Z",
+  "updated": "2026-07-07T21:49:50Z",
   "data": {
     "us_QQQ": {
       "today": -1.85,
       "price": 709.43
     },
     "us_SPY": {
-      "today": -0.49,
-      "price": 747.62
+      "today": -0.48,
+      "price": 747.71
     },
     "us_RING": {
       "today": -3.48,
