@@ -1,25 +1,25 @@
 {
-  "updated": "2026-07-09T14:34:57Z",
+  "updated": "2026-07-09T17:12:54Z",
   "data": {
     "us_QQQ": {
-      "today": 0.95,
-      "price": 718.22
+      "today": 1.68,
+      "price": 723.4
     },
     "us_SPY": {
-      "today": 0.29,
-      "price": 747.59
+      "today": 0.79,
+      "price": 751.25
     },
     "us_RING": {
-      "today": 2.29,
-      "price": 64.69
+      "today": 2.7,
+      "price": 64.95
     },
     "us_COPX": {
-      "today": 2.47,
-      "price": 74.85
+      "today": 3.4,
+      "price": 75.52
     },
     "us_BITB": {
-      "today": 0.87,
-      "price": 34.07
+      "today": 0.76,
+      "price": 34.03
     },
     "hk_03455": {
       "today": 0.93,
@@ -66,12 +66,12 @@
       "price": 92.83
     },
     "watch_MRVL": {
-      "today": 5.43,
-      "price": 244.3
+      "today": 6.73,
+      "price": 247.31
     },
     "watch_AAOI": {
-      "today": 5.32,
-      "price": 120.53
+      "today": 6.37,
+      "price": 121.73
     }
   }
 }
