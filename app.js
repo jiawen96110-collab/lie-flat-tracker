@@ -477,10 +477,6 @@ function renderValuations(){
         <strong>${currency}${compactPrice(price)}</strong>
         ${live?'':'<span class="valuation-price-source">周报参考价</span>'}
       </div>
-      <div class="valuation-status">
-        <span class="status-chip ${state.key}">${state.label}</span>
-        <small>${state.hint}</small>
-      </div>
       <div class="valuation-range">
         <div class="range-labels">
           <span>买 ${compactPrice(v.buy[0])}–${compactPrice(v.buy[1])}</span>
