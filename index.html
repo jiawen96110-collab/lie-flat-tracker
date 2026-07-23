@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f2f2ef">
   <title>Z先生躺平致富观察 · 数据整理</title>
-  <link rel="stylesheet" href="style.css?v=12">
+  <link rel="stylesheet" href="style.css?v=20">
 </head>
 <body>
   <main class="main-container">
@@ -57,13 +57,13 @@
       <article class="portfolio us" id="port-us">
         <div class="portfolio-header">
           <div class="left"><span class="name">美股躺平组合</span></div>
-          <span class="market-tag">全球科技 · 资源与另类资产</span>
+          <div class="portfolio-view-tabs" role="tablist" aria-label="美股组合视图">
+            <button class="portfolio-view-tab active" id="portfolio-tab-us-chart" data-portfolio-key="us" data-portfolio-view="chart" role="tab" aria-controls="chart-us" aria-selected="true">走势</button>
+            <button class="portfolio-view-tab" id="portfolio-tab-us-holdings" data-portfolio-key="us" data-portfolio-view="holdings" role="tab" aria-controls="holdings-panel-us" aria-selected="false">持仓</button>
+          </div>
         </div>
-        <div class="portfolio-summary" id="summary-us">
-          <div class="summary-item neutral"><div class="summary-label">当日</div><div class="summary-value"><div class="loading-skeleton"></div></div></div>
-          <div class="summary-item neutral"><div class="summary-label">YTD</div><div class="summary-value"><div class="loading-skeleton"></div></div></div>
-        </div>
-        <div class="holdings">
+        <div class="portfolio-chart" id="chart-us" role="tabpanel" aria-labelledby="portfolio-tab-us-chart"></div>
+        <div class="holdings" id="holdings-panel-us" role="tabpanel" aria-labelledby="portfolio-tab-us-holdings" hidden>
           <div class="change-header"><span>权重</span><span>持仓</span><span>当日</span><span>YTD</span></div>
           <div id="holdings-us"></div>
         </div>
@@ -72,13 +72,13 @@
       <article class="portfolio hk" id="port-hk">
         <div class="portfolio-header">
           <div class="left"><span class="name">港股躺平组合</span></div>
-          <span class="market-tag">跨市场平衡配置 · 攻守兼备</span>
+          <div class="portfolio-view-tabs" role="tablist" aria-label="港股组合视图">
+            <button class="portfolio-view-tab active" id="portfolio-tab-hk-chart" data-portfolio-key="hk" data-portfolio-view="chart" role="tab" aria-controls="chart-hk" aria-selected="true">走势</button>
+            <button class="portfolio-view-tab" id="portfolio-tab-hk-holdings" data-portfolio-key="hk" data-portfolio-view="holdings" role="tab" aria-controls="holdings-panel-hk" aria-selected="false">持仓</button>
+          </div>
         </div>
-        <div class="portfolio-summary" id="summary-hk">
-          <div class="summary-item neutral"><div class="summary-label">当日</div><div class="summary-value"><div class="loading-skeleton"></div></div></div>
-          <div class="summary-item neutral"><div class="summary-label">YTD</div><div class="summary-value"><div class="loading-skeleton"></div></div></div>
-        </div>
-        <div class="holdings">
+        <div class="portfolio-chart" id="chart-hk" role="tabpanel" aria-labelledby="portfolio-tab-hk-chart"></div>
+        <div class="holdings" id="holdings-panel-hk" role="tabpanel" aria-labelledby="portfolio-tab-hk-holdings" hidden>
           <div class="change-header"><span>权重</span><span>持仓</span><span>当日</span><span>YTD</span></div>
           <div id="holdings-hk"></div>
         </div>
@@ -87,13 +87,13 @@
       <article class="portfolio a" id="port-a">
         <div class="portfolio-header">
           <div class="left"><span class="name">A 股躺平组合</span></div>
-          <span class="market-tag">科技主线 · 周期资产辅助</span>
+          <div class="portfolio-view-tabs" role="tablist" aria-label="A股组合视图">
+            <button class="portfolio-view-tab active" id="portfolio-tab-a-chart" data-portfolio-key="a" data-portfolio-view="chart" role="tab" aria-controls="chart-a" aria-selected="true">走势</button>
+            <button class="portfolio-view-tab" id="portfolio-tab-a-holdings" data-portfolio-key="a" data-portfolio-view="holdings" role="tab" aria-controls="holdings-panel-a" aria-selected="false">持仓</button>
+          </div>
         </div>
-        <div class="portfolio-summary" id="summary-a">
-          <div class="summary-item neutral"><div class="summary-label">当日</div><div class="summary-value"><div class="loading-skeleton"></div></div></div>
-          <div class="summary-item neutral"><div class="summary-label">YTD</div><div class="summary-value"><div class="loading-skeleton"></div></div></div>
-        </div>
-        <div class="holdings">
+        <div class="portfolio-chart" id="chart-a" role="tabpanel" aria-labelledby="portfolio-tab-a-chart"></div>
+        <div class="holdings" id="holdings-panel-a" role="tabpanel" aria-labelledby="portfolio-tab-a-holdings" hidden>
           <div class="change-header"><span>权重</span><span>持仓</span><span>当日</span><span>YTD</span></div>
           <div id="holdings-a"></div>
         </div>
@@ -166,8 +166,10 @@
     </footer>
   </main>
 
-  <script src="data.js?v=3"></script>
+  <script src="portfolio_config.js?v=1"></script>
+  <script src="data.js?v=4"></script>
   <script src="valuation.js?v=10"></script>
-  <script src="app.js?v=9"></script>
+  <script src="portfolio_history.js?v=3"></script>
+  <script src="app.js?v=14"></script>
 </body>
 </html>

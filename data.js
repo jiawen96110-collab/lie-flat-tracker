@@ -1,32 +1,9 @@
-const PORTFOLIOS = {
-  us:{name:'美股躺平组合',holdings:[
-    {code:'usQQQ', display:'QQQ', nameCn:'纳指100 ETF',     weight:25},
-    {code:'usSPY', display:'SPY', nameCn:'标普500 ETF',     weight:25},
-    {code:'usRING',display:'RING',nameCn:'全球黄金矿股 ETF',weight:20},
-    {code:'usCOPX',display:'COPX',nameCn:'全球铜矿股 ETF', weight:20},
-    {code:'usBITB',display:'BITB',nameCn:'比特币 ETF',      weight:10},
-  ]},
-  hk:{name:'港股躺平组合',holdings:[
-    {code:'hk03455',display:'03455',nameCn:'纳指100 ETF',   weight:25},
-    {code:'hk03132',display:'03132',nameCn:'全球半导体 ETF',weight:20},
-    {code:'hk03147',display:'03147',nameCn:'中国创业板 ETF',weight:20},
-    {code:'hk03110',display:'03110',nameCn:'恒生高股息 ETF',weight:20},
-    {code:'hk02840',display:'02840',nameCn:'黄金 ETF',      weight:15},
-  ]},
-  a:{name:'A股躺平组合',holdings:[
-    {code:'sh513390',display:'513390',nameCn:'纳指100 ETF', weight:25},
-    {code:'sz159652',display:'159652',nameCn:'有色50 ETF',  weight:25},
-    {code:'sh588200',display:'588200',nameCn:'科创芯片 ETF',weight:25},
-    {code:'sh515880',display:'515880',nameCn:'通信 ETF',    weight:15},
-    {code:'sh518880',display:'518880',nameCn:'黄金 ETF',    weight:10},
-  ]}
-};
-
-const YTD_BASE = {
-  'usQQQ':613.537,'usSPY':680.063,'usRING':73.64,'usCOPX':71.78,'usBITB':47.44,
-  'hk03455':4809.267,'hk03132':37.56,'hk03147':12.46,'hk03110':30.12,'hk02840':3112.00,
-  'sh513390':2.107,'sz159652':1.674,'sh588200':0.7807,'sh515880':0.5135,'sh518880':9.301,
-};
+const PORTFOLIOS = window.PORTFOLIO_CONFIG.portfolios;
+const YTD_BASE = Object.fromEntries(
+  Object.values(PORTFOLIOS).flatMap(portfolio =>
+    portfolio.holdings.map(holding => [holding.code, holding.base])
+  )
+);
 
 /* 分享记录 — 含 group 字段用于分组 */
 const SHARE_RECORDS = [
