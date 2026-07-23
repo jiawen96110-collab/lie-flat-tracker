@@ -207,20 +207,6 @@ function renderPortfolioChart(key,dailyValue,ytdValue,points,estimated=true){
   bindChartPointer(key,visible,{left,right,top,bottom,w,h,scale});
 }
 
-function switchPortfolioView(key,view){
-  const chart=document.getElementById(`chart-${key}`);
-  const holdings=document.getElementById(`holdings-panel-${key}`);
-  if(!chart||!holdings)return;
-  const showChart=view==='chart';
-  chart.hidden=!showChart;
-  holdings.hidden=showChart;
-  document.querySelectorAll(`[data-portfolio-key="${key}"]`).forEach(button=>{
-    const active=button.dataset.portfolioView===view;
-    button.classList.toggle('active',active);
-    button.setAttribute('aria-selected',active?'true':'false');
-  });
-}
-
 function setPortfolioRange(key,range){
   PORTFOLIO_CHART_STATE[key]=range;
   const cache=HISTORY_CACHE[key];
@@ -592,9 +578,6 @@ document.addEventListener('DOMContentLoaded',()=>{
   });
   document.querySelectorAll('[data-page-tab]').forEach(button=>{
     button.addEventListener('click',()=>switchPageTab(button.dataset.pageTab));
-  });
-  document.querySelectorAll('[data-portfolio-view]').forEach(button=>{
-    button.addEventListener('click',()=>switchPortfolioView(button.dataset.portfolioKey,button.dataset.portfolioView));
   });
   switchPageTab(pageTabFromHash(),{updateHash:false,scroll:false});
   refreshAll();

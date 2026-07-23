@@ -161,20 +161,15 @@ button { font:inherit; }
 }
 .portfolio-header .left { min-width:0; margin-top:0; }
 .portfolio-header .name { font-size:24px; font-weight:680; letter-spacing:-.04em; }
-.portfolio-view-tabs {
-  display:inline-flex; padding:3px; border-radius:11px; background:#f2f4f7;
-}
-.portfolio-view-tab {
-  min-width:47px; padding:6px 10px; color:var(--text-dim); border:0; border-radius:8px;
-  background:transparent; cursor:pointer; font-size:11px; font-weight:650;
-}
-.portfolio-view-tab.active {
-  color:var(--text); background:#fff; box-shadow:0 2px 8px rgba(17,24,39,.07);
-}
-
 .positive-text { color:var(--red); }
 .negative-text { color:var(--green); }
 
+.portfolio-section-heading {
+  display:flex; justify-content:space-between; align-items:center;
+  margin:2px 24px 10px; padding-top:15px; border-top:1px solid var(--border);
+}
+.portfolio-section-heading strong { font-size:13px; font-weight:680; }
+.portfolio-section-heading span { color:var(--text-dim); font-size:10px; }
 .portfolio-chart {
   margin:0 18px 18px; padding:17px 16px 13px; border:1px solid rgba(17,24,39,.07);
   border-radius:18px; background:linear-gradient(180deg,#fbfcfd,#f7f9fb);
@@ -237,10 +232,6 @@ button { font:inherit; }
 .chart-ranges button.active { color:var(--text); background:#fff; box-shadow:0 2px 7px rgba(17,24,39,.07); }
 .chart-unavailable { display:flex; flex-direction:column; align-items:center; gap:5px; padding:70px 16px; }
 .chart-unavailable span { color:var(--text-dim); font-size:11px; }
-.holdings[hidden],.portfolio-chart[hidden] { display:none !important; }
-.holdings:not([hidden]) { animation:panel-in .2s ease; }
-.portfolio-chart:not([hidden]) { animation:panel-in .2s ease; }
-
 .holdings { padding:0 24px 18px; }
 .change-header,.holding {
   display:grid; grid-template-columns:38px minmax(0,1fr) 62px 62px; gap:9px; align-items:center;
@@ -374,8 +365,8 @@ button { font:inherit; }
   border-color:rgba(255,255,255,.08);
   background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));
 }
-[data-theme="dark"] .portfolio-view-tabs,[data-theme="dark"] .chart-ranges { background:#242520; }
-[data-theme="dark"] .portfolio-view-tab.active,[data-theme="dark"] .chart-ranges button.active {
+[data-theme="dark"] .chart-ranges { background:#242520; }
+[data-theme="dark"] .chart-ranges button.active {
   color:#f5f5f1; background:#343630; box-shadow:none;
 }
 [data-theme="dark"] .chart-grid-line { stroke:rgba(255,255,255,.09); }
@@ -648,8 +639,7 @@ button { font:inherit; }
   }
   .portfolio-header .left { min-width:0; margin-top:0; }
   .portfolio-header .name { font-size:21px; white-space:nowrap; }
-  .portfolio-view-tabs { padding:3px; border-radius:10px; }
-  .portfolio-view-tab { min-width:44px; padding:5px 8px; font-size:10px; }
+  .portfolio-section-heading { margin:0 19px 8px; padding-top:13px; }
   .portfolio-chart { margin:0 12px 12px; padding:14px 12px 11px; border-radius:17px; }
   .chart-head { gap:7px; }
   .chart-metrics { gap:3px; }
@@ -661,8 +651,8 @@ button { font:inherit; }
   .nav-chart { height:188px; }
   .chart-line { stroke-width:2.7; }
   .chart-y-label,.chart-x-label { font-size:9px; }
-  .chart-footer { align-items:flex-end; gap:6px; }
-  .chart-origin { max-width:105px; overflow:hidden; font-size:8px; text-overflow:ellipsis; white-space:nowrap; }
+  .chart-footer { justify-content:flex-end; align-items:flex-end; gap:6px; }
+  .chart-origin { display:none; }
   .chart-ranges button { padding:5px 7px; font-size:8px; }
   .holdings { padding:0 19px 13px; }
   .footer {
