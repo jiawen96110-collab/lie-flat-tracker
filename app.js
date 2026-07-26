@@ -57,6 +57,7 @@ const VALUATION_CACHE={};
 const HISTORY_CACHE={};
 const PORTFOLIO_CHART_STATE={us:'all',hk:'all',a:'all'};
 let currentValuationMarket='us';
+let valuationBuyFilterActive=false;
 const PAGE_TABS=['portfolio','valuation','research'];
 const PORTFOLIO_START_DATE=window.PORTFOLIO_CONFIG?.startDate||'2026-01-01';
 
@@ -413,6 +414,19 @@ function valuationSignalRank(key){
   }[key]||0;
 }
 
+function valuationPositionState(v){
+  const holding=Number(v.holding)||0;
+  const previousHolding=Number(v.targetHolding)||0;
+  if(holding>0)return {key:'active',label:`持仓 ${holding.toFixed(1)}%`};
+  if(previousHolding>0)return {key:'cleared',label:'已清仓'};
+  return {key:'watch',label:'观察'};
+}
+
+function toggleValuationBuyFilter(){
+  valuationBuyFilterActive=!valuationBuyFilterActive;
+  renderValuations();
+}
+
 function renderValuations(){
   const container=document.getElementById('valuationList');
   const group=activeValuationGroup();
@@ -433,9 +447,15 @@ function renderValuations(){
     return valuationSignalRank(b.state.key)-valuationSignalRank(a.state.key);
   });
 
-  container.innerHTML=orderedRecords.map(({v,price,live,state})=>{
+  orderedRecords.forEach(({state})=>{
     if(state.key==='buy'||state.key==='strong-buy')buyCount++;
     if(state.key==='fair'||state.key==='sell')sellCount++;
+  });
+  const visibleRecords=valuationBuyFilterActive
+    ? orderedRecords.filter(({state})=>state.key==='buy'||state.key==='strong-buy')
+    : orderedRecords;
+
+  container.innerHTML=visibleRecords.map(({v,price,live,state})=>{
 
     const min=v.buy[0]*0.82,max=v.sell[1]*1.08;
     const position=Math.max(1,Math.min(99,(price-min)/(max-min)*100));
@@ -443,8 +463,7 @@ function renderValuations(){
     const fairStart=(v.fair[0]-min)/(max-min)*100;
     const fairEnd=(v.fair[1]-min)/(max-min)*100;
     const sellStart=(v.sell[0]-min)/(max-min)*100;
-    const holding=v.holding?`${v.holding.toFixed(1)}%`:'观察';
-    const holdingClass=v.holding?'active':'watch';
+    const positionState=valuationPositionState(v);
     const currency=v.market==='US'?'$':v.market==='港股'?'HK$':'¥';
     const isUs=currentValuationMarket==='us';
     const title=isUs?v.ticker:v.name;
@@ -454,8 +473,8 @@ function renderValuations(){
       <div class="valuation-company">
         <div class="valuation-symbol-line">
           ${badge?`<span class="valuation-ticker">${badge}</span>`:''}
-          <strong>${title}</strong>
-          <span class="valuation-holding ${holdingClass}">${v.holding?'持仓 ':''}${holding}</span>
+          <strong title="${title}">${title}</strong>
+          <span class="valuation-holding ${positionState.key}">${positionState.label}</span>
           <span class="status-chip inline ${state.key}">${state.label}</span>
         </div>
       </div>
@@ -477,7 +496,7 @@ function renderValuations(){
         </div>
       </div>
     </article>`;
-  }).join('');
+  }).join('')||'<div class="valuation-empty">当前没有进入买入区间的标的</div>';
 
   document.getElementById('buySignalCount').textContent=buyCount;
   document.getElementById('sellSignalCount').textContent=sellCount;
@@ -488,6 +507,12 @@ function renderValuations(){
     `估值基准来自所提供的${currentValuationMarket==='us'?'美股':'A/H 股'}周报截图，双数值代表两档情景假设。`;
   const updateStamp=document.getElementById('valuationUpdateStamp');
   if(updateStamp)updateStamp.textContent=`\u5468\u62a5\u66f4\u65b0\uff1a${window.VALUATION_UPDATED_AT||'--'}`;
+  const buyFilter=document.getElementById('buySignalFilter');
+  if(buyFilter){
+    buyFilter.classList.toggle('active',valuationBuyFilterActive);
+    buyFilter.setAttribute('aria-pressed',valuationBuyFilterActive?'true':'false');
+    buyFilter.title=valuationBuyFilterActive?'显示全部估值标的':'只看处于买入区间的标的';
+  }
 }
 
 function switchValuationMarket(market){
@@ -576,6 +601,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.querySelectorAll('.valuation-tab').forEach(button=>{
     button.addEventListener('click',()=>switchValuationMarket(button.dataset.market));
   });
+  document.getElementById('buySignalFilter')?.addEventListener('click',toggleValuationBuyFilter);
   document.querySelectorAll('[data-page-tab]').forEach(button=>{
     button.addEventListener('click',()=>switchPageTab(button.dataset.pageTab));
   });

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f2f2ef">
   <title>Z先生躺平致富观察 · 数据整理</title>
-  <link rel="stylesheet" href="style.css?v=20">
+  <link rel="stylesheet" href="style.css?v=22">
 </head>
 <body>
   <main class="main-container">
@@ -115,7 +115,7 @@
 
         <div class="valuation-summary" id="valuationSummary">
           <div class="valuation-stat"><span>跟踪标的</span><strong id="valuationTotalCount">9</strong><em>Watchlist</em></div>
-          <div class="valuation-stat buy"><span>买入信号</span><strong id="buySignalCount">--</strong><em>Entry</em></div>
+          <button class="valuation-stat buy valuation-filter" id="buySignalFilter" type="button" aria-pressed="false" title="只看处于买入区间的标的"><span>买入信号</span><strong id="buySignalCount">--</strong><em>点击筛选</em></button>
           <div class="valuation-stat sell"><span>卖出观察</span><strong id="sellSignalCount">--</strong><em>Take profit</em></div>
           <div class="valuation-stat"><span id="valuationReserveLabel">现金 / 美债</span><strong id="valuationReserve">13.7%</strong><em>Reserve</em></div>
         </div>
@@ -159,8 +159,8 @@
 
   <script src="portfolio_config.js?v=1"></script>
   <script src="data.js?v=4"></script>
-  <script src="valuation.js?v=10"></script>
+  <script src="valuation.js?v=11"></script>
   <script src="portfolio_history.js?v=3"></script>
-  <script src="app.js?v=14"></script>
+  <script src="app.js?v=16"></script>
 </body>
 </html>

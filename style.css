@@ -300,13 +300,22 @@ button { font:inherit; }
   display:grid; grid-template-columns:repeat(4,minmax(96px,1fr)); gap:0; align-self:center; margin:0;
   border:1px solid rgba(17,24,39,.08); border-radius:999px; background:#fbfcfd; overflow:hidden;
 }
-.valuation-stat { position:relative; padding:9px 17px; border-left:1px solid rgba(17,24,39,.07); background:transparent; }
+.valuation-stat { position:relative; padding:9px 17px; border:0; border-left:1px solid rgba(17,24,39,.07); color:inherit; background:transparent; font:inherit; text-align:left; }
 .valuation-stat:first-child { border-left:0; }
 .valuation-stat span { display:inline-block; margin-right:8px; color:var(--text-dim); font-size:11px; vertical-align:middle; }
 .valuation-stat strong { font-size:21px; font-weight:680; letter-spacing:-.045em; vertical-align:middle; }
 .valuation-stat em { display:none; }
 .valuation-stat.buy strong { color:var(--green); }
 .valuation-stat.sell strong { color:var(--red); }
+.valuation-filter { cursor:pointer; transition:background .18s ease,box-shadow .18s ease; }
+.valuation-filter:hover { background:rgba(18,184,173,.055); }
+.valuation-filter.active {
+  background:rgba(18,184,173,.1); box-shadow:inset 0 0 0 1px rgba(18,164,116,.15);
+}
+.valuation-filter.active::after {
+  content:"筛选中"; position:absolute; right:10px; top:50%; color:var(--green);
+  font-size:9px; font-weight:700; transform:translateY(-50%);
+}
 .valuation-table-head,.valuation-row {
   display:grid; grid-template-columns:minmax(260px,300px) 130px minmax(520px,1fr); gap:22px; align-items:center;
 }
@@ -351,6 +360,13 @@ button { font:inherit; }
 }
 .valuation-holding.watch {
   color:#8a9099; background:#f3f5f7;
+}
+.valuation-holding.cleared {
+  color:#7c6a58; background:#f4efe9;
+}
+.valuation-empty {
+  grid-column:1/-1; margin-top:9px; padding:42px 20px; border:1px dashed rgba(17,24,39,.12);
+  border-radius:18px; color:var(--text-dim); text-align:center;
 }
 
 [data-theme="dark"] .portfolio,
@@ -407,6 +423,12 @@ button { font:inherit; }
 [data-theme="dark"] .valuation-holding.active {
   color:#71dec5; background:rgba(96,212,186,.14);
 }
+[data-theme="dark"] .valuation-holding.cleared {
+  color:#d4b99e; background:rgba(180,145,111,.14);
+}
+[data-theme="dark"] .valuation-filter:hover,
+[data-theme="dark"] .valuation-filter.active { background:rgba(96,212,186,.11); }
+[data-theme="dark"] .valuation-empty { border-color:rgba(255,255,255,.1); }
 [data-theme="dark"] .valuation-current .valuation-price-source { color:#e0b45f; }
 [data-theme="dark"] .range-labels span:nth-child(1) {
   color:#78dfc7; background:rgba(96,212,186,.11);
@@ -692,6 +714,8 @@ button { font:inherit; }
     min-width:0; padding:1px 5px; border-left:1px solid rgba(17,24,39,.07);
     border-radius:0; background:transparent; text-align:center;
   }
+  .valuation-filter { text-align:center; }
+  .valuation-filter.active::after { display:none; }
   .valuation-stat:first-child { border-left:0; }
   .valuation-stat span {
     display:block; margin-bottom:3px; overflow:hidden;
@@ -722,7 +746,7 @@ button { font:inherit; }
     font-size:9px; line-height:1; white-space:nowrap;
   }
   .status-chip.inline { display:none; }
-  .valuation-company strong { font-size:20px; letter-spacing:-.035em; }
+  .valuation-company strong { font-size:18px; letter-spacing:-.03em; }
   .valuation-company>span.valuation-meta { display:none; }
   .valuation-company>span,.valuation-current span { margin-top:4px; font-size:11px; }
   .valuation-current {
