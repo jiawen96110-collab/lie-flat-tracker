@@ -255,6 +255,14 @@ button { font:inherit; }
 .holding .change { text-align:right; font-variant-numeric:tabular-nums; }
 
 .valuation-section { margin-top:12px; }
+.valuation-market-notice {
+  grid-column:1/-1; padding:10px 13px; border:1px solid rgba(195,139,46,.22);
+  border-radius:12px; color:#8a641c; background:rgba(217,164,74,.09);
+  font-size:12px; line-height:1.5;
+}
+[data-theme="dark"] .valuation-market-notice {
+  color:#e2c179; border-color:rgba(226,193,121,.22); background:rgba(226,193,121,.08);
+}
 .valuation-card {
   display:grid; grid-template-columns:max-content minmax(0,1fr); gap:12px 18px;
   padding:18px 24px 28px;
