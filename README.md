@@ -1,99 +1,41 @@
-# Z先生躺平致富观察
+# Z先生躺平组合
 
-一个面向手机与电脑的多市场投资数据看板，集中展示三市场 ETF 组合、真实历史净值、周报估值区间和关注标的。
+一个适配手机与电脑的 ETF 组合看板，用于展示美股、港股和 A 股三个组合的持仓与净值走势。
 
-- [Cloudflare Pages](https://lie-flat-tracker.pages.dev/)
-- [GitHub Pages](https://jiawen96110-collab.github.io/lie-flat-tracker/)
-- [项目仓库](https://github.com/jiawen96110-collab/lie-flat-tracker)
+- 网站：[bjzsir.com](https://bjzsir.com/)
+- 仓库：[lie-flat-tracker](https://github.com/jiawen96110-collab/lie-flat-tracker)
 
-## 主要功能
+## 当前功能
 
-### 躺平组合
+- 展示三个市场的 ETF 组合与持仓权重
+- 计算并展示自 2026 年首个交易日起的复权净值走势
+- 支持近 3 月、近 6 月和成立以来三个时间区间
+- 支持拖动走势图查看每日净值
+- 行情每 30 秒自动刷新，也可手动刷新
+- 同时适配桌面端、移动端及深浅色模式
 
-- 分别展示美股、港股和 A 股 ETF 组合
-- 默认显示从 2026 年首个交易日开始的复权净值走势
-- 支持近 3 月、近 6 月和成立以来区间，并可拖动查看每日净值
-- 每个组合在同一张卡片中先展示持仓明细，再展示组合净值走势
-- 行情每 30 秒刷新一次，也可手动刷新
+历史走势由各 ETF 的复权日线与固定组合权重计算。美股使用复权收盘价，A/H 股使用前复权日线，减少分红、拆股等因素造成的收益跳变；盘中最新点根据实时行情估算。
 
-历史走势由各 ETF 的复权日线和固定组合权重计算。美股使用复权收盘价，A/H 股使用腾讯前复权日线，避免拆股造成收益跳变。盘中最新点由实时行情估算。
+## 数据维护
 
-### 周报估值
+- `portfolio_config.js`：组合名称、ETF、权重及行情代码
+- `portfolio_history.js`：自动生成的历史净值数据
+- `fetch_portfolio_history.py`：抓取复权行情并计算组合净值
+- `.github/workflows/`：交易日自动更新历史净值
 
-- 美股与 A/H 股分开查看
-- 展示实时价格、持仓比例和估值位置
-- 清晰标注理想买入区、合理区和卖出区
-- 点击“买入信号”可只看已经进入买入区间的标的，再次点击恢复全部
-- 零持仓标的会根据上期持仓自动区分为“已清仓”或“观察”
-- 默认优先展示有持仓的标的，并按持仓比例降序排列
-- 实时行情暂不可用时保留周报参考价，并明确标注来源
+调整组合时，只需修改 `portfolio_config.js`，并确保每个组合的权重合计为 100%。历史净值可由 GitHub Actions 自动更新，也可在 Actions 页面手动运行 `Update Portfolio History`。
 
-估值区间来自周报资料整理，仅用于信息展示，不会随实时价格自动改变。
-
-### 数据整理
-
-- 集中展示关注标的
-- 支持默认分组、累计表现和最新记录排序
-- 可查看行业、关注逻辑、简要分析和记录价格变化
-
-## 文件结构
+## 主要文件
 
 ```text
-index.html                    页面结构与三个主要板块
-style.css                    视觉样式、深浅色主题与响应式布局
-app.js                       页面交互、实时行情、计算与渲染逻辑
-portfolio_config.js          三市场组合、权重和年初基准价（唯一配置源）
-portfolio_history.js         自动生成的组合历史净值
-fetch_portfolio_history.py   抓取复权日线并生成组合历史净值
-data.js                      关注标的和分享记录
-valuation.js                 周报估值区间、持仓比例和参考价格
-.github/workflows/           历史净值自动更新任务
+index.html                    页面结构
+style.css                    页面样式与响应式布局
+app.js                       行情、交互与图表渲染
+portfolio_config.js          三市场组合配置
+portfolio_history.js         组合历史净值
+fetch_portfolio_history.py   历史净值生成脚本
 ```
 
-## 更新数据
+## 风险提示
 
-### 更新周报估值
-
-只需编辑 `valuation.js` 中对应市场的记录：
-
-```js
-{
-  ticker: 'MRVL',
-  sym: 'usMRVL',
-  market: 'US',
-  name: '迈威尔科技',
-  buy: [133.0, 177.3],
-  fair: [266.0, 354.7],
-  sell: [372.4, 496.6],
-  holding: 7.3,
-  targetHolding: 7.8,
-  snapshot: 267.4
-}
-```
-
-- `buy`：理想买入区间
-- `fair`：合理价格区间
-- `sell`：卖出观察区间
-- `holding`：当前持仓比例
-- `targetHolding`：上期持仓比例；当前为 0、上期大于 0 时自动标记为“已清仓”
-- `snapshot`：周报参考价，仅在实时行情不可用时显示
-
-### 更新组合
-
-编辑 `portfolio_config.js`。组合名称、ETF、权重、历史行情代码和年初基准价均只在这里维护。权重之和必须为 100%。
-
-历史净值会由 GitHub Actions 在交易日自动更新，也可以在 Actions 页面手动运行 `Update Portfolio History`。
-
-### 更新关注标的
-
-编辑 `data.js`。页面布局和行情逻辑通常不需要同步修改。
-
-## 本地预览
-
-项目不依赖前端框架。在项目目录启动任意静态文件服务器，再访问 `index.html` 即可。
-
-## 数据说明
-
-实时行情和 A/H 股复权日线主要来自腾讯财经公开接口，美股复权历史来自 Yahoo Finance 公开接口。第三方接口可能出现延迟、缺失或访问限制；页面会保留已有数据并提示状态，不会把失败请求显示为成功。
-
-本内容为 Z 先生公开分享的 ETF 组合与行业概念数据整理。市场有风险，投资需谨慎。
+市场有风险，投资需谨慎。
