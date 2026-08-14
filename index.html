@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f2f2ef">
-  <title>Z先生躺平致富观察 · 数据整理</title>
-  <link rel="stylesheet" href="style.css?v=23">
+  <title>Z先生躺平组合</title>
+  <link rel="stylesheet" href="style.css?v=33">
 </head>
 <body>
-  <main class="main-container">
+  <main class="main-container single-page">
     <nav class="topbar" aria-label="顶部导航">
       <div class="brand">
         <span class="brand-mark" aria-hidden="true">
@@ -19,7 +19,7 @@
           </svg>
         </span>
         <span class="brand-en">Balance</span>
-        <span class="brand-cn">Z先生躺平致富观察</span>
+        <span class="brand-cn">Z先生躺平组合</span>
       </div>
       <button class="btn-refresh" id="btnRefresh" onclick="refreshAll()">
         <span class="refresh-icon" aria-hidden="true">↻</span>
@@ -29,8 +29,8 @@
 
     <header class="header">
       <p class="eyebrow">Multi-market portfolio</p>
-      <h1>Z先生躺平致富观察<span class="desktop-break"><br></span><span class="mobile-divider"> · </span>数据整理</h1>
-      <p class="subtitle">三市场 ETF 组合与公开分享记录，在同一视野中保持清晰。</p>
+      <h1>Z先生躺平组合</h1>
+      <p class="subtitle">三市场 ETF 组合、持仓与净值走势。</p>
     </header>
 
     <div class="status-bar">
@@ -41,22 +41,10 @@
       </div>
     </div>
 
-    <nav class="page-tabs" role="tablist" aria-label="数据类型">
-      <button class="page-tab active" id="page-tab-portfolio" data-page-tab="portfolio" role="tab" aria-controls="panel-portfolio" aria-selected="true">
-        <span>组合</span><small>三市场持仓</small>
-      </button>
-      <button class="page-tab" id="page-tab-valuation" data-page-tab="valuation" role="tab" aria-controls="panel-valuation" aria-selected="false">
-        <span>周报估值</span><small>美股 · A/H 股</small>
-      </button>
-      <button class="page-tab" id="page-tab-research" data-page-tab="research" role="tab" aria-controls="panel-research" aria-selected="false">
-        <span>数据整理</span><small>关注标的</small>
-      </button>
-    </nav>
-
-    <section class="portfolios page-panel active" id="panel-portfolio" data-page-panel="portfolio" role="tabpanel" aria-labelledby="page-tab-portfolio" aria-label="三市场组合">
+    <section class="portfolios page-panel active" id="panel-portfolio" data-page-panel="portfolio" role="region" aria-label="三市场组合">
       <article class="portfolio us" id="port-us">
         <div class="portfolio-header">
-          <div class="left"><span class="name">美股躺平组合</span></div>
+          <div class="left"><span class="name">美股组合</span></div>
         </div>
         <div class="holdings" id="holdings-panel-us" aria-label="美股组合持仓">
           <div class="change-header"><span>权重</span><span>持仓</span><span>当日</span><span>YTD</span></div>
@@ -68,7 +56,7 @@
 
       <article class="portfolio hk" id="port-hk">
         <div class="portfolio-header">
-          <div class="left"><span class="name">港股躺平组合</span></div>
+          <div class="left"><span class="name">港股组合</span></div>
         </div>
         <div class="holdings" id="holdings-panel-hk" aria-label="港股组合持仓">
           <div class="change-header"><span>权重</span><span>持仓</span><span>当日</span><span>YTD</span></div>
@@ -80,7 +68,7 @@
 
       <article class="portfolio a" id="port-a">
         <div class="portfolio-header">
-          <div class="left"><span class="name">A 股躺平组合</span></div>
+          <div class="left"><span class="name">A 股组合</span></div>
         </div>
         <div class="holdings" id="holdings-panel-a" aria-label="A股组合持仓">
           <div class="change-header"><span>权重</span><span>持仓</span><span>当日</span><span>YTD</span></div>
@@ -90,78 +78,16 @@
         <div class="portfolio-chart" id="chart-a" aria-label="A股组合净值走势"></div>
       </article>
 
-      <div class="portfolio-source portfolio-source-bottom">
-        <span>组合框架来自 Z 先生读者公开分享。</span>
-        <a class="source-link" href="https://mp.weixin.qq.com/s/socfOaEL1oy_O1oy9KDxfg?mpshare=1&scene=1&srcid=06223Ph6VaSdSX12KJ5vGf9b&sharer_shareinfo=cab9802d041a689b753613cdbefbc9a9&sharer_shareinfo_first=cab9802d041a689b753613cdbefbc9a9&from=industrynews&color_scheme=light#rd" target="_blank" rel="noreferrer">查看躺平组合介绍</a>
-      </div>
-    </section>
-
-    <section class="valuation-section page-panel" id="panel-valuation" data-page-panel="valuation" role="tabpanel" aria-labelledby="page-tab-valuation" aria-label="估值雷达" hidden>
-      <div class="valuation-card">
-        <div class="valuation-header">
-          <a class="valuation-method-link" href="https://mp.weixin.qq.com/s/TPaGAS_BdopkUDS5hRU62A" target="_blank" rel="noreferrer">查看估值方法说明</a>
-          <span class="valuation-update-stamp" id="valuationUpdateStamp"></span>
-          <div class="valuation-legend" aria-label="估值状态图例">
-            <span><i class="legend-dot buy"></i>买入区</span>
-            <span><i class="legend-dot fair"></i>合理区</span>
-            <span><i class="legend-dot sell"></i>卖出区</span>
-          </div>
-        </div>
-        <div class="valuation-market-notice" id="valuationMarketNotice" hidden></div>
-
-        <div class="valuation-tabs" role="tablist" aria-label="估值市场">
-          <button class="valuation-tab active" id="valuation-tab-us" data-market="us" role="tab" aria-selected="true">美股估值</button>
-          <button class="valuation-tab" id="valuation-tab-ah" data-market="ah" role="tab" aria-selected="false">A / H 股估值</button>
-        </div>
-
-        <div class="valuation-summary" id="valuationSummary">
-          <div class="valuation-stat"><span>跟踪标的</span><strong id="valuationTotalCount">9</strong><em>Watchlist</em></div>
-          <button class="valuation-stat buy valuation-filter" id="buySignalFilter" type="button" aria-pressed="false" title="只看处于买入区间的标的"><span>买入信号</span><strong id="buySignalCount">--</strong><em>点击筛选</em></button>
-          <div class="valuation-stat sell"><span>卖出观察</span><strong id="sellSignalCount">--</strong><em>Take profit</em></div>
-          <div class="valuation-stat"><span id="valuationReserveLabel">现金 / 美债</span><strong id="valuationReserve">13.7%</strong><em>Reserve</em></div>
-        </div>
-
-        <div class="valuation-table-head" aria-hidden="true">
-          <span>股票 / 持仓</span>
-          <span>实时价格</span>
-          <span>估值位置</span>
-          <span>当前状态</span>
-        </div>
-        <div class="valuation-list" id="valuationList"></div>
-
-        <div class="valuation-note">
-          <span id="valuationSourceNote">估值基准来自所提供的美股周报截图，双数值代表两档情景假设。</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="share-section page-panel" id="panel-research" data-page-panel="research" role="tabpanel" aria-labelledby="page-tab-research" hidden>
-      <div class="share-card">
-        <div class="share-toolbar">
-          <span class="sort-label">排序</span>
-          <button class="sort-btn active" id="sort-default" onclick="sortShares('default')">默认</button>
-          <button class="sort-btn" id="sort-since-desc" onclick="sortShares('since-desc')">累计表现</button>
-          <button class="sort-btn" id="sort-date-desc" onclick="sortShares('date-desc')">最新记录</button>
-        </div>
-
-        <div class="share-table-header">
-          <span></span><span>代码</span><span>名称</span>
-          <span>当日</span><span>累计</span>
-        </div>
-        <div class="share-items" id="share-list"></div>
-      </div>
     </section>
 
     <footer class="footer">
-      <span>数据来源：腾讯财经 · 自动刷新间隔 30 秒</span>
-      <span class="footer-note">本内容为Z先生公开分享的 ETF 组合与行业概念数据整理。市场有风险，投资需谨慎。</span>
+      <span class="footer-note">市场有风险，投资需谨慎。</span>
     </footer>
   </main>
 
   <script src="portfolio_config.js?v=1"></script>
   <script src="data.js?v=4"></script>
-  <script src="valuation.js?v=12"></script>
   <script src="portfolio_history.js?v=3"></script>
-  <script src="app.js?v=17"></script>
+  <script src="app.js?v=20"></script>
 </body>
 </html>

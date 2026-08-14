@@ -57,8 +57,7 @@ const VALUATION_CACHE={};
 const HISTORY_CACHE={};
 const PORTFOLIO_CHART_STATE={us:'all',hk:'all',a:'all'};
 let currentValuationMarket='us';
-let valuationBuyFilterActive=false;
-const PAGE_TABS=['portfolio','valuation','research'];
+let currentValuationFilter='all';
 const PORTFOLIO_START_DATE=window.PORTFOLIO_CONFIG?.startDate||'2026-01-01';
 
 function fmt(v){ if(v==null||isNaN(v))return '—'; return(v>0?'+':'')+v.toFixed(2)+'%'; }
@@ -140,9 +139,43 @@ function maxDrawdown(points){
   return drawdown;
 }
 
+const CHART_REVEALED=new Set();
+let chartRevealObserver=null;
+
+function revealChart(target,key){
+  if(!target||!key||CHART_REVEALED.has(key))return;
+  CHART_REVEALED.add(key);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>target.classList.add('is-revealed')));
+}
+
+function queueChartReveal(plot,key){
+  if(!plot||CHART_REVEALED.has(key))return;
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    CHART_REVEALED.add(key);
+    return;
+  }
+  plot.classList.add('chart-await');
+  plot.style.setProperty('--chart-reveal-delay',`${({us:0,hk:70,a:140}[key]||0)}ms`);
+  if(!('IntersectionObserver' in window)){
+    revealChart(plot,key);
+    return;
+  }
+  chartRevealObserver??=new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(!entry.isIntersecting)return;
+      const target=entry.target;
+      chartRevealObserver.unobserve(target);
+      revealChart(target,target.dataset.chartKey);
+    });
+  },{threshold:.28});
+  chartRevealObserver.observe(plot);
+}
+
 function renderPortfolioChart(key,dailyValue,ytdValue,points,estimated=true){
   const el=document.getElementById(`chart-${key}`);
   if(!el)return;
+  const previousPlot=el.querySelector('.chart-plot');
+  if(previousPlot&&chartRevealObserver)chartRevealObserver.unobserve(previousPlot);
   const previous=HISTORY_CACHE[key];
   const data=points&&points.length>1?points:
     previous&&previous.data?.length>1?previous.data:null;
@@ -152,7 +185,8 @@ function renderPortfolioChart(key,dailyValue,ytdValue,points,estimated=true){
   }
   HISTORY_CACHE[key]={data,daily:dailyValue,ytd:ytdValue,estimated};
   const range=PORTFOLIO_CHART_STATE[key]||'all';
-  const visible=filterChartPoints(data,range);
+  const filtered=filterChartPoints(data,range);
+  const visible=filtered.length>1?filtered:data.slice(-2);
   const latest=visible[visible.length-1]?.value??ytdValue;
   const first=visible[0]?.value||0;
   const periodReturn=((1+latest/100)/(1+first/100)-1)*100;
@@ -187,8 +221,8 @@ function renderPortfolioChart(key,dailyValue,ytdValue,points,estimated=true){
     <div class="chart-plot" data-chart-key="${key}">
       <svg class="nav-chart" viewBox="0 0 ${w} ${h}" role="img" aria-label="${PORTFOLIOS[key].name}净值走势">
         ${yTicks}
-        <path class="chart-area ${cls}" d="${area}"></path>
-        <path class="chart-line ${cls}" d="${line}"></path>
+        <path class="chart-area ${cls}" d="${area}" pathLength="1"></path>
+        <path class="chart-line ${cls}" d="${line}" pathLength="1"></path>
         <line class="chart-zero" x1="${left}" y1="${top+(h-top-bottom)*(1-(0-scale.min)/(scale.max-scale.min))}" x2="${plotRight}" y2="${top+(h-top-bottom)*(1-(0-scale.min)/(scale.max-scale.min))}"></line>
         <text x="${left}" y="${h-7}" text-anchor="start" class="chart-x-label">${compactDate(visible[0].date)}</text>
         <text x="${(left+plotRight)/2}" y="${h-7}" text-anchor="middle" class="chart-x-label">${compactDate(mid.date)}</text>
@@ -205,6 +239,8 @@ function renderPortfolioChart(key,dailyValue,ytdValue,points,estimated=true){
         <button class="${range==='all'?'active':''}" onclick="setPortfolioRange('${key}','all')">成立以来</button>
       </div>
     </div>`;
+  const plot=el.querySelector('.chart-plot');
+  queueChartReveal(plot,key);
   bindChartPointer(key,visible,{left,right,top,bottom,w,h,scale});
 }
 
@@ -227,7 +263,8 @@ function bindChartPointer(key,points,layout){
     const ratio=Math.max(0,Math.min(1,(localX-plotStart)/(plotEnd-plotStart)));
     const index=Math.round(ratio*(points.length-1));
     const point=points[index];
-    const x=plotStart+ratio*(plotEnd-plotStart);
+    const exactRatio=index/(points.length-1);
+    const x=plotStart+exactRatio*(plotEnd-plotStart);
     const yRatio=1-(point.value-layout.scale.min)/(layout.scale.max-layout.scale.min);
     const y=(layout.top/layout.h*rect.height)+yRatio*((layout.h-layout.top-layout.bottom)/layout.h*rect.height);
     crosshair.style.setProperty('--cursor-x',`${x}px`);
@@ -244,6 +281,7 @@ function bindChartPointer(key,points,layout){
   plot.addEventListener('pointermove',event=>{if(event.pointerType==='mouse'||plot.hasPointerCapture?.(event.pointerId))update(event);});
   plot.addEventListener('pointerleave',()=>plot.classList.remove('is-tracking'));
   plot.addEventListener('pointerup',event=>plot.releasePointerCapture?.(event.pointerId));
+  plot.addEventListener('pointercancel',()=>plot.classList.remove('is-tracking'));
 }
 
 function renderLoadingHoldings(key){
@@ -335,8 +373,6 @@ function toggleShareDetail(id){
 function allQuoteCodes(){
   const codes=new Set();
   Object.values(PORTFOLIOS).forEach(portfolio=>portfolio.holdings.forEach(holding=>codes.add(holding.code)));
-  SHARE_RECORDS.forEach(record=>codes.add(record.sym));
-  Object.values(window.VALUATION_GROUPS||{}).forEach(group=>group.records.forEach(record=>codes.add(record.sym)));
   return [...codes];
 }
 
@@ -358,10 +394,6 @@ function applyQuoteMap(rawMap){
     });
     cache.loaded=true;
   });
-  SHARE_RECORDS.forEach(record=>{if(parsed[record.sym])SHARE_CACHE[record.sym]=parsed[record.sym];});
-  Object.values(window.VALUATION_GROUPS||{}).forEach(group=>group.records.forEach(record=>{
-    if(parsed[record.sym])VALUATION_CACHE[record.sym]=parsed[record.sym];
-  }));
   return {received:Object.keys(parsed).length,total:allQuoteCodes().length};
 }
 
@@ -370,8 +402,6 @@ function renderAllData(){
     renderHoldings(key,CACHE[key].rt,CACHE[key].ytd);
     renderSummary(key,CACHE[key].rt,CACHE[key].ytd);
   });
-  renderShareRecords();
-  renderValuations();
 }
 
 async function refreshQuotes(){
@@ -423,8 +453,21 @@ function valuationPositionState(v){
 }
 
 function toggleValuationBuyFilter(){
-  valuationBuyFilterActive=!valuationBuyFilterActive;
+  currentValuationFilter=currentValuationFilter==='buy'?'all':'buy';
   renderValuations();
+}
+
+function setValuationFilter(filter){
+  currentValuationFilter=filter||'all';
+  renderValuations();
+}
+
+function valuationMatchesFilter(item,filter){
+  if(filter==='buy')return item.state.key==='buy'||item.state.key==='strong-buy';
+  if(filter==='active')return item.positionState.key==='active';
+  if(filter==='watch')return item.positionState.key==='watch';
+  if(filter==='cleared')return item.positionState.key==='cleared';
+  return true;
 }
 
 function renderValuations(){
@@ -436,7 +479,8 @@ function renderValuations(){
   const orderedRecords=records.map(v=>{
     const {price,live}=valuationQuote(v);
     const state=valuationState(v,price);
-    return {v,price,live,state};
+    const positionState=valuationPositionState(v);
+    return {v,price,live,state,positionState};
   }).sort((a,b)=>{
     const holdingA=Number(a.v.holding)||0;
     const holdingB=Number(b.v.holding)||0;
@@ -451,11 +495,9 @@ function renderValuations(){
     if(state.key==='buy'||state.key==='strong-buy')buyCount++;
     if(state.key==='fair'||state.key==='sell')sellCount++;
   });
-  const visibleRecords=valuationBuyFilterActive
-    ? orderedRecords.filter(({state})=>state.key==='buy'||state.key==='strong-buy')
-    : orderedRecords;
+  const visibleRecords=orderedRecords.filter(item=>valuationMatchesFilter(item,currentValuationFilter));
 
-  container.innerHTML=visibleRecords.map(({v,price,live,state})=>{
+  container.innerHTML=visibleRecords.map(({v,price,live,state,positionState})=>{
 
     const min=v.buy[0]*0.82,max=v.sell[1]*1.08;
     const position=Math.max(1,Math.min(99,(price-min)/(max-min)*100));
@@ -463,19 +505,17 @@ function renderValuations(){
     const fairStart=(v.fair[0]-min)/(max-min)*100;
     const fairEnd=(v.fair[1]-min)/(max-min)*100;
     const sellStart=(v.sell[0]-min)/(max-min)*100;
-    const positionState=valuationPositionState(v);
     const currency=v.market==='US'?'$':v.market==='港股'?'HK$':'¥';
     const isUs=currentValuationMarket==='us';
     const title=isUs?v.ticker:v.name;
     const badge=isUs?'':v.market;
 
-    return `<article class="valuation-row state-${state.key}">
+    return `<article class="valuation-row state-${state.key} position-${positionState.key}">
       <div class="valuation-company">
         <div class="valuation-symbol-line">
           ${badge?`<span class="valuation-ticker">${badge}</span>`:''}
           <strong title="${title}">${title}</strong>
           <span class="valuation-holding ${positionState.key}">${positionState.label}</span>
-          <span class="status-chip inline ${state.key}">${state.label}</span>
         </div>
       </div>
       <div class="valuation-current">
@@ -496,7 +536,9 @@ function renderValuations(){
         </div>
       </div>
     </article>`;
-  }).join('')||'<div class="valuation-empty">当前没有进入买入区间的标的</div>';
+  }).join('')||`<div class="valuation-empty">当前没有“${{
+    buy:'买入信号',active:'当前持仓',watch:'观察',cleared:'已清仓'
+  }[currentValuationFilter]||'全部'}”标的</div>`;
 
   document.getElementById('buySignalCount').textContent=buyCount;
   document.getElementById('sellSignalCount').textContent=sellCount;
@@ -506,19 +548,21 @@ function renderValuations(){
   document.getElementById('valuationSourceNote').textContent=
     `估值基准来自所提供的${currentValuationMarket==='us'?'美股':'A/H 股'}周报截图，双数值代表两档情景假设。`;
   const updateStamp=document.getElementById('valuationUpdateStamp');
-  if(updateStamp)updateStamp.textContent=
-    `实盘：${window.POSITION_UPDATED_AT||'--'} · 估值：${window.VALUATION_UPDATED_AT||'--'}`;
-  const marketNotice=document.getElementById('valuationMarketNotice');
-  if(marketNotice){
-    marketNotice.textContent=window.VALUATION_NOTICE||'';
-    marketNotice.hidden=!window.VALUATION_NOTICE;
-  }
+  if(updateStamp)updateStamp.textContent=`\u5468\u62a5\u66f4\u65b0\uff1a${window.VALUATION_UPDATED_AT||'--'}`;
   const buyFilter=document.getElementById('buySignalFilter');
   if(buyFilter){
-    buyFilter.classList.toggle('active',valuationBuyFilterActive);
-    buyFilter.setAttribute('aria-pressed',valuationBuyFilterActive?'true':'false');
-    buyFilter.title=valuationBuyFilterActive?'显示全部估值标的':'只看处于买入区间的标的';
+    const active=currentValuationFilter==='buy';
+    buyFilter.classList.toggle('active',active);
+    buyFilter.setAttribute('aria-pressed',active?'true':'false');
+    buyFilter.title=active?'显示全部估值标的':'只看处于买入区间的标的';
   }
+  document.querySelectorAll('[data-valuation-filter]').forEach(button=>{
+    const active=button.dataset.valuationFilter===currentValuationFilter;
+    button.classList.toggle('active',active);
+    button.setAttribute('aria-pressed',active?'true':'false');
+  });
+  const resultCount=document.getElementById('valuationResultCount');
+  if(resultCount)resultCount.textContent=`显示 ${visibleRecords.length} / ${records.length}`;
 }
 
 function switchValuationMarket(market){
@@ -530,31 +574,6 @@ function switchValuationMarket(market){
     button.setAttribute('aria-selected',active?'true':'false');
   });
   renderValuations();
-}
-
-function switchPageTab(tab,{updateHash=true,scroll=true}={}){
-  if(!PAGE_TABS.includes(tab))tab='portfolio';
-  document.querySelectorAll('[data-page-tab]').forEach(button=>{
-    const active=button.dataset.pageTab===tab;
-    button.classList.toggle('active',active);
-    button.setAttribute('aria-selected',active?'true':'false');
-  });
-  document.querySelectorAll('[data-page-panel]').forEach(panel=>{
-    const active=panel.dataset.pagePanel===tab;
-    panel.classList.toggle('active',active);
-    panel.hidden=!active;
-  });
-  if(updateHash)history.replaceState(null,'',`#${tab}`);
-  if(scroll){
-    const tabs=document.querySelector('.page-tabs');
-    const top=tabs?tabs.getBoundingClientRect().top+window.scrollY-12:0;
-    window.scrollTo({top:Math.max(0,top),behavior:'smooth'});
-  }
-}
-
-function pageTabFromHash(){
-  const tab=window.location.hash.replace('#','');
-  return PAGE_TABS.includes(tab)?tab:'portfolio';
 }
 
 function setStatus(s,m){
@@ -602,21 +621,10 @@ async function refreshAll(){
 
 document.addEventListener('DOMContentLoaded',()=>{
   ['us','hk','a'].forEach(k=>renderLoadingHoldings(k));
-  renderShareRecords();
-  renderValuations();
-  document.querySelectorAll('.valuation-tab').forEach(button=>{
-    button.addEventListener('click',()=>switchValuationMarket(button.dataset.market));
-  });
-  document.getElementById('buySignalFilter')?.addEventListener('click',toggleValuationBuyFilter);
-  document.querySelectorAll('[data-page-tab]').forEach(button=>{
-    button.addEventListener('click',()=>switchPageTab(button.dataset.pageTab));
-  });
-  switchPageTab(pageTabFromHash(),{updateHash:false,scroll:false});
+  if(window.location.hash&&window.location.hash!=='#portfolio'){
+    history.replaceState(null,'','#portfolio');
+  }
   refreshAll();
-});
-
-window.addEventListener('hashchange',()=>{
-  switchPageTab(pageTabFromHash(),{updateHash:false,scroll:false});
 });
 
 document.addEventListener('visibilitychange',()=>{
